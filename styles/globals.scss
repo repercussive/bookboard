@@ -1,8 +1,46 @@
+@use 'sass:color';
+
+@font-face {
+  font-family: 'Krona';
+  src: url('/font/KronaOne-Regular.ttf');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+$color-primary: #41596f;
+$color-bg: #ffdfd1;
+
+:root {
+  --color-bg: #{$color-bg};
+  --color-primary: #{$color-primary};
+  --color-button-highlight: #{color.scale($color-primary, $lightness: 30%, $saturation: -70%)};
+  --color-focus-highlight: #{color.scale($color-bg, $lightness: 40%)};
+  --color-selection: #{color.scale($color-primary, $alpha: -70%)};
+  --padding-page: 0.5rem;
+}
+
 html,
 body {
-  padding: 0;
+  padding: var(--padding-page);
   margin: 0;
-  font-family: sans-serif;
+  font-size: 16px;
+  font-family: 'Krona', sans-serif;
+  color: var(--color-primary);
+  background-color: var(--color-bg);
+
+  :focus {
+    outline: none;
+    box-shadow: var(--color-focus-highlight) 0 0 0 3px, var(--color-primary) 0 0 0 5px, var(--color-bg) 0 0 0 7px;
+    &:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-selection);
+  }
 }
 
 a {
@@ -10,6 +48,26 @@ a {
   text-decoration: none;
 }
 
+button {
+  appearance: none;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  user-select: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1.5rem;
+  cursor: default;
+}
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
