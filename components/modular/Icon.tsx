@@ -1,21 +1,26 @@
 import type { CSS } from '@stitches/react/types/css-util'
+import * as AccessibleIcon from '@radix-ui/react-accessible-icon'
 import Box from '@/components/modular/Box'
 
 interface Props {
   icon: () => JSX.Element,
-  css?: CSS
+  label?: string,
+  css?: CSS,
 }
 
-const Icon = ({ icon, css }: Props) => {
+const Icon = ({ icon, label, css }: Props) => {
   const IconComponent = icon
 
   return (
     <Box
-      css={{ ...css, display: 'inline-flex', transform: 'scale(1.8)' }}
+      as="span"
+      css={{ ...css, display: 'inline-flex', transform: 'scale(1.7)' }}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none">
-        <IconComponent />
-      </svg>
+      <AccessibleIcon.Root label={label ?? ''}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" role="presentation">
+          <IconComponent />
+        </svg>
+      </AccessibleIcon.Root>
     </Box>
   )
 }
