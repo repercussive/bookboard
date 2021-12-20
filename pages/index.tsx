@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -6,7 +7,11 @@ export default function Home() {
       <Head>
         <title>Bookboard</title>
       </Head>
-      <h1>Hello world!</h1>
+      <Link href="/home">
+        <button>
+          go to app (temporary)
+        </button>
+      </Link>
     </div>
   )
 }
