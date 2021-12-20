@@ -1,4 +1,5 @@
 import { styled } from '@/styles/stitches.config'
+import { defaultPseudo } from '@/styles/utilStyles'
 import Flex from '@/components/modular/Flex'
 
 const Shelf = styled(Flex, {
@@ -8,10 +9,7 @@ const Shelf = styled(Flex, {
   pb: '2.6px',
   alignItems: 'flex-end !important',
   '&::after': {
-    pointerEvents: 'none',
-    position: 'absolute',
-    inset: 0,
-    content: '""',
+    ...defaultPseudo,
     borderBottom: 'solid 3px',
     borderBottomColor: '$primary',  
   },
