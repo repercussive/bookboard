@@ -8,6 +8,7 @@ export const { styled, css, theme } = createStitches({
     colors: {
       bg: 'var(--color-bg)',
       primary: 'var(--color-primary)',
+      board: 'var(--color-board)',
       buttonHighlight: 'var(--color-button-highlight)'
     },
     space: {
@@ -21,6 +22,9 @@ export const { styled, css, theme } = createStitches({
       7: '1.75rem',
       8: '2rem',
       paddingPage: 'var(--padding-page)'
+    },
+    fontSizes: {
+      body: '0.9rem'
     }
   },
   media: {

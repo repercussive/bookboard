@@ -14,6 +14,7 @@ $color-bg: #ffdfd1;
 :root {
   --color-bg: #{$color-bg};
   --color-primary: #{$color-primary};
+  --color-board: #{color.scale($color-bg, $lightness: 25%)};
   --color-button-highlight: #{color.scale($color-primary, $lightness: 30%, $saturation: -70%)};
   --color-focus-highlight: #{color.scale($color-bg, $lightness: 40%)};
   --color-selection: #{color.scale($color-primary, $alpha: -70%)};
