@@ -5,12 +5,13 @@ import { styled } from '@/styles/stitches.config'
 interface Props {
   filled?: boolean,
   hoverable?: boolean,
-  css?: CSS
+  css?: CSS,
+  label?: string
 }
 
-const ShelfButton: FC<Props> = ({ filled, hoverable, css, children }) => {
+const ShelfButton: FC<Props> = ({ filled, hoverable, css, label, children }) => {
   return (
-    <StyledButton css={css} filled={filled} hoverable={hoverable}>
+    <StyledButton css={css} filled={filled} hoverable={hoverable} aria-label={label}>
       {children}
     </StyledButton>
   )
