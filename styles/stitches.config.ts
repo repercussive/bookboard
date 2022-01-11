@@ -78,8 +78,8 @@ export const { styled, css, theme } = createStitches({
       paddingLeft: value,
       paddingRight: value
     }),
-    bg: (value: PropertyValue<'backgroundColor'>) => ({
-      backgroundColor: value
+    bg: (value: PropertyValue<'background'>) => ({
+      background: value
     })
   },
 })
