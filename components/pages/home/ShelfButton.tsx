@@ -1,6 +1,7 @@
-import type { FC } from 'react'
 import type { CSS } from '@stitches/react/types/css-util'
+import { FC, useRef } from 'react'
 import { styled } from '@/styles/stitches.config'
+import useElementDimensions from '@/lib/hooks/useElementDimensions'
 
 interface Props {
   filled?: boolean,
@@ -10,8 +11,22 @@ interface Props {
 }
 
 const ShelfButton: FC<Props> = ({ filled, hoverable, css, label, children }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null!)
+  const dimensions = useElementDimensions(buttonRef)
+
   return (
-    <StyledButton css={css} filled={filled} hoverable={hoverable} aria-label={label}>
+    <StyledButton
+      ref={buttonRef}
+      filled={filled}
+      hoverable={hoverable}
+      aria-label={label}
+      css={{
+        ...css,
+        '&::after': {
+          right: `-${0.295 * dimensions.height + 2.8}px`
+        }
+      }}
+    >
       {children}
     </StyledButton>
   )
@@ -33,8 +48,7 @@ const StyledButton = styled('button', {
   '&::after': {
     position: 'absolute',
     inset: 0,
-    top: '-3px',
-    right: '-0.78rem',
+    top: '-2.52px',
     content: '""',
     borderRight: 'solid 3px',
     borderRightColor: '$primary',
