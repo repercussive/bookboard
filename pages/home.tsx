@@ -21,7 +21,7 @@ const HomePage = () => {
         <Spacer ml="$3" />
         <ShelfButton filled>Books to read</ShelfButton>
         <Spacer ml="auto" />
-        <ShelfButton label="Open the boards menu" css={{ px: '$2', mr: '$2', ml: '$1' }}>
+        <ShelfButton label="Open the boards menu" css={{ px: '$2', mr: '0.85rem', ml: '$1' }}>
           <Icon icon={MenuIcon} css={{ position: 'relative', top: '1px' }} />
         </ShelfButton>
       </Shelf>

@@ -23,7 +23,8 @@ const ShelfButton: FC<Props> = ({ filled, hoverable, css, label, children }) => 
       css={{
         ...css,
         '&::after': {
-          right: `-${0.295 * dimensions.height + 2.8}px`
+          right: `-${0.295 * dimensions.height + 2.8}px`,
+          overflow: 'hidden'
         }
       }}
     >

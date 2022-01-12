@@ -18,12 +18,11 @@ $color-bg: #ffdfd1;
   --color-button-highlight: #{color.scale($color-primary, $lightness: 30%, $saturation: -70%)};
   --color-focus-highlight: #{color.scale($color-bg, $lightness: 40%)};
   --color-selection: #{color.scale($color-primary, $alpha: -70%)};
-  --padding-page: 0.5rem;
+  --padding-page: 1rem;
 }
 
 html,
 body {
-  padding: var(--padding-page);
   margin: 0;
   font-size: 16px;
   font-family: 'Krona', sans-serif;
@@ -42,6 +41,10 @@ body {
   ::selection {
     background-color: var(--color-selection);
   }
+}
+
+#__next {
+  padding: var(--padding-page);
 }
 
 a {

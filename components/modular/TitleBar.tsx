@@ -12,7 +12,7 @@ const Wrapper = styled('div', {
   mt: '$1',
   mb: '$4',
   '@bp1': {
-    mt: '$3',
+    mt: '$2',
     mb: '$6'
   },
   '@bp2': {

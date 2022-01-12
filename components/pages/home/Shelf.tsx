@@ -4,7 +4,7 @@ import Flex from '@/components/modular/Flex'
 
 const Shelf = styled(Flex, {
   position: 'relative',
-  mx: 'calc($paddingPage * -2)',
+  mx: '-$paddingPage',
   px: '0.6rem',
   pb: '2.6px',
   alignItems: 'flex-end !important',
@@ -14,7 +14,6 @@ const Shelf = styled(Flex, {
     borderBottomColor: '$primary',  
   },
   '@bp1': {
-    mx: '0',
     px: '$4'
   }
 })
