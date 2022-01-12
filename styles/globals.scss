@@ -14,8 +14,23 @@ $color-bg: #ffdfd1;
 :root {
   --color-bg: #{$color-bg};
   --color-primary: #{$color-primary};
+  --color-primary-dark: #{color.scale(
+      $color-primary,
+      $lightness: -40%,
+      $saturation: -25%
+    )};
+  --color-shadow: #{color.scale(
+      $color-primary,
+      $lightness: -30%,
+      $saturation: -25%,
+      $alpha: -80%
+    )};
   --color-board: #{color.scale($color-bg, $lightness: 25%)};
-  --color-button-highlight: #{color.scale($color-primary, $lightness: 30%, $saturation: -70%)};
+  --color-button-highlight: #{color.scale(
+      $color-primary,
+      $lightness: 30%,
+      $saturation: -70%
+    )};
   --color-focus-highlight: #{color.scale($color-bg, $lightness: 40%)};
   --color-selection: #{color.scale($color-primary, $alpha: -70%)};
   --padding-page: 1rem;
@@ -58,6 +73,8 @@ button {
   font-family: inherit;
   color: inherit;
   user-select: none;
+  cursor: pointer;
+  transition: background-color 100ms, color 100ms;
 }
 
 h1,
@@ -68,6 +85,16 @@ h5,
 h6 {
   font-size: 1.5rem;
   cursor: default;
+}
+
+input {
+  font-family: inherit;
+  color: var(--color-primary);
+  padding: 0.5rem;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 * {

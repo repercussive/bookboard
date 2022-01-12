@@ -8,6 +8,7 @@ export const { styled, css, theme } = createStitches({
     colors: {
       bg: 'var(--color-bg)',
       primary: 'var(--color-primary)',
+      primaryDark: 'var(--color-primary-dark)',
       board: 'var(--color-board)',
       buttonHighlight: 'var(--color-button-highlight)'
     },

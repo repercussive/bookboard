@@ -43,7 +43,6 @@ const StyledButton = styled('button', {
   borderBottom: 'none',
   borderColor: '$primary',
   transform: 'skewX(-15deg)',
-  transition: 'background-color 120ms, color 120ms',
   wordBreak: 'break-word',
   overflowWrap: 'break-word',
   '&::after': {
@@ -65,11 +64,13 @@ const StyledButton = styled('button', {
     },
     hoverable: {
       true: {
-        cursor: 'pointer',
         '&:hover': {
           color: '$bg',
           bg: '$buttonHighlight'
         },
+      },
+      false: {
+        cursor: 'default'
       }
     }
   },

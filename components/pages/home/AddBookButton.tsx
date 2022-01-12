@@ -1,35 +1,38 @@
 import { styled } from '@stitches/react'
 import { defaultPseudo } from '@/styles/utilStyles'
-import PlusIcon from '@/components/icons/PlusIcon'
+import * as Dialog from '@radix-ui/react-dialog'
+import AddBookDialog from '@/components/pages/home/AddBookDialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
+import PlusIcon from '@/components/icons/PlusIcon'
 
 const AddBookButton = () => {
   return (
     <Flex center css={{ position: 'relative', zIndex: 1, transform: 'rotate(2deg)' }}>
       <StickyNote />
-      <StyledButton aria-label="Add a book to this board">
-        <Flex center as="span">
-          <Icon
-            icon={PlusIcon}
-            css={{ position: 'relative', bottom: '0.5px', padding: '0.3em' }}
-          />
-        </Flex>
-      </StyledButton>
+      <Dialog.Root>
+        <AddBookDialog />
+        <StyledButton aria-label="Add a book to this board">
+          <Flex center as="span">
+            <Icon
+              icon={PlusIcon}
+              css={{ position: 'relative', bottom: '0.5px', padding: '0.3em' }}
+            />
+          </Flex>
+        </StyledButton>
+      </Dialog.Root>
     </Flex>
   )
 }
 
-const StyledButton = styled('button', {
+const StyledButton = styled(Dialog.Trigger, {
   padding: '0.35em',
   background: 'none',
-  transition: 'color 120ms',
-  cursor: 'pointer',
   '&::before': { // button background
     ...defaultPseudo,
     zIndex: -1,
     backgroundColor: '$board',
-    transition: 'background-color 120ms'
+    transition: 'background-color 100ms'
   },
   '&::after': { // covers sticky note flap
     ...defaultPseudo,
