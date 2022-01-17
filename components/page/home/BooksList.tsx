@@ -3,10 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Book from '@/lib/logic/app/Book'
+import BookOptionsDropdown from '@/components/page/home/BookOptionsDropdown'
 import Box from '@/components/modular/Box'
 import Icon from '@/components/modular/Icon'
 import Text from '@/components/modular/Text'
 import Flex from '@/components/modular/Flex'
+import Spacer from '@/components/modular/Spacer'
 import PlusIcon from '@/components/icons/PlusIcon'
 
 const BooksList = observer(() => {
@@ -32,7 +34,6 @@ const BookListItem = ({ book }: { book: Book }) => {
   return (
     <Flex
       as="li"
-      direction="column"
       css={{
         position: 'relative',
         pl: '$4',
@@ -50,12 +51,16 @@ const BookListItem = ({ book }: { book: Book }) => {
         }
       }}
     >
-      <Text as="span">
-        {book.title}
-      </Text>
-      <Text as="span" css={{ opacity: 0.5, mt: '$1' }}>
-        {book.author}
-      </Text>
+      <Flex as="span" direction="column">
+        <Text as="span">
+          {book.title}
+        </Text>
+        <Text as="span" css={{ opacity: 0.5, mt: '$1' }}>
+          {book.author}
+        </Text>
+      </Flex>
+      <Spacer ml="auto" />
+      <BookOptionsDropdown />
     </Flex>
   )
 }
