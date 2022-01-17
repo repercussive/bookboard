@@ -1,20 +1,45 @@
+import { container } from 'tsyringe'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
+import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
+import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import * as Dialog from '@radix-ui/react-dialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import Spacer from '@/components/modular/Spacer'
 import CrossIcon from '@/components/icons/CrossIcon'
 
-const AddBookDialog = () => {
+const emptyBookInfo = { title: '', author: '' }
+
+const AddBookDialog = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  const [bookInfo, setBookInfo] = useState<BookConstructorOptions>(emptyBookInfo)
+  const { selectedBoard } = container.resolve(BoardsHandler)
+
+  useEffect(() => {
+    if (!isOpen) {
+      setBookInfo(emptyBookInfo)
+    }
+  }, [isOpen])
+
+  function handleAddBook() {
+    selectedBoard.addBook(new Book({ ...bookInfo }))
+    onClose()
+  }
+
   return (
     <Dialog.Portal>
       <Overlay>
         <ContentWrapper>
           <TitleSection />
           <Spacer mb="$3" />
-          <InputSection />
+          <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
           <Spacer mb="$4" />
-          <AddButton>Add</AddButton>
+          <AddButton
+            onClick={handleAddBook}
+            disabled={!bookInfo.title || !bookInfo.author}
+          >
+            Add
+          </AddButton>
         </ContentWrapper>
       </Overlay>
     </Dialog.Portal>
@@ -33,19 +58,35 @@ const TitleSection = () => {
   )
 }
 
-const InputSection = () => {
+const InputSection = ({ bookInfo, setBookInfo }: {
+  bookInfo: BookConstructorOptions,
+  setBookInfo: Dispatch<SetStateAction<BookConstructorOptions>>
+}) => {
+  function updateBookInfo(newValue: string, property: 'title' | 'author') {
+    setBookInfo({
+      ...bookInfo,
+      [property]: newValue
+    })
+  }
+
   return (
     <>
       <label>
         Title
         <Spacer mb="$1" />
-        <BookTitleInput />
+        <BookInfoInput
+          value={bookInfo.title}
+          onChange={(e) => updateBookInfo(e.target.value, 'title')}
+        />
       </label>
       <Spacer mb="$3" />
       <label>
         Author
         <Spacer mb="$1" />
-        <BookTitleInput />
+        <BookInfoInput
+          value={bookInfo.author}
+          onChange={(e) => updateBookInfo(e.target.value, 'author')}
+        />
       </label>
     </>
   )
@@ -78,7 +119,7 @@ const Overlay = styled(Dialog.Overlay, {
   overflowY: 'auto'
 })
 
-const BookTitleInput = styled('input', {
+const BookInfoInput = styled('input', {
   width: '100%',
   border: 'solid 2px $primary',
   borderRadius: '4px',

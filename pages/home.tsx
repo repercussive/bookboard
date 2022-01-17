@@ -1,7 +1,8 @@
-import Board from '@/components/pages/home/Board'
-import Shelf from '@/components/pages/home/Shelf'
-import ShelfButton from '@/components/pages/home/ShelfButton'
-import ShelfPlant from '@/components/pages/home/ShelfPlant'
+import Board from '@/components/page/home/Board'
+import Shelf from '@/components/page/home/Shelf'
+import ShelfButton from '@/components/page/home/ShelfButton'
+import ShelfPlant from '@/components/page/home/ShelfPlant'
+import BoardNameButton from '@/components/page/home/BoardNameButton'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import Spacer from '@/components/modular/Spacer'
@@ -19,7 +20,7 @@ const HomePage = () => {
       <Shelf>
         <ShelfPlant />
         <Spacer ml="$3" />
-        <ShelfButton filled>Books to read</ShelfButton>
+        <BoardNameButton />
         <Spacer ml="auto" />
         <ShelfButton label="Open the boards menu" css={{ px: '$2', mr: '0.85rem', ml: '$1' }}>
           <Icon icon={MenuIcon} css={{ position: 'relative', top: '1px' }} />

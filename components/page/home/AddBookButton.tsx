@@ -1,17 +1,20 @@
+import { useState } from 'react'
 import { styled } from '@stitches/react'
 import { defaultPseudo } from '@/styles/utilStyles'
 import * as Dialog from '@radix-ui/react-dialog'
-import AddBookDialog from '@/components/pages/home/AddBookDialog'
+import AddBookDialog from '@/components/page/home/AddBookDialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import PlusIcon from '@/components/icons/PlusIcon'
 
 const AddBookButton = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   return (
     <Flex center css={{ position: 'relative', zIndex: 1, transform: 'rotate(2deg)' }}>
       <StickyNote />
-      <Dialog.Root>
-        <AddBookDialog />
+      <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <AddBookDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
         <StyledButton aria-label="Add a book to this board">
           <Flex center as="span">
             <Icon

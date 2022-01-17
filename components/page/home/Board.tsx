@@ -2,8 +2,8 @@ import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
-import AddBookButton from '@/components/pages/home/AddBookButton'
-import BooksList from '@/components/pages/home/BooksList'
+import AddBookButton from '@/components/page/home/AddBookButton'
+import BooksList from '@/components/page/home/BooksList'
 
 const Board = () => {
   return (

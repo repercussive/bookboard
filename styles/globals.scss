@@ -75,6 +75,10 @@ button {
   user-select: none;
   cursor: pointer;
   transition: background-color 100ms, color 100ms;
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }
 
 h1,
