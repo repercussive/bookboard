@@ -1,5 +1,6 @@
 import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
+import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Book from '@/lib/logic/app/Book'
@@ -32,25 +33,7 @@ const BooksList = observer(() => {
 
 const BookListItem = ({ book }: { book: Book }) => {
   return (
-    <Flex
-      as="li"
-      css={{
-        position: 'relative',
-        pl: '$4',
-        '&:not(:last-of-type)': {
-          mb: '$4'
-        },
-        '&:before': {
-          ...defaultPseudo,
-          top: '18%',
-          width: '4px',
-          height: '4px',
-          background: '$primary',
-          borderRadius: '50%',
-          opacity: 0.5
-        }
-      }}
-    >
+    <BookListItemWrapper>
       <Flex as="span" direction="column">
         <Text as="span">
           {book.title}
@@ -60,8 +43,8 @@ const BookListItem = ({ book }: { book: Book }) => {
         </Text>
       </Flex>
       <Spacer ml="auto" />
-      <BookOptionsDropdown />
-    </Flex>
+      <BookOptionsDropdown book={book} />
+    </BookListItemWrapper>
   )
 }
 
@@ -77,5 +60,23 @@ const NoBooksText = () => {
     </Box>
   )
 }
+
+const BookListItemWrapper = styled('li', {
+  display: 'flex',
+  position: 'relative',
+  paddingLeft: '$4',
+  '&:not(:last-of-type)': {
+    marginBottom: '$4'
+  },
+  '&:before': {
+    ...defaultPseudo,
+    top: '18%',
+    width: '4px',
+    height: '4px',
+    background: '$primary',
+    borderRadius: '50%',
+    opacity: 0.5
+  }
+})
 
 export default BooksList
