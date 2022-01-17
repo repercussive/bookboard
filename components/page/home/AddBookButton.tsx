@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { styled } from '@stitches/react'
 import { defaultPseudo } from '@/styles/utilStyles'
 import * as Dialog from '@radix-ui/react-dialog'
-import AddBookDialog from '@/components/page/home/AddBookDialog'
+import EditBookInfoDialog from '@/components/page/home/EditBookInfoDialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import PlusIcon from '@/components/icons/PlusIcon'
@@ -13,17 +13,20 @@ const AddBookButton = () => {
   return (
     <Flex center css={{ position: 'relative', zIndex: 1, transform: 'rotate(2deg)' }}>
       <StickyNote />
-      <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AddBookDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
-        <StyledButton aria-label="Add a book to this board">
-          <Flex center as="span">
-            <Icon
-              icon={PlusIcon}
-              css={{ position: 'relative', bottom: '0.5px', padding: '0.3em' }}
-            />
-          </Flex>
-        </StyledButton>
-      </Dialog.Root>
+      <EditBookInfoDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        triggerElement={(
+          <StyledButton aria-label="Add a book to this board">
+            <Flex center as="span">
+              <Icon
+                icon={PlusIcon}
+                css={{ position: 'relative', bottom: '0.5px', padding: '0.3em' }}
+              />
+            </Flex>
+          </StyledButton>
+        )}
+      />
     </Flex>
   )
 }

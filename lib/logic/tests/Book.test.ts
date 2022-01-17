@@ -18,3 +18,11 @@ test('when a book is created, it is automatically assigned a random 8-character 
   expect(newBookA.id.length).toEqual(8)
   expect(newBookB.id.length).toEqual(8)
 })
+
+test('updating a book correctly sets its title and author', () => {
+  const testBook = new Book({ title: 'Old title', author: 'Old author' })
+  testBook.updateInfo({ title: 'New title', author: 'New author' })
+
+  expect(testBook.title).toEqual('New title')
+  expect(testBook.author).toEqual('New author')
+})

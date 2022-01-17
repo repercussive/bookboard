@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { styled } from '@/styles/stitches.config'
+import Book from '@/lib/logic/app/Book'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import EditBookInfoDialog from '@/components/page/home/EditBookInfoDialog'
 import Icon from '@/components/modular/Icon'
 import Flex from '@/components/modular/Flex'
 import CheckIcon from '@/components/icons/CheckIcon'
@@ -8,32 +10,45 @@ import MenuIcon from '@/components/icons/MenuIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 import PencilIcon from '@/components/icons/PencilIcon'
 
-const BookOptionsDropdown = () => {
-  const [isOpen, setIsOpen] = useState(false)
+const BookOptionsDropdown = ({ book }: { book: Book }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isEditingBookInfo, setIsEditingBookInfo] = useState(false)
 
   return (
-    <DropdownMenu.Root onOpenChange={(value) => setIsOpen(value)}>
-      <DropdownButton css={{ '& span': { opacity: isOpen ? 1 : 0.7 } }}>
-        <Flex as="span" center>
-          <Icon icon={MenuIcon} />
-        </Flex>
-      </DropdownButton>
+    <>
+      {isEditingBookInfo && (
+        <EditBookInfoDialog
+          isOpen={isEditingBookInfo}
+          onOpenChange={setIsEditingBookInfo}
+          selectedBook={book}
+        />
+      )}
 
-      <DropdownContentWrapper align="end" sideOffset={3}>
-        <DropdownItem>
-          <Icon icon={CheckIcon} />
-          Mark as read
-        </DropdownItem>
-        <DropdownItem>
-          <Icon icon={PencilIcon} />
-          Edit
-        </DropdownItem>
-        <DropdownItem>
-          <Icon icon={TrashIcon} />
-          Delete
-        </DropdownItem>
-      </DropdownContentWrapper>
-    </DropdownMenu.Root>
+      <DropdownMenu.Root onOpenChange={(value) => setIsDropdownOpen(value)}>
+        <DropdownButton css={{ '& span': { opacity: isDropdownOpen ? 1 : 0.7 } }}>
+          <Flex as="span" center>
+            <Icon icon={MenuIcon} />
+          </Flex>
+        </DropdownButton>
+
+        <DropdownContentWrapper align="end" sideOffset={3}>
+          <DropdownItem>
+            <Icon icon={CheckIcon} />
+            Mark as read
+          </DropdownItem>
+
+          <DropdownItem onClick={() => setIsEditingBookInfo(true)}>
+            <Icon icon={PencilIcon} />
+            Edit
+          </DropdownItem>
+
+          <DropdownItem>
+            <Icon icon={TrashIcon} />
+            Delete
+          </DropdownItem>
+        </DropdownContentWrapper>
+      </DropdownMenu.Root>
+    </>
   )
 }
 

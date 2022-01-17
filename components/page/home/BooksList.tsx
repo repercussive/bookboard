@@ -31,7 +31,7 @@ const BooksList = observer(() => {
   )
 })
 
-const BookListItem = ({ book }: { book: Book }) => {
+const BookListItem = observer(({ book }: { book: Book }) => {
   return (
     <BookListItemWrapper>
       <Flex as="span" direction="column">
@@ -46,7 +46,7 @@ const BookListItem = ({ book }: { book: Book }) => {
       <BookOptionsDropdown book={book} />
     </BookListItemWrapper>
   )
-}
+})
 
 const NoBooksText = () => {
   return (

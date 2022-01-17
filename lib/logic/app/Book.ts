@@ -1,3 +1,4 @@
+import { makeAutoObservable } from 'mobx'
 import { nanoid } from 'nanoid'
 
 export interface BookConstructorOptions {
@@ -15,5 +16,12 @@ export default class Book {
     this.title = title
     this.author = author
     this.id = nanoid(8)
+    makeAutoObservable(this)
+  }
+
+  public updateInfo = (newInfo: BookConstructorOptions) => {
+    const { title, author } = newInfo
+    this.title = title
+    this.author = author
   }
 }

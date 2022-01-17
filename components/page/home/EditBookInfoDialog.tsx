@@ -9,10 +9,17 @@ import Icon from '@/components/modular/Icon'
 import Spacer from '@/components/modular/Spacer'
 import CrossIcon from '@/components/icons/CrossIcon'
 
+interface Props {
+  triggerElement?: JSX.Element
+  selectedBook?: Book,
+  isOpen: boolean,
+  onOpenChange: (open: boolean) => void
+}
+
 const emptyBookInfo = { title: '', author: '' }
 
-const AddBookDialog = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const [bookInfo, setBookInfo] = useState<BookConstructorOptions>(emptyBookInfo)
+const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange }: Props) => {
+  const [bookInfo, setBookInfo] = useState<BookConstructorOptions>(selectedBook ? { ...selectedBook } : emptyBookInfo)
   const { selectedBoard } = container.resolve(BoardsHandler)
 
   useEffect(() => {
@@ -21,35 +28,46 @@ const AddBookDialog = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => vo
     }
   }, [isOpen])
 
-  function handleAddBook() {
-    selectedBoard.addBook(new Book({ ...bookInfo }))
-    onClose()
+  function handleSaveChanges() {
+    if (selectedBook) {
+      selectedBook.updateInfo({ ...bookInfo })
+    } else {
+      selectedBoard.addBook(new Book({ ...bookInfo }))
+    }
+
+    onOpenChange(false)
   }
 
   return (
-    <Dialog.Portal>
-      <Overlay>
-        <ContentWrapper>
-          <TitleSection />
-          <Spacer mb="$3" />
-          <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
-          <Spacer mb="$4" />
-          <AddButton
-            onClick={handleAddBook}
-            disabled={!bookInfo.title || !bookInfo.author}
-          >
-            Add
-          </AddButton>
-        </ContentWrapper>
-      </Overlay>
-    </Dialog.Portal>
+    <Dialog.Root
+      open={isOpen ?? isOpen}
+      onOpenChange={(value) => onOpenChange(value)}
+    >
+      {(() => triggerElement)()}
+      <Dialog.Portal>
+        <Overlay>
+          <ContentWrapper>
+            <TitleSection text={selectedBook ? 'Edit book' : 'Add book'} />
+            <Spacer mb="$3" />
+            <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
+            <Spacer mb="$4" />
+            <SaveChangesButton
+              onClick={handleSaveChanges}
+              disabled={!bookInfo.title || !bookInfo.author}
+            >
+              {selectedBook ? 'Save' : 'Add'}
+            </SaveChangesButton>
+          </ContentWrapper>
+        </Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }
 
-const TitleSection = () => {
+const TitleSection = ({ text }: { text: string }) => {
   return (
     <Flex align="center">
-      <Dialog.Title>Add book</Dialog.Title>
+      <Dialog.Title>{text}</Dialog.Title>
       <Spacer ml="auto" />
       <CloseButton>
         <Icon icon={CrossIcon} />
@@ -121,12 +139,12 @@ const Overlay = styled(Dialog.Overlay, {
 
 const BookInfoInput = styled('input', {
   width: '100%',
-  border: 'solid 2px $primary',
+  border: 'solid 3px $primary',
   borderRadius: '4px',
   bg: 'none'
 })
 
-const AddButton = styled('button', {
+const SaveChangesButton = styled('button', {
   bg: '$primary',
   color: '$bg',
   padding: '$2',
@@ -147,4 +165,4 @@ const CloseButton = styled(Dialog.Close, {
   }
 })
 
-export default AddBookDialog
+export default EditBookInfoDialog
