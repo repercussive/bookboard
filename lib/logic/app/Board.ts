@@ -24,6 +24,11 @@ export default class Board {
     this.unreadBooksOrder.unshift(newBook.id)
   }
 
+  public deleteBook = (book: Book) => {
+    delete this.unreadBooks[book.id]
+    this.unreadBooksOrder = this.unreadBooksOrder.filter((id) => id !== book.id)
+  }
+
   public get hasUnreadBooks() {
     return Object.keys(this.unreadBooks).length > 0
   }

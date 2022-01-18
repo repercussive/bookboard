@@ -43,6 +43,20 @@ test(`adding a book to a board pushes the new book id to the start of the "unrea
   expect(board.unreadBooksOrder).toEqual([testBookB.id, testBookA.id])
 })
 
+test('deleting a book removes it from the "unreadBooks" object', () => {
+  const { board, testBookA } = createBoardWithTestBooks()
+
+  board.deleteBook(testBookA)
+  expect(board.unreadBooks[testBookA.id]).toBeUndefined()
+})
+
+test('deleting a book removes its id from the "unreadBooksOrder" array', () => {
+  const { board, testBookA, testBookB } = createBoardWithTestBooks()
+
+  board.deleteBook(testBookB)
+  expect(board.unreadBooksOrder).toEqual([testBookA.id])
+})
+
 test(`hasUnreadBooks is true only when the board has unread books`, () => {
   const board = new Board({ name: 'Test board' })
   expect(board.hasUnreadBooks).toEqual(false)

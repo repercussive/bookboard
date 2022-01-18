@@ -3,6 +3,7 @@ import { styled } from '@/styles/stitches.config'
 import Book from '@/lib/logic/app/Book'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import EditBookInfoDialog from '@/components/page/home/EditBookInfoDialog'
+import DeleteBookDialog from '@/components/page/home/DeleteBookDialog'
 import Icon from '@/components/modular/Icon'
 import Flex from '@/components/modular/Flex'
 import CheckIcon from '@/components/icons/CheckIcon'
@@ -12,47 +13,54 @@ import PencilIcon from '@/components/icons/PencilIcon'
 
 const BookOptionsDropdown = ({ book }: { book: Book }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [isEditingBookInfo, setIsEditingBookInfo] = useState(false)
+  const [activeDialog, setActiveDialog] = useState<'edit' | 'delete' | 'review' | null>(null)
 
   return (
     <>
-      {isEditingBookInfo && (
+      {activeDialog === 'edit' && (
         <EditBookInfoDialog
-          isOpen={isEditingBookInfo}
-          onOpenChange={setIsEditingBookInfo}
+          isOpen={activeDialog === 'edit'}
+          onOpenChange={(open) => setActiveDialog(open ? 'edit' : null)}
           selectedBook={book}
+        />
+      )}
+      {activeDialog === 'delete' && (
+        <DeleteBookDialog
+          isOpen={activeDialog === 'delete'}
+          selectedBook={book}
+          onOpenChange={(open) => setActiveDialog(open ? 'delete' : null)}
         />
       )}
 
       <DropdownMenu.Root onOpenChange={(value) => setIsDropdownOpen(value)}>
-        <DropdownButton css={{ '& span': { opacity: isDropdownOpen ? 1 : 0.7 } }}>
+
+        <DropdownTrigger css={{ '& span': { opacity: isDropdownOpen ? 1 : 0.7 } }}>
           <Flex as="span" center>
             <Icon icon={MenuIcon} />
           </Flex>
-        </DropdownButton>
+        </DropdownTrigger>
 
         <DropdownContentWrapper align="end" sideOffset={3}>
           <DropdownItem>
             <Icon icon={CheckIcon} />
             Mark as read
           </DropdownItem>
-
-          <DropdownItem onClick={() => setIsEditingBookInfo(true)}>
+          <DropdownItem onClick={() => setActiveDialog('edit')}>
             <Icon icon={PencilIcon} />
             Edit
           </DropdownItem>
-
-          <DropdownItem>
+          <DropdownItem onClick={() => setActiveDialog('delete')}>
             <Icon icon={TrashIcon} />
             Delete
           </DropdownItem>
         </DropdownContentWrapper>
+
       </DropdownMenu.Root>
     </>
   )
 }
 
-const DropdownButton = styled(DropdownMenu.Trigger, {
+const DropdownTrigger = styled(DropdownMenu.Trigger, {
   background: 'none',
   width: '1.6rem',
   height: '1.6rem',
