@@ -5,6 +5,7 @@ import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
+import SimpleButton from '@/components/modular/SimpleButton'
 
 interface Props {
   triggerElement?: JSX.Element
@@ -44,12 +45,12 @@ const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange
     >
       <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
       <Spacer mb="$4" />
-      <SaveChangesButton
+      <SimpleButton
         onClick={handleSaveChanges}
         disabled={!bookInfo.title || !bookInfo.author}
       >
         {selectedBook ? 'Save' : 'Add'}
-      </SaveChangesButton>
+      </SimpleButton>
     </Dialog>
   )
 }
@@ -93,16 +94,6 @@ const BookInfoInput = styled('input', {
   border: 'solid 3px $primary',
   borderRadius: '4px',
   bg: 'none'
-})
-
-const SaveChangesButton = styled('button', {
-  bg: '$primary',
-  color: '$bg',
-  padding: '$2',
-  borderRadius: '4px',
-  '&:hover': {
-    bg: '$primaryDark',
-  }
 })
 
 export default EditBookInfoDialog
