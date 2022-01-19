@@ -8,7 +8,7 @@ import Spacer from '@/components/modular/Spacer'
 import SimpleButton from '@/components/modular/SimpleButton'
 
 interface Props {
-  triggerElement?: JSX.Element
+  triggerElement?: JSX.Element,
   selectedBook?: Book,
   isOpen: boolean,
   onOpenChange: (open: boolean) => void

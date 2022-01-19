@@ -26,3 +26,17 @@ test('updating a book correctly sets its title and author', () => {
   expect(testBook.title).toEqual('New title')
   expect(testBook.author).toEqual('New author')
 })
+
+test('updating rating works', () => {
+  const testBook = new Book({ title: 'Old title', author: 'Old author' })
+
+  testBook.updateRating(4)
+  expect(testBook.rating).toEqual(4)
+})
+
+test('updating review works', () => {
+  const testBook = new Book({ title: 'Old title', author: 'Old author' })
+
+  testBook.updateReview('it is pretty good')
+  expect(testBook.review).toEqual('it is pretty good')
+})

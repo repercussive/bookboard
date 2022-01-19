@@ -11,6 +11,7 @@ export default class Board {
   public name
   public unreadBooks: { [id: string]: Book } = {}
   public unreadBooksOrder: string[] = []
+  public readBooks: { [id: string]: Book } = {}
 
   constructor(options: BoardConstructorOptions) {
     const { name } = options
@@ -25,6 +26,16 @@ export default class Board {
   }
 
   public deleteBook = (book: Book) => {
+    this.removeUnreadBook(book)
+  }
+
+  public markBookAsRead = (book: Book) => {
+    book.dateCompleted = new Date()
+    this.removeUnreadBook(book)
+    this.readBooks[book.id] = book
+  }
+
+  private removeUnreadBook = (book: Book) => {
     delete this.unreadBooks[book.id]
     this.unreadBooksOrder = this.unreadBooksOrder.filter((id) => id !== book.id)
   }

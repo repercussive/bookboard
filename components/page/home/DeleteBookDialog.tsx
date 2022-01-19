@@ -1,19 +1,13 @@
 import { container } from 'tsyringe'
 import { useEffect, useState } from 'react'
-import Book from '@/lib/logic/app/Book'
+import { BookActionDialogProps } from '@/components/page/home/BookActionsDropdown'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
 import Text from '@/components/modular/Text'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 
-interface Props {
-  isOpen: boolean,
-  selectedBook: Book,
-  onOpenChange: (open: boolean) => void
-}
-
-const DeleteBookDialog = ({ isOpen, selectedBook, onOpenChange }: Props) => {
+const DeleteBookDialog = ({ isOpen, selectedBook, onOpenChange }: BookActionDialogProps) => {
   const [disableDeleteButton, setDisableDeleteButton] = useState(false)
   const { selectedBoard } = container.resolve(BoardsHandler)
 

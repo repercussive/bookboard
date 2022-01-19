@@ -4,7 +4,7 @@ import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Book from '@/lib/logic/app/Book'
-import BookOptionsDropdown from '@/components/page/home/BookOptionsDropdown'
+import BookActionsDropdown from '@/components/page/home/BookActionsDropdown'
 import Box from '@/components/modular/Box'
 import Icon from '@/components/modular/Icon'
 import Text from '@/components/modular/Text'
@@ -43,7 +43,7 @@ const BookListItem = observer(({ book }: { book: Book }) => {
         </Text>
       </Flex>
       <Spacer ml="auto" />
-      <BookOptionsDropdown book={book} />
+      <BookActionsDropdown book={book} />
     </BookListItemWrapper>
   )
 })

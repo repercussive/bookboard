@@ -43,18 +43,27 @@ test(`adding a book to a board pushes the new book id to the start of the "unrea
   expect(board.unreadBooksOrder).toEqual([testBookB.id, testBookA.id])
 })
 
-test('deleting a book removes it from the "unreadBooks" object', () => {
-  const { board, testBookA } = createBoardWithTestBooks()
+test('deleting a book removes it from the "unreadBooks" object and the "unreadBooksOrder" array', () => {
+  const { board, testBookA, testBookB } = createBoardWithTestBooks()
 
   board.deleteBook(testBookA)
   expect(board.unreadBooks[testBookA.id]).toBeUndefined()
+  expect(board.unreadBooksOrder).toEqual([testBookB.id])
 })
 
-test('deleting a book removes its id from the "unreadBooksOrder" array', () => {
+test('marking a book as read removes it from the "unreadBooks" object and the "unreadBooksOrder" array', () => {
   const { board, testBookA, testBookB } = createBoardWithTestBooks()
 
-  board.deleteBook(testBookB)
-  expect(board.unreadBooksOrder).toEqual([testBookA.id])
+  board.markBookAsRead(testBookA)
+  expect(board.unreadBooks[testBookA.id]).toBeUndefined()
+  expect(board.unreadBooksOrder).toEqual([testBookB.id])
+})
+
+test('marking a book as read moves it to the "readBooks" object', () => {
+  const { board, testBookA } = createBoardWithTestBooks()
+
+  board.markBookAsRead(testBookA)
+  expect(board.readBooks[testBookA.id]).toEqual(testBookA)
 })
 
 test(`hasUnreadBooks is true only when the board has unread books`, () => {
