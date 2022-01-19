@@ -36,7 +36,7 @@ const BookActionsDropdown = ({ book }: { book: Book }) => {
       <BookActionDialog dialogAction="edit" />
       <BookActionDialog dialogAction="delete" />
       <DropdownMenu.Root onOpenChange={(value) => setIsDropdownOpen(value)}>
-        <DropdownTrigger open={isDropdownOpen}>
+        <DropdownTrigger aria-label="Book actions" open={isDropdownOpen}>
           <Flex as="span" center>
             <Icon icon={MenuIcon} />
           </Flex>

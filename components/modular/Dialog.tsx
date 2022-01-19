@@ -11,7 +11,7 @@ interface Props {
   children: ReactNode
   triggerElement?: JSX.Element
   isOpen?: boolean,
-  onOpenChange?: (open: boolean) => void,
+  onOpenChange?: (open: boolean) => void
 }
 
 const Dialog = ({ title, triggerElement, isOpen, onOpenChange, children }: Props) => {
@@ -39,7 +39,7 @@ const TitleSection = ({ text }: { text: string }) => {
     <Flex align="center">
       <RadixDialog.Title>{text}</RadixDialog.Title>
       <Spacer ml="auto" />
-      <CloseButton>
+      <CloseButton aria-label="Close dialog">
         <Icon icon={CrossIcon} />
       </CloseButton>
     </Flex>
