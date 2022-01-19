@@ -36,7 +36,7 @@ const BookActionsDropdown = ({ book }: { book: Book }) => {
       <BookActionDialog dialogAction="edit" />
       <BookActionDialog dialogAction="delete" />
       <DropdownMenu.Root onOpenChange={(value) => setIsDropdownOpen(value)}>
-        <DropdownTrigger css={{ '& span': { opacity: isDropdownOpen ? 1 : 0.7 } }}>
+        <DropdownTrigger open={isDropdownOpen}>
           <Flex as="span" center>
             <Icon icon={MenuIcon} />
           </Flex>
@@ -78,7 +78,7 @@ const BookActionDialog = ({ dialogAction }: { dialogAction: BookAction }) => {
   const { book, activeDialog, setActiveDialog } = useContext(BookActionsContext)
 
   if (dialogAction !== activeDialog) return null
-  
+
   const Component = bookActionsDialogsMap[dialogAction]
 
   return (
@@ -96,6 +96,20 @@ const DropdownTrigger = styled(DropdownMenu.Trigger, {
   height: '1.6rem',
   '&:hover span': {
     opacity: 1
+  },
+  variants: {
+    open: {
+      true: {
+        '& span': {
+          opacity: '1 !important'
+        }
+      },
+      false: {
+        '& span': {
+          opacity: 0.7
+        }
+      }
+    }
   }
 })
 
