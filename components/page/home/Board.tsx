@@ -1,26 +1,31 @@
+import { container } from 'tsyringe'
+import { observer } from 'mobx-react-lite'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
-import Flex from '@/components/modular/Flex'
-import Spacer from '@/components/modular/Spacer'
+import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import AddBookButton from '@/components/page/home/AddBookButton'
 import BooksList from '@/components/page/home/BooksList'
+import Flex from '@/components/modular/Flex'
+import Spacer from '@/components/modular/Spacer'
 
-const Board = () => {
+const Board = observer(() => {
+  const { viewMode } = container.resolve(BoardsHandler)
+
   return (
     <Flex center direction="column">
       <Hanger role="presentation" />
       <Wrapper>
-        <Flex align="center">
-          <Title>Up next</Title>
+        <Flex align="center" css={{ height: '2rem' }}>
+          <Title>{viewMode === 'unread' ? 'Up next' : `Books you've read`}</Title>
           <Spacer ml="auto" />
-          <AddBookButton />
+          {viewMode === 'unread' && <AddBookButton />}
         </Flex>
         <Spacer mb="$6" />
         <BooksList />
       </Wrapper>
     </Flex>
   )
-}
+})
 
 const Wrapper = styled('div', {
   width: 'min(calc(100vw - 1rem), 25rem)',

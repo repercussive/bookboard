@@ -5,6 +5,7 @@ import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Book from '@/lib/logic/app/Book'
 import BookActionsDropdown from '@/components/page/home/BookActionsDropdown'
+import StarRatingPreview from '@/components/page/home/StarRatingPreview'
 import Box from '@/components/modular/Box'
 import Icon from '@/components/modular/Icon'
 import Text from '@/components/modular/Text'
@@ -13,15 +14,22 @@ import Spacer from '@/components/modular/Spacer'
 import PlusIcon from '@/components/icons/PlusIcon'
 
 const BooksList = observer(() => {
-  const { selectedBoard } = container.resolve(BoardsHandler)
+  const { selectedBoard, viewMode } = container.resolve(BoardsHandler)
+
+  const ids = viewMode === 'read'
+    ? selectedBoard.getSortedReadBookIds()
+    : selectedBoard.unreadBooksOrder
+
+  const books = viewMode === 'read' ? selectedBoard.readBooks : selectedBoard.unreadBooks
 
   return (
     <Box>
-      {!selectedBoard.hasUnreadBooks ? <NoBooksText />
+      {!ids.length ? <NoBooksText />
         : <ul>
-          {selectedBoard.unreadBooksOrder.map((id) => (
+          {ids.map((id) => (
             <BookListItem
-              book={selectedBoard.unreadBooks[id]}
+              book={books[id]}
+              showRating={viewMode === 'read'}
               key={id}
             />
           ))}
@@ -31,14 +39,24 @@ const BooksList = observer(() => {
   )
 })
 
-const BookListItem = observer(({ book }: { book: Book }) => {
+const BookListItem = observer(({ book, showRating }: { book: Book, showRating: boolean }) => {
   return (
-    <BookListItemWrapper>
+    <BookListItemWrapper css={{ marginTop: showRating ? '2.25rem' : 0 }}>
       <Flex as="span" direction="column">
-        <Text as="span">
+        {showRating && (
+          <Box
+            as="span"
+            role="img"
+            aria-label={`${book.rating} stars`}
+            css={{ position: 'absolute', top: '-1.1rem', transform: 'translateX(2px)' }}
+          >
+            <StarRatingPreview value={book.rating ?? 0} />
+          </Box>
+        )}
+        <Text>
           {book.title}
         </Text>
-        <Text as="span" css={{ opacity: 0.5, mt: '$1' }}>
+        <Text css={{ opacity: 0.5, mt: '$1' }}>
           {book.author}
         </Text>
       </Flex>
@@ -48,18 +66,24 @@ const BookListItem = observer(({ book }: { book: Book }) => {
   )
 })
 
-const NoBooksText = () => {
+const NoBooksText = observer(() => {
+  const { viewMode } = container.resolve(BoardsHandler)
+
   return (
     <Box css={{ opacity: 0.8, lineHeight: 1.5 }}>
-      <Text css={{ mb: '$2' }}>You haven't added any books yet!</Text>
       <Text>
-        Press
-        <Icon label="The add book button" icon={PlusIcon} css={{ mx: '$2', fontSize: '0.8em' }} />
-        above to add one.
+        You haven't {viewMode === 'read' ? 'finished' : 'read'} any books yet!
       </Text>
+      {viewMode === 'unread' && (
+        <Text css={{ mt: '$2' }}>
+          Press
+          <Icon label="The add book button" icon={PlusIcon} css={{ mx: '$2', fontSize: '0.8em' }} />
+          above to add one.
+        </Text>
+      )}
     </Box>
   )
-}
+})
 
 const BookListItemWrapper = styled('li', {
   display: 'flex',

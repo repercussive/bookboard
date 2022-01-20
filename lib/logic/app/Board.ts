@@ -27,6 +27,7 @@ export default class Board {
 
   public deleteBook = (book: Book) => {
     this.removeUnreadBook(book)
+    this.removeReadBook(book)
   }
 
   public markBookAsRead = (book: Book) => {
@@ -35,9 +36,19 @@ export default class Board {
     this.readBooks[book.id] = book
   }
 
+  public getSortedReadBookIds = () => {
+    return Object.values(this.readBooks)
+      .sort((a, b) => (b.dateCompleted?.valueOf() ?? 0) - (a.dateCompleted?.valueOf() ?? 0))
+      .map((book) => book.id)
+  }
+
   private removeUnreadBook = (book: Book) => {
     delete this.unreadBooks[book.id]
     this.unreadBooksOrder = this.unreadBooksOrder.filter((id) => id !== book.id)
+  }
+
+  private removeReadBook = (book: Book) => {
+    delete this.readBooks[book.id]
   }
 
   public get hasUnreadBooks() {

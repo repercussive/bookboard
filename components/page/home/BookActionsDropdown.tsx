@@ -1,7 +1,9 @@
+import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
-import Book from '@/lib/logic/app/Book'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import Book from '@/lib/logic/app/Book'
+import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import EditBookInfoDialog from '@/components/page/home/EditBookInfoDialog'
 import DeleteBookDialog from '@/components/page/home/DeleteBookDialog'
 import ReviewBookDialog from '@/components/page/home/ReviewBookDialog'
@@ -11,6 +13,7 @@ import CheckIcon from '@/components/icons/CheckIcon'
 import MenuIcon from '@/components/icons/MenuIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 import PencilIcon from '@/components/icons/PencilIcon'
+import StarOutlineIcon from '@/components/icons/StarOutlineIcon'
 
 export interface BookActionDialogProps {
   selectedBook: Book,
@@ -48,13 +51,14 @@ const BookActionsDropdown = ({ book }: { book: Book }) => {
 }
 
 const DropdownContent = () => {
+  const { viewMode } = container.resolve(BoardsHandler)
   const { setActiveDialog } = useContext(BookActionsContext)
 
   return (
     <DropdownContentWrapper align="end" sideOffset={3}>
       <DropdownItem onClick={() => setActiveDialog('review')}>
-        <Icon icon={CheckIcon} />
-        Mark as read
+        <Icon icon={viewMode === 'read' ? StarOutlineIcon : CheckIcon} />
+        {viewMode === 'read' ? 'View thoughts' : 'Mark as read'}
       </DropdownItem>
       <DropdownItem onClick={() => setActiveDialog('edit')}>
         <Icon icon={PencilIcon} />

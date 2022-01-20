@@ -10,9 +10,9 @@ export default class Book {
   public id
   public title
   public author
-  public rating?: number
-  public review?: string
-  public dateCompleted?: Date
+  public rating?: number = undefined
+  public review?: string = undefined
+  public dateCompleted?: Date = undefined
 
   constructor(options: BookConstructorOptions) {
     const { title, author } = options

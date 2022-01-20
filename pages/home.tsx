@@ -1,3 +1,6 @@
+import { container } from 'tsyringe'
+import { observer } from 'mobx-react-lite'
+import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
 import ShelfButton from '@/components/page/home/ShelfButton'
@@ -30,9 +33,7 @@ const HomePage = () => {
       <Spacer mb="$4" />
 
       <Shelf>
-        <ShelfButton filled hoverable={false} label="View books you haven't read yet">Not read</ShelfButton>
-        <Spacer ml="$2" />
-        <ShelfButton label="View books you have read">Read</ShelfButton>
+        <BoardViewModeSection />
         <Spacer ml="auto" />
         <Spacer ml="$3" />
         <ShelfPlant flip />
@@ -44,5 +45,31 @@ const HomePage = () => {
     </Flex>
   )
 }
+
+const BoardViewModeSection = observer(() => {
+  const { viewMode, setViewMode } = container.resolve(BoardsHandler)
+
+  return (
+    <>
+      <ShelfButton
+        onClick={() => setViewMode('unread')}
+        filled={viewMode === 'unread'}
+        hoverable={viewMode !== 'unread'}
+        label="View unread books"
+      >
+        Unread
+      </ShelfButton>
+      <Spacer ml="$2" />
+      <ShelfButton
+        onClick={() => setViewMode('read')}
+        filled={viewMode === 'read'}
+        hoverable={viewMode !== 'read'}
+        label="View books you have read"
+      >
+        Read
+      </ShelfButton>
+    </>
+  )
+})
 
 export default HomePage

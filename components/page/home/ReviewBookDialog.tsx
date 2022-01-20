@@ -1,31 +1,35 @@
 import { container } from 'tsyringe'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { BookActionDialogProps } from '@/components/page/home/BookActionsDropdown'
+import StarRatingInput from '@/components/page/home/StarRatingInput'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
-import StarRating from '@/components/modular/StarRating'
 
 const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDialogProps) => {
+  const isUpdatingReview = useMemo(() => !!selectedBook.rating, [selectedBook])
   const [rating, setRating] = useState(selectedBook.rating ?? 0)
   const [review, setReview] = useState(selectedBook.review ?? '')
 
   function handleMarkAsRead() {
     selectedBook.updateRating(rating)
     selectedBook.updateReview(review)
-    container.resolve(BoardsHandler).selectedBoard.markBookAsRead(selectedBook)
+    if (!isUpdatingReview) {
+      container.resolve(BoardsHandler).selectedBoard.markBookAsRead(selectedBook)
+    }
+
     onOpenChange(false)
   }
 
   return (
     <Dialog
-      title={'Add thoughts'}
+      title={isUpdatingReview ? 'Your thoughts' : 'Add thoughts'}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
     >
-      <StarRating
+      <StarRatingInput
         value={rating}
         onChange={(value) => setRating(value)}
       />
@@ -42,7 +46,9 @@ const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDial
         onClick={handleMarkAsRead}
         disabled={rating === 0}
       >
-        {rating === 0 ? 'Add a rating first' : 'Mark as read'}
+        {rating === 0
+          ? 'Add a rating first'
+          : isUpdatingReview ? 'Save' : 'Mark as read'}
       </SimpleButton>
     </Dialog>
   )
