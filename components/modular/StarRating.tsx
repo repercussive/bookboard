@@ -1,19 +1,18 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
-import { BookRating } from '@/lib/logic/app/Book'
 import Icon from '@/components/modular/Icon'
 import StarOutlineIcon from '@/components/icons/StarOutlineIcon'
 import StarFillIcon from '@/components/icons/StarFillIcon'
 
 const StarRatingContext = createContext<{
-  selectedValue: BookRating,
-  onChange: (value: BookRating) => void,
+  selectedValue: number,
+  onChange: (value: number) => void,
   hoveredValue: number | null,
   setHoveredValue: Dispatch<SetStateAction<number | null>>
 }>(null!)
 
-const StarRating = ({ value, onChange }: { value: BookRating, onChange: (value: BookRating) => void }) => {
+const StarRating = ({ value, onChange }: { value: number, onChange: (value: number) => void }) => {
   const [hoveredValue, setHoveredValue] = useState<number | null>(null)
 
   return (
@@ -30,7 +29,7 @@ const StarRating = ({ value, onChange }: { value: BookRating, onChange: (value: 
   )
 }
 
-const Star = ({ value }: { value: BookRating }) => {
+const Star = ({ value }: { value: number }) => {
   const { selectedValue, onChange, hoveredValue, setHoveredValue } = useContext(StarRatingContext)
 
   function handleSelect() {

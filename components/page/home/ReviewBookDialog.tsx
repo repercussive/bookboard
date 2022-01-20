@@ -1,7 +1,6 @@
 import { container } from 'tsyringe'
 import { useState } from 'react'
 import { styled } from '@/styles/stitches.config'
-import { BookRating } from '@/lib/logic/app/Book'
 import { BookActionDialogProps } from '@/components/page/home/BookActionsDropdown'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
@@ -10,7 +9,7 @@ import Spacer from '@/components/modular/Spacer'
 import StarRating from '@/components/modular/StarRating'
 
 const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDialogProps) => {
-  const [rating, setRating] = useState(selectedBook.rating ?? 3 as BookRating)
+  const [rating, setRating] = useState(selectedBook.rating ?? 0)
   const [review, setReview] = useState(selectedBook.review ?? '')
 
   function handleMarkAsRead() {
@@ -39,7 +38,12 @@ const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDial
         />
       </label>
       <Spacer mb="$3" />
-      <SimpleButton onClick={handleMarkAsRead}>Mark as read</SimpleButton>
+      <SimpleButton
+        onClick={handleMarkAsRead}
+        disabled={rating === 0}
+      >
+        {rating === 0 ? 'Add a rating first' : 'Mark as read'}
+      </SimpleButton>
     </Dialog>
   )
 }

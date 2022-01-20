@@ -6,13 +6,11 @@ export interface BookConstructorOptions {
   author: string
 }
 
-export type BookRating = 1 | 2 | 3 | 4 | 5
-
 export default class Book {
   public id
   public title
   public author
-  public rating?: BookRating 
+  public rating?: number
   public review?: string
   public dateCompleted?: Date
 
@@ -30,7 +28,7 @@ export default class Book {
     this.author = author
   }
 
-  public updateRating = (rating: BookRating) => {
+  public updateRating = (rating: number) => {
     this.rating = rating
   }
 
