@@ -4,19 +4,21 @@ import { styled } from '@/styles/stitches.config'
 import useElementDimensions from '@/lib/hooks/useElementDimensions'
 
 interface Props {
+  onClick?: () => void,
   filled?: boolean,
   hoverable?: boolean,
   css?: CSS,
   label?: string
 }
 
-const ShelfButton: FC<Props> = ({ filled, hoverable, css, label, children }) => {
+const ShelfButton: FC<Props> = ({ onClick, filled, hoverable, css, label, children }) => {
   const buttonRef = useRef<HTMLButtonElement>(null!)
   const dimensions = useElementDimensions(buttonRef)
 
   return (
     <StyledButton
       ref={buttonRef}
+      onClick={onClick}
       filled={filled}
       hoverable={hoverable}
       aria-label={label}
