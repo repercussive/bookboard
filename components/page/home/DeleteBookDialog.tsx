@@ -30,7 +30,9 @@ const DeleteBookDialog = ({ isOpen, selectedBook, onOpenChange }: BookActionDial
       isOpen={isOpen}
       onOpenChange={onOpenChange}
     >
-      <Text>Permanently delete {selectedBook.title} from this board?</Text>
+      <Text>
+        Permanently delete <span style={{ fontWeight: 900 }}>{selectedBook.title}</span> from this board?
+      </Text>
       <Spacer mb="$3" />
       <SimpleButton
         onClick={handleDeleteBook}
