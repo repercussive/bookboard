@@ -42,6 +42,10 @@ export default class Board {
       .map((book) => book.id)
   }
 
+  public updateUnreadBooksOrder = (newOrder: string[]) => {
+    this.unreadBooksOrder = newOrder
+  }
+
   private removeUnreadBook = (book: Book) => {
     delete this.unreadBooks[book.id]
     this.unreadBooksOrder = this.unreadBooksOrder.filter((id) => id !== book.id)

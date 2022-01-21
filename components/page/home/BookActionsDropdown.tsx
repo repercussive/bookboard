@@ -1,5 +1,5 @@
 import { container } from 'tsyringe'
-import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
+import { createContext, Dispatch, memo, SetStateAction, useContext, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import Book from '@/lib/logic/app/Book'
@@ -29,7 +29,7 @@ const BookActionsContext = createContext<{
   setActiveDialog: Dispatch<SetStateAction<BookAction | null>>
 }>(null!)
 
-const BookActionsDropdown = ({ book }: { book: Book }) => {
+const BookActionsDropdown = memo(({ book }: { book: Book }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [activeDialog, setActiveDialog] = useState<BookAction | null>(null)
 
@@ -48,7 +48,7 @@ const BookActionsDropdown = ({ book }: { book: Book }) => {
       </DropdownMenu.Root>
     </BookActionsContext.Provider>
   )
-}
+})
 
 const DropdownContent = () => {
   const { viewMode } = container.resolve(BoardsHandler)

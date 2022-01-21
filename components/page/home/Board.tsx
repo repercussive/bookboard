@@ -20,7 +20,7 @@ const Board = observer(() => {
           <Spacer ml="auto" />
           {viewMode === 'unread' && <AddBookButton />}
         </Flex>
-        <Spacer mb="$6" />
+        <Spacer mb="$4" />
         <BooksList />
       </Wrapper>
     </Flex>
