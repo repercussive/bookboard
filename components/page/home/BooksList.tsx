@@ -246,7 +246,7 @@ const BookListItemWrapper = styled('li', {
   },
   '&::before': {
     ...defaultPseudo,
-    top: '18%',
+    top: '0.42em',
     width: '4px',
     height: '4px',
     background: 'currentColor',
@@ -263,6 +263,7 @@ const BookListItemWrapper = styled('li', {
 
 const BookInfoWrapper = styled('div', {
   touchAction: 'manipulation',
+  wordBreak: 'break-word',
   variants: {
     showDragCursor: {
       true: {
