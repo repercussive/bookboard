@@ -2,7 +2,7 @@ import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
-import { DragStartEvent, DragEndEvent, DndContext, DragOverlay, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors, DraggableSyntheticListeners, } from '@dnd-kit/core'
+import { DragStartEvent, DragEndEvent, DndContext, DragOverlay, closestCenter, KeyboardSensor, TouchSensor, useSensor, useSensors, DraggableSyntheticListeners, MouseSensor, } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy, } from '@dnd-kit/sortable'
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { styled } from '@/styles/stitches.config'
@@ -54,8 +54,8 @@ const UnreadBooksList = observer(() => {
   const ids = selectedBoard.unreadBooksOrder
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(TouchSensor),
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
@@ -262,7 +262,7 @@ const BookListItemWrapper = styled('li', {
 })
 
 const BookInfoWrapper = styled('div', {
-  touchAction: 'none',
+  touchAction: 'manipulation',
   variants: {
     showDragCursor: {
       true: {
