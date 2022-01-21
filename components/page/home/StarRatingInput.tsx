@@ -71,11 +71,6 @@ const Wrapper = styled('fieldset', {
   justifyContent: 'center',
   alignItems: 'center',
   border: 'none',
-  '.hidden': {
-    position: 'absolute',
-    width: '0%',
-    overflow: 'hidden'
-  },
   'input:focus + label': {
     position: 'relative',
     '&::after': {
