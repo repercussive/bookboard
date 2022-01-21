@@ -72,7 +72,7 @@ const NoBooksText = observer(() => {
   return (
     <Box css={{ opacity: 0.8, lineHeight: 1.5 }}>
       <Text>
-        You haven't {viewMode === 'read' ? 'finished' : 'read'} any books yet!
+        You haven't {viewMode === 'read' ? 'finished' : 'added'} any books yet!
       </Text>
       {viewMode === 'unread' && (
         <Text css={{ mt: '$2' }}>
