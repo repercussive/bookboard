@@ -191,14 +191,16 @@ const BookListItem = observer(({ book, showRating, hide, listeners, attributes, 
 })
 
 const Rating = observer(({ book }: { book: Book }) => {
+  const { rating } = book
+
   return (
     <Box
       as="span"
       role="img"
-      aria-label={`${book.rating} stars`}
+      aria-label={`${rating} star${rating === 1 ? '' : 's'}`}
       css={{ position: 'absolute', top: '-1.1rem', transform: 'translateX(2px)' }}
     >
-      <StarRatingPreview value={book.rating ?? 0} />
+      <StarRatingPreview value={rating ?? 0} />
     </Box>
   )
 })
@@ -210,7 +212,7 @@ const BookInfo = observer(({ book }: { book: Book }) => {
         {book.title}
       </Text>
       <Text css={{ opacity: 0.5, mt: '$1' }}>
-        <span className="hidden">by </span>{book.author}
+        <span className="hidden">by{' '}</span>{book.author}
       </Text>
     </>
   )
