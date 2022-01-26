@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { styled } from '@/styles/stitches.config'
+import { defaultPseudo } from '@/styles/utilStyles'
 import * as RadixDialog from '@radix-ui/react-dialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
@@ -62,7 +63,6 @@ const ContentWrapper = styled(RadixDialog.Content, {
 })
 
 const Overlay = styled(RadixDialog.Overlay, {
-  bg: 'rgba(0, 0, 0, 0.45)',
   zIndex: 1,
   position: 'fixed',
   inset: 0,
@@ -70,7 +70,15 @@ const Overlay = styled(RadixDialog.Overlay, {
   flexDirection: 'column',
   alignItems: 'center',
   paddingTop: '12.5vh',
-  overflowY: 'auto'
+  overflowY: 'auto',
+  bg: 'none',
+  backdropFilter: 'blur(2px)',
+  '&::after': {
+    ...defaultPseudo,
+    bg: '$bg',
+    opacity: 0.8,
+    zIndex: -1,
+  }
 })
 
 const CloseButton = styled(RadixDialog.Close, {
