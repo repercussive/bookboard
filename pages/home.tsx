@@ -21,8 +21,9 @@ const HomePage = () => {
       <TitleBar />
 
       <Shelf>
+        <Spacer ml="-$1" />
         <ShelfPlant />
-        <Spacer ml="$3" />
+        <Spacer ml="$2" />
         <BoardNameButton />
         <Spacer ml="auto" />
         <ShelfButton label="Open the boards menu" css={{ px: '$2', mr: '0.85rem', ml: '$1' }}>
@@ -37,6 +38,7 @@ const HomePage = () => {
         <Spacer ml="auto" />
         <Spacer ml="$3" />
         <ShelfPlant flip />
+        <Spacer ml="-$1" />
       </Shelf>
 
       <Spacer mb="$4" bp1={{ mb: '$6' }} />
