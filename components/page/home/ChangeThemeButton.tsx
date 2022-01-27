@@ -9,7 +9,7 @@ const ChangeThemeButton = () => {
   return (
     <>
       <ThemesDialog isOpen={showDialog} onOpenChange={setShowDialog} />
-      <LightbulbButton onClick={() => setShowDialog(true)}>
+      <LightbulbButton aria-label="Change theme" onClick={() => setShowDialog(true)}>
         <LightbulbSvg />
       </LightbulbButton>
     </>
