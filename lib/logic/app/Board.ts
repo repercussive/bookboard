@@ -20,6 +20,10 @@ export default class Board {
     makeAutoObservable(this)
   }
 
+  public renameBoard = (newName: string) => {
+    this.name = newName
+  }
+
   public addBook = (newBook: Book) => {
     this.unreadBooks[newBook.id] = newBook
     this.unreadBooksOrder.unshift(newBook.id)

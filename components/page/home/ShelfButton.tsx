@@ -13,7 +13,7 @@ interface Props {
 
 const ShelfButton: FC<Props> = ({ onClick, filled, hoverable, css, label, children }) => {
   const buttonRef = useRef<HTMLButtonElement>(null!)
-  const dimensions = useElementDimensions(buttonRef)
+  const dimensions = useElementDimensions(buttonRef, [children])
 
   return (
     <StyledButton

@@ -8,16 +8,21 @@ function getElementDimensions(elementRef: MutableRefObject<HTMLElement>) {
   }
 }
 
-export default function useElementDimensions(elementRef: MutableRefObject<HTMLElement>) {
+export default function useElementDimensions(elementRef: MutableRefObject<HTMLElement>, extraDependencies?: any[]) {
   const [dimensions, setDimensions] = useState(getElementDimensions(elementRef))
 
+  const resize = () => setDimensions(getElementDimensions(elementRef))
+
   useLayoutEffect(() => {
-    const handleResize = () => setDimensions(getElementDimensions(elementRef))
-    const handleResizeDebounced = debounce(handleResize, 300)
-    handleResize()
-    window.addEventListener('resize', handleResizeDebounced)
-    return () => window.removeEventListener('resize', handleResizeDebounced)
+    const resizeDebounced = debounce(resize, 300)
+    resize()
+    window.addEventListener('resize', resizeDebounced)
+    return () => window.removeEventListener('resize', resizeDebounced)
   }, [elementRef])
+
+  useLayoutEffect(() => {
+    resize()
+  }, [...(extraDependencies ?? [])])
 
   return dimensions
 }

@@ -28,6 +28,13 @@ test('when a board is created, it is automatically assigned a random 6-character
   expect(newBoardB.id.length).toEqual(6)
 })
 
+test('renaming a board works', () => {
+  const testBoard = new Board({ name: 'Old name' })
+  testBoard.renameBoard('New name')
+
+  expect(testBoard.name).toEqual('New name')
+})
+
 test(`adding a book to a board adds it to the board's "unreadBooks" object`, () => {
   const { board, testBookA, testBookB } = createBoardWithTestBooks()
 

@@ -11,7 +11,7 @@ export default class BoardsHandler {
 
   constructor() {
     this.selectedBoard = new Board({
-      name: 'Test board'
+      name: 'Books to read'
     })
     makeAutoObservable(this)
   }
