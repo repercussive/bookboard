@@ -1,11 +1,11 @@
 import { container } from 'tsyringe'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { styled } from '@/styles/stitches.config'
 import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
 import SimpleButton from '@/components/modular/SimpleButton'
+import Input from '@/components/modular/Input'
 
 interface Props {
   triggerElement?: JSX.Element,
@@ -71,7 +71,7 @@ const InputSection = ({ bookInfo, setBookInfo }: {
       <label>
         Title
         <Spacer mb="$1" />
-        <BookInfoInput
+        <Input
           value={bookInfo.title}
           onChange={(e) => updateBookInfo(e.target.value, 'title')}
         />
@@ -80,7 +80,7 @@ const InputSection = ({ bookInfo, setBookInfo }: {
       <label>
         Author
         <Spacer mb="$1" />
-        <BookInfoInput
+        <Input
           value={bookInfo.author}
           onChange={(e) => updateBookInfo(e.target.value, 'author')}
         />
@@ -88,12 +88,5 @@ const InputSection = ({ bookInfo, setBookInfo }: {
     </>
   )
 }
-
-const BookInfoInput = styled('input', {
-  width: '100%',
-  border: 'solid 3px $primary',
-  borderRadius: '4px',
-  bg: 'none'
-})
 
 export default EditBookInfoDialog
