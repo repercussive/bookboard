@@ -7,6 +7,11 @@ import Icon from '@/components/modular/Icon'
 import Spacer from '@/components/modular/Spacer'
 import CrossIcon from '@/components/icons/CrossIcon'
 
+export interface CoreDialogProps {
+  isOpen: boolean,
+  onOpenChange: (open: boolean) => void
+}
+
 interface Props {
   title: string,
   children: ReactNode

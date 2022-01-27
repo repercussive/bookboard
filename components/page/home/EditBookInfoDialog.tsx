@@ -2,16 +2,14 @@ import { container } from 'tsyringe'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import Dialog from '@/components/modular/Dialog'
+import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Input from '@/components/modular/Input'
 
-interface Props {
+interface Props extends CoreDialogProps {
   triggerElement?: JSX.Element,
-  selectedBook?: Book,
-  isOpen: boolean,
-  onOpenChange: (open: boolean) => void
+  selectedBook?: Book
 }
 
 const emptyBookInfo = { title: '', author: '' }

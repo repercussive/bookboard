@@ -2,17 +2,12 @@ import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import Dialog from '@/components/modular/Dialog'
+import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Input from '@/components/modular/Input'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 
-interface Props {
-  isOpen: boolean,
-  onOpenChange: (open: boolean) => void
-}
-
-const RenameBoardDialog = observer(({ isOpen, onOpenChange }: Props) => {
+const RenameBoardDialog = observer(({ isOpen, onOpenChange }: CoreDialogProps) => {
   const [boardName, setBoardName] = useState('')
   const { selectedBoard } = container.resolve(BoardsHandler)
 

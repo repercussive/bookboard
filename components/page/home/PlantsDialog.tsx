@@ -1,13 +1,10 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import PlantSvg, { PlantId } from '@/components/page/home/PlantSvg'
-import Dialog from '@/components/modular/Dialog'
-import SimpleButton from '@/components/modular/SimpleButton'
+import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
 
-interface Props {
-  isOpen: boolean,
-  onOpenChange: (open: boolean) => void,
+interface Props extends CoreDialogProps {
   initiallySelectedPlant: PlantId,
   onSaveSelection: (plantId: PlantId) => void
 }

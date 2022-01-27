@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { defaultPseudo } from '@/styles/utilStyles'
 import { styled } from '@/styles/stitches.config'
-import Dialog from '@/components/modular/Dialog'
+import Dialog, { CoreDialogProps as CoreDialogProps } from '@/components/modular/Dialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import CheckIcon from '@/components/icons/CheckIcon'
@@ -23,17 +23,12 @@ const themesData: Record<ThemeId, { name: string }> = {
   milkyway: { name: 'Milky Way' },
 }
 
-interface Props {
-  isOpen: boolean,
-  onOpenChange: (open: boolean) => void
-}
-
 const ThemesDialogContext = createContext<{
   selectedTheme: ThemeId,
   setSelectedTheme: Dispatch<SetStateAction<ThemeId>>
 }>(null!)
 
-const ThemesDialog = ({ isOpen, onOpenChange }: Props) => {
+const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
   const [selectedTheme, setSelectedTheme] = useState<ThemeId>('vanilla')
 
   useEffect(() => {

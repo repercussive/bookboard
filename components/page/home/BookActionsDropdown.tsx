@@ -1,6 +1,7 @@
 import { container } from 'tsyringe'
 import { createContext, Dispatch, memo, SetStateAction, useContext, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
+import { CoreDialogProps } from '@/components/modular/Dialog'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import Book from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
@@ -15,10 +16,8 @@ import TrashIcon from '@/components/icons/TrashIcon'
 import PencilIcon from '@/components/icons/PencilIcon'
 import StarOutlineIcon from '@/components/icons/StarOutlineIcon'
 
-export interface BookActionDialogProps {
-  selectedBook: Book,
-  isOpen: boolean,
-  onOpenChange: (open: boolean) => void
+export interface BookActionDialogProps extends CoreDialogProps {
+  selectedBook: Book
 }
 
 type BookAction = 'review' | 'edit' | 'delete'
