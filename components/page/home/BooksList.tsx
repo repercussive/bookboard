@@ -224,10 +224,10 @@ const NoBooksText = observer(() => {
   return (
     <Box css={{ opacity: 0.8, lineHeight: 1.5 }}>
       <Text>
-        You haven't {viewMode === 'read' ? 'finished' : 'added'} any books yet!
+        You haven't {viewMode === 'read' ? 'finished any books on this board ' : 'added any books'} yet!
       </Text>
       {viewMode === 'unread' && (
-        <Text css={{ mt: '$2' }}>
+        <Text>
           Press
           <Icon label="The add book button" icon={PlusIcon} css={{ mx: '$2', fontSize: '0.8em' }} />
           above to add one.

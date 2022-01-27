@@ -7,11 +7,12 @@ interface Props {
   onClick?: () => void,
   filled?: boolean,
   hoverable?: boolean,
-  css?: CSS,
   label?: string
+  css?: CSS,
+  as?: any,
 }
 
-const ShelfButton: FC<Props> = ({ onClick, filled, hoverable, css, label, children }) => {
+const ShelfButton: FC<Props> = ({ onClick, filled, hoverable, label, css, as, children }) => {
   const buttonRef = useRef<HTMLButtonElement>(null!)
   const dimensions = useElementDimensions(buttonRef, [children])
 
@@ -22,6 +23,7 @@ const ShelfButton: FC<Props> = ({ onClick, filled, hoverable, css, label, childr
       filled={filled}
       hoverable={hoverable}
       aria-label={label}
+      as={as}
       css={{
         ...css,
         '&::after': {

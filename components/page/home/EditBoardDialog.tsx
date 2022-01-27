@@ -2,23 +2,32 @@ import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
+import Board from '@/lib/logic/app/Board'
 import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Input from '@/components/modular/Input'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 
-const RenameBoardDialog = observer(({ isOpen, onOpenChange }: CoreDialogProps) => {
+interface Props extends CoreDialogProps {
+  createNewBoard?: boolean
+}
+
+const EditBoardDialog = observer(({ isOpen, onOpenChange, createNewBoard }: Props) => {
   const [boardName, setBoardName] = useState('')
-  const { selectedBoard } = container.resolve(BoardsHandler)
+  const { selectedBoard, addBoard } = container.resolve(BoardsHandler)
 
   useEffect(() => {
     if (isOpen) {
-      setBoardName(selectedBoard.name)
+      setBoardName(createNewBoard ? '' : selectedBoard.name)
     }
   }, [isOpen])
 
   function handleSave() {
-    selectedBoard.renameBoard(boardName)
+    if (createNewBoard) {
+      addBoard(new Board({ name: boardName }))
+    } else {
+      selectedBoard.renameBoard(boardName)
+    }
     onOpenChange(false)
   }
 
@@ -26,7 +35,7 @@ const RenameBoardDialog = observer(({ isOpen, onOpenChange }: CoreDialogProps) =
     <Dialog
       isOpen={isOpen}
       onOpenChange={(value) => onOpenChange(value)}
-      title="Rename board"
+      title={createNewBoard ? 'Create board' : 'Edit board'}
     >
       <label>
         Name
@@ -38,10 +47,10 @@ const RenameBoardDialog = observer(({ isOpen, onOpenChange }: CoreDialogProps) =
         onClick={handleSave}
         disabled={!boardName}
       >
-        Save
+        {createNewBoard ? 'Add' : 'Save'}
       </SimpleButton>
     </Dialog>
   )
 })
 
-export default RenameBoardDialog
+export default EditBoardDialog

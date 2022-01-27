@@ -3,14 +3,13 @@ import { observer } from 'mobx-react-lite'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
+import BoardActionsDropdown from '@/components/page/home/BoardActionsDropdown'
 import ShelfButton from '@/components/page/home/ShelfButton'
 import ShelfPlant from '@/components/page/home/ShelfPlant'
 import BoardNameButton from '@/components/page/home/BoardNameButton'
 import Flex from '@/components/modular/Flex'
-import Icon from '@/components/modular/Icon'
 import Spacer from '@/components/modular/Spacer'
 import TitleBar from '@/components/modular/TitleBar'
-import MenuIcon from '@/components/icons/MenuIcon'
 import Head from 'next/head'
 
 const HomePage = () => {
@@ -26,9 +25,7 @@ const HomePage = () => {
         <Spacer ml="$2" />
         <BoardNameButton />
         <Spacer ml="auto" />
-        <ShelfButton label="Open the boards menu" css={{ px: '$2', mr: '0.85rem', ml: '$1' }}>
-          <Icon icon={MenuIcon} css={{ position: 'relative', top: '1px' }} />
-        </ShelfButton>
+        <BoardActionsDropdown />
       </Shelf>
 
       <Spacer mb="$4" />
