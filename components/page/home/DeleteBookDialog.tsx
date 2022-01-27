@@ -7,6 +7,8 @@ import Text from '@/components/modular/Text'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 
+let enableDeleteButtonTimeout = undefined as ReturnType<typeof setTimeout> | undefined
+
 const DeleteBookDialog = ({ isOpen, selectedBook, onOpenChange }: BookActionDialogProps) => {
   const [disableDeleteButton, setDisableDeleteButton] = useState(false)
   const { selectedBoard } = container.resolve(BoardsHandler)
@@ -14,9 +16,11 @@ const DeleteBookDialog = ({ isOpen, selectedBook, onOpenChange }: BookActionDial
   useEffect(() => {
     if (isOpen) {
       setDisableDeleteButton(true)
-      new Promise((resolve) => setTimeout(resolve, 550))
-        .then(() => setDisableDeleteButton(false))
+      enableDeleteButtonTimeout = setTimeout(() => {
+        setDisableDeleteButton(false)
+      }, 550)
     }
+    return () => clearTimeout(enableDeleteButtonTimeout as unknown as number)
   }, [isOpen])
 
   function handleDeleteBook() {
