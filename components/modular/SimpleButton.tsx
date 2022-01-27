@@ -6,7 +6,7 @@ const SimpleButton = styled('button', {
   padding: '$2',
   borderRadius: '4px',
   '&:hover': {
-    bg: '$primaryDark',
+    bg: '$primaryAlt',
   }
 })
 

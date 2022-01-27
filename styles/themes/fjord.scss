@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$fjord-color-primary: #d8e2dc;
+$fjord-color-bg: #465c65;
+
+:root {
+  --fjord-color-bg: #{$fjord-color-bg};
+  --fjord-color-primary: #{$fjord-color-primary};
+  --fjord-color-primary-alt: #{color.scale($fjord-color-primary, $saturation: -40%, $lightness: -12%)};
+  --fjord-color-shadow: #{color.scale($fjord-color-bg, $lightness: -50%, $saturation: -25%, $alpha: -80%)};
+  --fjord-color-board: #{color.scale($fjord-color-bg, $lightness: 4%)};
+  --fjord-color-button-alt: #{color.scale($fjord-color-bg, $saturation: -15%, $lightness: 18%)};
+  --fjord-color-button-alt-text: #{$fjord-color-primary};
+  --fjord-color-focus-highlight: #{color.scale($fjord-color-bg, $lightness: 10%)};
+  --fjord-color-selection: #{color.scale($fjord-color-primary, $alpha: -80%)};
+}

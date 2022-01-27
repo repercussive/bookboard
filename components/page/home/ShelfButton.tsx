@@ -67,8 +67,8 @@ const StyledButton = styled('button', {
     hoverable: {
       true: {
         '&:hover': {
-          color: '$bg',
-          bg: '$buttonHighlight'
+          color: '$buttonAltText',
+          bg: '$buttonAlt'
         },
       },
       false: {

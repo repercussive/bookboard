@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$coffee-color-primary: #58493a;
+$coffee-color-bg: #dee0e6;
+
+:root {
+  --coffee-color-bg: #{$coffee-color-bg};
+  --coffee-color-primary: #{$coffee-color-primary};
+  --coffee-color-primary-alt: #{color.scale($coffee-color-primary, $saturation: -40%, $lightness: -12%)};
+  --coffee-color-shadow: #{color.scale($coffee-color-bg, $lightness: -60%, $saturation: -25%, $alpha: -85%)};
+  --coffee-color-board: #{color.scale($coffee-color-bg, $lightness: 5%)};
+  --coffee-color-button-alt: #{color.scale($coffee-color-primary, $saturation: -30%, $lightness: 25%)};
+  --coffee-color-button-alt-text: #{$coffee-color-bg};
+  --coffee-color-focus-highlight: #{color.scale($coffee-color-bg, $lightness: 10%)};
+  --coffee-color-selection: #{color.scale($coffee-color-primary, $alpha: -75%)};
+}

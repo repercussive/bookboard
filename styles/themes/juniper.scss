@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$juniper-color-primary: #698b8b;
+$juniper-color-bg: #f7e8de;
+
+:root {
+  --juniper-color-bg: #{$juniper-color-bg};
+  --juniper-color-primary: #{$juniper-color-primary};
+  --juniper-color-primary-alt: #{color.scale($juniper-color-primary, $saturation: -40%, $lightness: -12%)};
+  --juniper-color-shadow: #{color.scale($juniper-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -85%)};
+  --juniper-color-board: #{color.scale($juniper-color-bg, $lightness: 30%)};
+  --juniper-color-button-alt: #{color.scale($juniper-color-primary, $saturation: -35%, $lightness: 25%)};
+  --juniper-color-button-alt-text: #{$juniper-color-bg};
+  --juniper-color-focus-highlight: #{color.scale($juniper-color-bg, $lightness: 10%)};
+  --juniper-color-selection: #{color.scale($juniper-color-primary, $alpha: -80%)};
+}

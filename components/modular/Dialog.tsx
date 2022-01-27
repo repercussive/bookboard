@@ -88,7 +88,7 @@ const CloseButton = styled(RadixDialog.Close, {
   height: '2rem',
   bg: 'none',
   '&:hover': {
-    color: '$primaryDark'
+    color: '$primaryAlt'
   }
 })
 

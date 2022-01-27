@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$blackcurrant-color-primary: #f0d8f0;
+$blackcurrant-color-bg: #3d2c3d;
+
+:root {
+  --blackcurrant-color-bg: #{$blackcurrant-color-bg};
+  --blackcurrant-color-primary: #{$blackcurrant-color-primary};
+  --blackcurrant-color-primary-alt: #{color.scale($blackcurrant-color-primary, $saturation: -40%, $lightness: -12%)};
+  --blackcurrant-color-shadow: #{color.scale($blackcurrant-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -80%)};
+  --blackcurrant-color-board: #{color.scale($blackcurrant-color-bg, $lightness: 10%)};
+  --blackcurrant-color-button-alt: #{color.scale($blackcurrant-color-bg, $saturation: -10%, $lightness: 20%)};
+  --blackcurrant-color-button-alt-text: #{$blackcurrant-color-primary};
+  --blackcurrant-color-focus-highlight: #{color.scale($blackcurrant-color-bg, $lightness: 10%)};
+  --blackcurrant-color-selection: #{color.scale($blackcurrant-color-primary, $alpha: -70%)};
+}

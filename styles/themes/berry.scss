@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$berry-color-primary: #9bc4b8;
+$berry-color-bg: #270f13;
+
+:root {
+  --berry-color-bg: #{$berry-color-bg};
+  --berry-color-primary: #{$berry-color-primary};
+  --berry-color-primary-alt: #{color.scale($berry-color-primary, $saturation: -40%, $lightness: -12%)};
+  --berry-color-shadow: #{color.scale($berry-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -80%)};
+  --berry-color-board: #{color.scale($berry-color-bg, $saturation: -15%, $lightness: 4%)};
+  --berry-color-button-alt: #{color.scale($berry-color-bg, $saturation: -30%, $lightness: 16%)};
+  --berry-color-button-alt-text: #{$berry-color-primary};
+  --berry-color-focus-highlight: #{color.scale($berry-color-bg, $lightness: 10%)};
+  --berry-color-selection: #{color.scale($berry-color-primary, $alpha: -70%)};
+}

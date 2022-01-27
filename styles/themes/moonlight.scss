@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$moonlight-color-primary: #dddce2;
+$moonlight-color-bg: #21252b;
+
+:root {
+  --moonlight-color-bg: #{$moonlight-color-bg};
+  --moonlight-color-primary: #{$moonlight-color-primary};
+  --moonlight-color-primary-alt: #{color.scale($moonlight-color-primary, $saturation: -85%, $lightness: -12%)};
+  --moonlight-color-shadow: #{color.scale($moonlight-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -80%)};
+  --moonlight-color-board: #{color.scale($moonlight-color-bg, $lightness: 10%)};
+  --moonlight-color-button-alt: #{color.scale($moonlight-color-bg, $saturation: -10%, $lightness: 30%)};
+  --moonlight-color-button-alt-text: #{color.scale($moonlight-color-primary)};
+  --moonlight-color-focus-highlight: #{color.scale($moonlight-color-bg, $lightness: 10%)};
+  --moonlight-color-selection: #{color.scale($moonlight-color-primary, $alpha: -70%)};
+}

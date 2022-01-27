@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$milkyway-color-primary: #EAD2AC;
+$milkyway-color-bg: #172121;
+
+:root {
+  --milkyway-color-bg: #{$milkyway-color-bg};
+  --milkyway-color-primary: #{$milkyway-color-primary};
+  --milkyway-color-primary-alt: #{color.scale($milkyway-color-primary, $saturation: -40%, $lightness: -12%)};
+  --milkyway-color-shadow: #{color.scale($milkyway-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -85%)};
+  --milkyway-color-board: #{color.scale($milkyway-color-bg, $lightness: 5%)};
+  --milkyway-color-button-alt: #{color.scale($milkyway-color-bg, $saturation: -55%, $lightness: 20%)};
+  --milkyway-color-button-alt-text: #{$milkyway-color-primary};
+  --milkyway-color-focus-highlight: #{color.scale($milkyway-color-bg, $lightness: 10%)};
+  --milkyway-color-selection: #{color.scale($milkyway-color-primary, $alpha: -80%)};
+}

@@ -1,4 +1,16 @@
 @use 'sass:color';
+@use '/styles/themes/almond';
+@use '/styles/themes/berry';
+@use '/styles/themes/blackcurrant';
+@use '/styles/themes/blush';
+@use '/styles/themes/chalkboard';
+@use '/styles/themes/coffee';
+@use '/styles/themes/fjord';
+@use '/styles/themes/juniper';
+@use '/styles/themes/laurel';
+@use '/styles/themes/milkyway';
+@use '/styles/themes/moonlight';
+@use '/styles/themes/vanilla';
 
 @font-face {
   font-family: 'Krona';
@@ -8,31 +20,7 @@
   font-display: swap;
 }
 
-$color-primary: #41596f;
-$color-bg: #ffdfd1;
-
 :root {
-  --color-bg: #{$color-bg};
-  --color-primary: #{$color-primary};
-  --color-primary-dark: #{color.scale(
-      $color-primary,
-      $lightness: -40%,
-      $saturation: -25%
-    )};
-  --color-shadow: #{color.scale(
-      $color-primary,
-      $lightness: -30%,
-      $saturation: -25%,
-      $alpha: -80%
-    )};
-  --color-board: #{color.scale($color-bg, $lightness: 25%)};
-  --color-button-highlight: #{color.scale(
-      $color-primary,
-      $lightness: 30%,
-      $saturation: -70%
-    )};
-  --color-focus-highlight: #{color.scale($color-bg, $lightness: 40%)};
-  --color-selection: #{color.scale($color-primary, $alpha: -70%)};
   --padding-page: 1rem;
 }
 
@@ -46,7 +34,8 @@ body {
 
   :focus {
     outline: none;
-    box-shadow: var(--color-focus-highlight) 0 0 0 3px, var(--color-primary) 0 0 0 5px, var(--color-bg) 0 0 0 7px;
+    box-shadow: var(--color-focus-highlight) 0 0 0 3px, var(--color-primary) 0 0 0 5px;
+    transition: box-shadow 150ms;
     &:not(:focus-visible) {
       outline: none;
       box-shadow: none;

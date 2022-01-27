@@ -52,9 +52,9 @@ const StyledButton = styled(Dialog.Trigger, {
     backgroundColor: '$board',
   },
   '&:hover': {
-    color: '$board',
+    color: '$buttonAltText',
     '&::before': {
-      backgroundColor: '$buttonHighlight'
+      backgroundColor: '$buttonAlt'
     }
   }
 })

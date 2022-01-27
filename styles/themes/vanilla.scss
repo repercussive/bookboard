@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$vanilla-color-primary: #41596f;
+$vanilla-color-bg: #fee4d7;
+
+:root {
+  --vanilla-color-bg: #{$vanilla-color-bg};
+  --vanilla-color-primary: #{$vanilla-color-primary};
+  --vanilla-color-primary-alt: #{color.scale($vanilla-color-primary, $lightness: -40%, $saturation: -25%)};
+  --vanilla-color-shadow: #{color.scale($vanilla-color-primary, $lightness: 15%, $saturation: -25%, $alpha: -85%)};
+  --vanilla-color-board: #{color.scale($vanilla-color-bg, $lightness: 25%)};
+  --vanilla-color-button-alt: #{color.scale($vanilla-color-primary, $lightness: 30%, $saturation: -70%)};
+  --vanilla-color-button-alt-text: #{$vanilla-color-bg};
+  --vanilla-color-focus-highlight: #{color.scale($vanilla-color-bg, $lightness: 40%)};
+  --vanilla-color-selection: #{color.scale($vanilla-color-primary, $alpha: -75%)};
+}

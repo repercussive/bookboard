@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$chalkboard-color-primary: #ececec;
+$chalkboard-color-bg: #0c0c0c;
+
+:root {
+  --chalkboard-color-bg: #{$chalkboard-color-bg};
+  --chalkboard-color-primary: #{$chalkboard-color-primary};
+  --chalkboard-color-primary-alt: #{color.scale($chalkboard-color-primary, $saturation: -85%, $lightness: -12%)};
+  --chalkboard-color-shadow: #{color.scale($chalkboard-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -80%)};
+  --chalkboard-color-board: #{color.scale($chalkboard-color-bg, $lightness: 10%)};
+  --chalkboard-color-button-alt: #{color.scale($chalkboard-color-bg, $saturation: -10%, $lightness: 22%)};
+  --chalkboard-color-button-alt-text: #{color.scale($chalkboard-color-primary)};
+  --chalkboard-color-focus-highlight: #{color.scale($chalkboard-color-bg, $lightness: 10%)};
+  --chalkboard-color-selection: #{color.scale($chalkboard-color-primary, $alpha: -70%)};
+}

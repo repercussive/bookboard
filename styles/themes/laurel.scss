@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$laurel-color-primary: #f7ffe1;
+$laurel-color-bg: #6A8D73;
+
+:root {
+  --laurel-color-bg: #{$laurel-color-bg};
+  --laurel-color-primary: #{$laurel-color-primary};
+  --laurel-color-primary-alt: #{color.scale($laurel-color-primary, $saturation: -40%, $lightness: -12%)};
+  --laurel-color-shadow: #{color.scale($laurel-color-bg, $lightness: -50%, $saturation: -25%, $alpha: -85%)};
+  --laurel-color-board: #{color.scale($laurel-color-bg, $lightness: 5%)};
+  --laurel-color-button-alt: #{color.scale($laurel-color-bg, $saturation: -0%, $lightness: 20%)};
+  --laurel-color-button-alt-text: #{$laurel-color-primary};
+  --laurel-color-focus-highlight: #{color.scale($laurel-color-bg, $lightness: 10%)};
+  --laurel-color-selection: #{color.scale($laurel-color-primary, $alpha: -75%)};
+}

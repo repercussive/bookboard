@@ -8,9 +8,10 @@ export const { styled, css, theme } = createStitches({
     colors: {
       bg: 'var(--color-bg)',
       primary: 'var(--color-primary)',
-      primaryDark: 'var(--color-primary-dark)',
+      primaryAlt: 'var(--color-primary-alt)',
       board: 'var(--color-board)',
-      buttonHighlight: 'var(--color-button-highlight)'
+      buttonAlt: 'var(--color-button-alt)',
+      buttonAltText: 'var(--color-button-alt-text)'
     },
     space: {
       0: '0',

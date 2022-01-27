@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$almond-color-primary: #000000;
+$almond-color-bg: #e5cfb8;
+
+:root {
+  --almond-color-bg: #{$almond-color-bg};
+  --almond-color-primary: #{$almond-color-primary};
+  --almond-color-primary-alt: #{color.scale($almond-color-primary, $saturation: 0%, $lightness: 15%)};
+  --almond-color-shadow: #{color.scale($almond-color-bg, $lightness: -80%, $saturation: -25%, $alpha: -85%)};
+  --almond-color-board: #{color.scale($almond-color-bg, $lightness: 8%)};
+  --almond-color-button-alt: #{color.scale($almond-color-primary, $saturation: -30%, $lightness: 35%)};
+  --almond-color-button-alt-text: #{$almond-color-bg};
+  --almond-color-focus-highlight: #{color.scale($almond-color-bg, $lightness: 10%)};
+  --almond-color-selection: #{color.scale($almond-color-primary, $alpha: -80%)};
+}
