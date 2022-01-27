@@ -8,6 +8,7 @@ import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import EditBookInfoDialog from '@/components/page/home/EditBookInfoDialog'
 import DeleteBookDialog from '@/components/page/home/DeleteBookDialog'
 import ReviewBookDialog from '@/components/page/home/ReviewBookDialog'
+import Dropdown from '@/components/modular/Dropdown'
 import Icon from '@/components/modular/Icon'
 import Flex from '@/components/modular/Flex'
 import CheckIcon from '@/components/icons/CheckIcon'
@@ -29,7 +30,7 @@ const BookActionsContext = createContext<{
 }>(null!)
 
 const BookActionsDropdown = memo(({ book }: { book: Book }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
   const [activeDialog, setActiveDialog] = useState<BookAction | null>(null)
 
   return (
@@ -37,37 +38,47 @@ const BookActionsDropdown = memo(({ book }: { book: Book }) => {
       <BookActionDialog dialogAction="review" />
       <BookActionDialog dialogAction="edit" />
       <BookActionDialog dialogAction="delete" />
-      <DropdownMenu.Root onOpenChange={(value) => setIsDropdownOpen(value)}>
-        <DropdownTrigger aria-label="Book actions" open={isDropdownOpen}>
-          <Flex as="span" center>
-            <Icon icon={MenuIcon} />
-          </Flex>
-        </DropdownTrigger>
+      <Dropdown
+        onOpenChange={setShowDropdown}
+        align="end"
+        sideOffset={3}
+        triggerElement={<DropdownTrigger highlight={showDropdown} />}
+      >
         <DropdownContent />
-      </DropdownMenu.Root>
+      </Dropdown>
     </BookActionsContext.Provider>
   )
 })
+
+const DropdownTrigger = ({ highlight }: { highlight: boolean }) => {
+  return (
+    <DropdownButton aria-label="Book actions" open={highlight}>
+      <Flex as="span" center>
+        <Icon icon={MenuIcon} />
+      </Flex>
+    </DropdownButton>
+  )
+}
 
 const DropdownContent = () => {
   const { viewMode } = container.resolve(BoardsHandler)
   const { setActiveDialog } = useContext(BookActionsContext)
 
   return (
-    <DropdownContentWrapper align="end" sideOffset={3}>
-      <DropdownItem onClick={() => setActiveDialog('review')}>
+    <>
+      <Dropdown.Item onClick={() => setActiveDialog('review')}>
         <Icon icon={viewMode === 'read' ? StarOutlineIcon : CheckIcon} />
-        {viewMode === 'read' ? 'View thoughts' : 'Mark as read'}
-      </DropdownItem>
-      <DropdownItem onClick={() => setActiveDialog('edit')}>
+        <span>{viewMode === 'read' ? 'View thoughts' : 'Mark as read'}</span>
+      </Dropdown.Item>
+      <Dropdown.Item onClick={() => setActiveDialog('edit')}>
         <Icon icon={PencilIcon} />
-        Edit info
-      </DropdownItem>
-      <DropdownItem onClick={() => setActiveDialog('delete')}>
+        <span>Edit info</span>
+      </Dropdown.Item>
+      <Dropdown.Item onClick={() => setActiveDialog('delete')}>
         <Icon icon={TrashIcon} />
-        Delete
-      </DropdownItem>
-    </DropdownContentWrapper >
+        <span>Delete</span>
+      </Dropdown.Item>
+    </>
   )
 }
 
@@ -93,7 +104,7 @@ const BookActionDialog = ({ dialogAction }: { dialogAction: BookAction }) => {
   )
 }
 
-const DropdownTrigger = styled(DropdownMenu.Trigger, {
+const DropdownButton = styled(DropdownMenu.Trigger, {
   background: 'none',
   width: '1.6rem',
   height: '1.6rem',
@@ -113,38 +124,6 @@ const DropdownTrigger = styled(DropdownMenu.Trigger, {
         }
       }
     }
-  }
-})
-
-const DropdownContentWrapper = styled(DropdownMenu.Content, {
-  position: 'relative',
-  right: '-$1',
-  padding: '$1',
-  backgroundColor: '$bg',
-  border: 'solid 3px $primary',
-  borderRadius: '8px',
-  boxShadow: 'var(--color-shadow) 0 0 5px 1px !important',
-  fontSize: '$body'
-})
-
-const DropdownItem = styled(DropdownMenu.Item, {
-  display: 'flex',
-  alignItems: 'center',
-  borderRadius: '4px',
-  padding: '$2 $3',
-  userSelect: 'none',
-  cursor: 'pointer',
-  '&:focus': {
-    boxShadow: 'none !important',
-    color: '$bg',
-    backgroundColor: '$primary !important'
-  },
-  '& span': {
-    marginRight: '$3',
-    fontSize: '0.8em'
-  },
-  '&:not(:last-of-type)': {
-    marginBottom: '$1'
   }
 })
 
