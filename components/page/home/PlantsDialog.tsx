@@ -24,15 +24,12 @@ const PlantsDialog = ({ isOpen, onOpenChange, initiallySelectedPlant, onSaveSele
   useEffect(() => {
     if (isOpen) {
       setSelectedPlant(initiallySelectedPlant)
+    } else {
+      onSaveSelection(selectedPlant)
     }
   }, [isOpen])
 
   if (!isOpen) return null
-
-  function saveSelection() {
-    onSaveSelection(selectedPlant)
-    onOpenChange(false)
-  }
 
   return (
     <PlantsDialogContext.Provider value={{ selectedPlant, setSelectedPlant, onSaveSelection }}>
@@ -52,10 +49,7 @@ const PlantsDialog = ({ isOpen, onOpenChange, initiallySelectedPlant, onSaveSele
           <SelectPlantButton plantId="oliver" />
           <SelectPlantButton plantId="roman" />
         </PlantsGrid>
-        <Spacer mb="$5" />
-        <SimpleButton onClick={saveSelection}>
-          Save
-        </SimpleButton>
+        <Spacer mb="$2" />
       </Dialog>
     </PlantsDialogContext.Provider>
   )
