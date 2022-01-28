@@ -1,5 +1,4 @@
 import { container } from 'tsyringe'
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { defaultPseudo } from '@/styles/utilStyles'
 import { styled } from '@/styles/stitches.config'
 import UserDataHandler, { ThemeId } from '@/lib/logic/app/UserDataHandler'
@@ -23,45 +22,31 @@ const themesData: Record<ThemeId, { name: string }> = {
   milkyway: { name: 'Milky Way' },
 }
 
-const ThemesDialogContext = createContext<{
-  selectedTheme: ThemeId,
-  setSelectedTheme: Dispatch<SetStateAction<ThemeId>>
-}>(null!)
-
 const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
-  const { colorTheme, setColorTheme } = container.resolve(UserDataHandler)
-  const [selectedTheme, setSelectedTheme] = useState<ThemeId>(colorTheme)
-
-  useEffect(() => {
-    setColorTheme(selectedTheme)
-  }, [selectedTheme])
-
   return (
-    <ThemesDialogContext.Provider value={{ selectedTheme, setSelectedTheme }}>
-      <Dialog
-        title="Pick a theme"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
-        <ThemeItem themeId="vanilla" />
-        <ThemeItem themeId="moonlight" />
-        <ThemeItem themeId="almond" />
-        <ThemeItem themeId="laurel" />
-        <ThemeItem themeId="coffee" />
-        <ThemeItem themeId="berry" />
-        <ThemeItem themeId="chalkboard" />
-        <ThemeItem themeId="blush" />
-        <ThemeItem themeId="fjord" />
-        <ThemeItem themeId="juniper" />
-        <ThemeItem themeId="blackcurrant" />
-        <ThemeItem themeId="milkyway" />
-      </Dialog>
-    </ThemesDialogContext.Provider>
+    <Dialog
+      title="Pick a theme"
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+    >
+      <ThemeItem themeId="vanilla" />
+      <ThemeItem themeId="moonlight" />
+      <ThemeItem themeId="almond" />
+      <ThemeItem themeId="laurel" />
+      <ThemeItem themeId="coffee" />
+      <ThemeItem themeId="berry" />
+      <ThemeItem themeId="chalkboard" />
+      <ThemeItem themeId="blush" />
+      <ThemeItem themeId="fjord" />
+      <ThemeItem themeId="juniper" />
+      <ThemeItem themeId="blackcurrant" />
+      <ThemeItem themeId="milkyway" />
+    </Dialog>
   )
 }
 
 const ThemeItem = ({ themeId }: { themeId: ThemeId }) => {
-  const { selectedTheme, setSelectedTheme } = useContext(ThemesDialogContext)
+  const { colorTheme, setColorTheme } = container.resolve(UserDataHandler)
 
   return (
     <Flex center css={{ '&:not(:last-of-type)': { mb: '$2' } }}>
@@ -72,11 +57,11 @@ const ThemeItem = ({ themeId }: { themeId: ThemeId }) => {
           name="theme"
           value={themeId}
           className="hidden"
-          checked={themeId === selectedTheme}
-          onChange={() => setSelectedTheme(themeId)}
+          checked={themeId === colorTheme}
+          onChange={() => setColorTheme(themeId)}
         />
         <Flex center as="span">
-          {themeId === selectedTheme && <Icon icon={CheckIcon} />}
+          {themeId === colorTheme && <Icon icon={CheckIcon} />}
         </Flex>
       </ThemeLabel>
     </Flex>
