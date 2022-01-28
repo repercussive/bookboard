@@ -44,6 +44,7 @@ export default class UserDataHandler {
 
     const storedTheme = localStorage.getItem('colorTheme') as ThemeId | undefined
     if (!storedTheme || !themeIds.includes(storedTheme)) {
+      this.setColorTheme('vanilla')
       return
     }
     this.setColorTheme(storedTheme)
