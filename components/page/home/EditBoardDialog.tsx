@@ -20,7 +20,7 @@ const EditBoardDialog = observer(({ isOpen, onOpenChange, createNewBoard }: Prop
     if (isOpen) {
       setBoardName(createNewBoard ? '' : selectedBoard.name)
     }
-  }, [isOpen])
+  }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleSave() {
     if (createNewBoard) {

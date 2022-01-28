@@ -7,7 +7,7 @@ export default function Home() {
       <Head>
         <title>Bookboard</title>
       </Head>
-      <Link href="/home">
+      <Link href="/home" passHref>
         <button>
           go to app (temporary)
         </button>

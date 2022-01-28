@@ -6,7 +6,7 @@ import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
 
 interface Props extends CoreDialogProps {
-  initiallySelectedPlant: PlantId,
+  selectedPlantOnOpen: PlantId,
   onSaveSelection: (plantId: PlantId) => void
 }
 
@@ -16,16 +16,18 @@ const PlantsDialogContext = createContext<{
   onSaveSelection: (plantId: PlantId) => void
 }>(null!)
 
-const PlantsDialog = ({ isOpen, onOpenChange, initiallySelectedPlant, onSaveSelection }: Props) => {
-  const [selectedPlant, setSelectedPlant] = useState(initiallySelectedPlant)
+const PlantsDialog = ({ isOpen, onOpenChange, selectedPlantOnOpen, onSaveSelection }: Props) => {
+  const [selectedPlant, setSelectedPlant] = useState(selectedPlantOnOpen)
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedPlant(initiallySelectedPlant)
+      setSelectedPlant(selectedPlantOnOpen)
     } else {
-      onSaveSelection(selectedPlant)
+      if (selectedPlant !== selectedPlantOnOpen) {
+        onSaveSelection(selectedPlant)
+      }
     }
-  }, [isOpen])
+  }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isOpen) return null
 

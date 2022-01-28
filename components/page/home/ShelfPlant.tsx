@@ -15,7 +15,7 @@ const ShelfPlant = observer(({ shelfId, flip }: { shelfId: 'a' | 'b', flip?: boo
       <PlantsDialog
         isOpen={showDialog}
         onOpenChange={setShowDialog}
-        initiallySelectedPlant={plants[shelfId]}
+        selectedPlantOnOpen={plants[shelfId]}
         onSaveSelection={(plant) => setPlant(shelfId, plant)}
       />
       <PlantButton aria-label="Change plant" onClick={() => setShowDialog(true)}>

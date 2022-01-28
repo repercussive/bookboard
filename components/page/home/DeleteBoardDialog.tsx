@@ -6,6 +6,7 @@ import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 import Text from '@/components/modular/Text'
+import { observer } from 'mobx-react-lite'
 
 interface Props extends CoreDialogProps {
   boardToDelete: Board
@@ -13,23 +14,18 @@ interface Props extends CoreDialogProps {
 
 let enableDeleteButtonTimeout = undefined as ReturnType<typeof setTimeout> | undefined
 
-const DeleteBoardDialog = ({ isOpen, onOpenChange, boardToDelete }: Props) => {
+const DeleteBoardDialog = observer(({ isOpen, onOpenChange, boardToDelete }: Props) => {
   const { allBoards, deleteBoard } = container.resolve(BoardsHandler)
   const [disableDeleteButton, setDisableDeleteButton] = useState(false)
-  const [allowDelete, setAllowDelete] = useState(false)
+
+  const allowDelete = allBoards.length > 1
 
   useEffect(() => {
     if (isOpen) {
-      const allow = allBoards.length > 1
-
-      if (allow) {
-        setDisableDeleteButton(true)
-        setAllowDelete(allBoards.length > 1)
-
-        enableDeleteButtonTimeout = setTimeout(() => {
-          setDisableDeleteButton(false)
-        }, 1000)
-      }
+      setDisableDeleteButton(true)
+      enableDeleteButtonTimeout = setTimeout(() => {
+        setDisableDeleteButton(false)
+      }, 1000)
     }
     return () => clearTimeout(enableDeleteButtonTimeout as unknown as number)
   }, [isOpen])
@@ -60,6 +56,6 @@ const DeleteBoardDialog = ({ isOpen, onOpenChange, boardToDelete }: Props) => {
         : <Text>{`That's the only board you have!`}</Text>}
     </Dialog>
   )
-}
+})
 
 export default DeleteBoardDialog

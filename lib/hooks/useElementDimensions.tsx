@@ -8,21 +8,16 @@ function getElementDimensions(elementRef: MutableRefObject<HTMLElement>) {
   }
 }
 
-export default function useElementDimensions(elementRef: MutableRefObject<HTMLElement>, extraDependencies?: any[]) {
+export default function useElementDimensions(elementRef: MutableRefObject<HTMLElement>, extraDependencies: any[] = []) {
   const [dimensions, setDimensions] = useState(getElementDimensions(elementRef))
 
-  const resize = () => setDimensions(getElementDimensions(elementRef))
-
   useLayoutEffect(() => {
+    const resize = () => setDimensions(getElementDimensions(elementRef))
     const resizeDebounced = debounce(resize, 300)
     resize()
     window.addEventListener('resize', resizeDebounced)
     return () => window.removeEventListener('resize', resizeDebounced)
-  }, [elementRef])
-
-  useLayoutEffect(() => {
-    resize()
-  }, [...(extraDependencies ?? [])])
+  }, [elementRef, ...extraDependencies]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return dimensions
 }
