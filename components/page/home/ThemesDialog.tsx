@@ -1,4 +1,5 @@
 import { container } from 'tsyringe'
+import { observer } from 'mobx-react-lite'
 import { defaultPseudo } from '@/styles/utilStyles'
 import { styled } from '@/styles/stitches.config'
 import UserDataHandler, { ThemeId } from '@/lib/logic/app/UserDataHandler'
@@ -45,7 +46,7 @@ const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
   )
 }
 
-const ThemeItem = ({ themeId }: { themeId: ThemeId }) => {
+const ThemeItem = observer(({ themeId }: { themeId: ThemeId }) => {
   const { colorTheme, setColorTheme } = container.resolve(UserDataHandler)
 
   return (
@@ -66,7 +67,7 @@ const ThemeItem = ({ themeId }: { themeId: ThemeId }) => {
       </ThemeLabel>
     </Flex>
   )
-}
+})
 
 const ThemeLabel = styled('label', {
   display: 'flex',
