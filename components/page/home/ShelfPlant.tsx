@@ -1,10 +1,13 @@
+import { container } from 'tsyringe'
 import { useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { styled } from '@/styles/stitches.config'
-import PlantSvg, { PlantId } from '@/components/page/home/PlantSvg'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
+import PlantSvg from '@/components/page/home/PlantSvg'
 import PlantsDialog from '@/components/page/home/PlantsDialog'
 
-const ShelfPlant = ({ flip }: { flip?: boolean }) => {
-  const [plantId, setPlantId] = useState<PlantId>('george')
+const ShelfPlant = observer(({ shelfId, flip }: { shelfId: 'a' | 'b', flip?: boolean }) => {
+  const { plants, setPlant } = container.resolve(UserDataHandler)
   const [showDialog, setShowDialog] = useState(false)
 
   return (
@@ -12,15 +15,15 @@ const ShelfPlant = ({ flip }: { flip?: boolean }) => {
       <PlantsDialog
         isOpen={showDialog}
         onOpenChange={setShowDialog}
-        initiallySelectedPlant={plantId}
-        onSaveSelection={(id) => setPlantId(id)}
+        initiallySelectedPlant={plants[shelfId]}
+        onSaveSelection={(plant) => setPlant(shelfId, plant)}
       />
       <PlantButton aria-label="Change plant" onClick={() => setShowDialog(true)}>
-        <PlantSvg plantId={plantId} flip={flip} />
+        <PlantSvg plantId={plants[shelfId]} flip={flip} />
       </PlantButton>
     </>
   )
-}
+})
 
 const PlantButton = styled('button', {
   position: 'relative',

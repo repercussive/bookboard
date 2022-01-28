@@ -21,7 +21,7 @@ const HomePage = () => {
 
       <Shelf>
         <Spacer ml="-$1" />
-        <ShelfPlant />
+        <ShelfPlant shelfId="a" />
         <Spacer ml="$2" />
         <BoardNameButton />
         <Spacer ml="auto" />
@@ -34,7 +34,7 @@ const HomePage = () => {
         <BoardViewModeSection />
         <Spacer ml="auto" />
         <Spacer ml="$3" />
-        <ShelfPlant flip />
+        <ShelfPlant shelfId="b" flip />
         <Spacer ml="-$1" />
       </Shelf>
 

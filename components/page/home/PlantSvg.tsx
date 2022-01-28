@@ -1,3 +1,4 @@
+import { PlantId } from '@/lib/logic/app/UserDataHandler'
 import Anita from '@/components/plants/Anita'
 import Frank from '@/components/plants/Frank'
 import George from '@/components/plants/George'
@@ -6,8 +7,6 @@ import Oliver from '@/components/plants/Oliver'
 import Roman from '@/components/plants/Roman'
 import Wes from '@/components/plants/Wes'
 import Zoe from '@/components/plants/Zoe'
-
-export type PlantId = 'george' | 'frank' | 'zoe' | 'anita' | 'wes' | 'leah' | 'oliver' | 'roman'
 
 const plantsData: Record<PlantId, { component: () => JSX.Element }> = {
   george: { component: George },
