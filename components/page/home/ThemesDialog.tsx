@@ -1,12 +1,12 @@
+import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { defaultPseudo } from '@/styles/utilStyles'
 import { styled } from '@/styles/stitches.config'
+import UserDataHandler, { ThemeId } from '@/lib/logic/app/UserDataHandler'
 import Dialog, { CoreDialogProps as CoreDialogProps } from '@/components/modular/Dialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import CheckIcon from '@/components/icons/CheckIcon'
-
-export type ThemeId = 'vanilla' | 'moonlight' | 'almond' | 'laurel' | 'coffee' | 'berry' | 'chalkboard' | 'blush' | 'fjord' | 'juniper' | 'blackcurrant' | 'milkyway'
 
 const themesData: Record<ThemeId, { name: string }> = {
   vanilla: { name: 'Vanilla' },
@@ -29,10 +29,11 @@ const ThemesDialogContext = createContext<{
 }>(null!)
 
 const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
-  const [selectedTheme, setSelectedTheme] = useState<ThemeId>('vanilla')
+  const { colorTheme, setColorTheme } = container.resolve(UserDataHandler)
+  const [selectedTheme, setSelectedTheme] = useState<ThemeId>(colorTheme)
 
   useEffect(() => {
-    setTheme(selectedTheme)
+    setColorTheme(selectedTheme)
   }, [selectedTheme])
 
   return (
@@ -80,14 +81,6 @@ const ThemeItem = ({ themeId }: { themeId: ThemeId }) => {
       </ThemeLabel>
     </Flex>
   )
-}
-
-const themeProperties = ['bg', 'primary', 'primary-alt', 'shadow', 'board', 'button-alt', 'button-alt-text', 'focus-highlight', 'selection']
-
-function setTheme(theme: ThemeId) {
-  for (const property of themeProperties) {
-    document.documentElement.style.setProperty(`--color-${property}`, `var(--${theme}-color-${property})`)
-  }
 }
 
 const ThemeLabel = styled('label', {
