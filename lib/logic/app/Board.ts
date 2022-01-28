@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx'
+import { container } from 'tsyringe'
 import { nanoid } from 'nanoid'
 import Book from '@/lib/logic/app/Book'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 
 interface BoardConstructorOptions {
   name: string
@@ -12,11 +14,13 @@ export default class Board {
   public unreadBooks: { [id: string]: Book } = {}
   public unreadBooksOrder: string[] = []
   public readBooks: { [id: string]: Book } = {}
+  private userDataHandler
 
   constructor(options: BoardConstructorOptions) {
     const { name } = options
     this.name = name
     this.id = nanoid(6)
+    this.userDataHandler = container.resolve(UserDataHandler)
     makeAutoObservable(this)
   }
 
@@ -38,6 +42,7 @@ export default class Board {
     book.dateCompleted = new Date()
     this.removeUnreadBook(book)
     this.readBooks[book.id] = book
+    this.userDataHandler.incrementCompletedBooks()
   }
 
   public getSortedReadBookIds = () => {

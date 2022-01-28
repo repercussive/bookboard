@@ -1,5 +1,8 @@
-import Book from '@/lib/logic/app/Book'
+import '@abraham/reflection'
+import { container } from 'tsyringe'
 import Board from '@/logic/app/Board'
+import Book from '@/lib/logic/app/Book'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 
 function createBoardWithTestBooks() {
   const board = new Board({ name: 'Test board' })
@@ -10,6 +13,10 @@ function createBoardWithTestBooks() {
 
   return { board, testBookA, testBookB }
 }
+
+afterEach(() => {
+  container.clearInstances()
+})
 
 test('when a board is created, its properties are correctly assigned', () => {
   const newBoard = new Board({
@@ -71,6 +78,13 @@ test('marking a book as read moves it to the "readBooks" object', () => {
 
   board.markBookAsRead(testBookA)
   expect(board.readBooks[testBookA.id]).toEqual(testBookA)
+})
+
+test(`marking a book as read increments UserDataHandler's completed books count`, () => {
+  const { board, testBookA, testBookB } = createBoardWithTestBooks()
+  board.markBookAsRead(testBookA)
+  board.markBookAsRead(testBookB)
+  expect(container.resolve(UserDataHandler).completedBooksCount).toEqual(2)
 })
 
 test(`hasUnreadBooks is true only when the board has unread books`, () => {
