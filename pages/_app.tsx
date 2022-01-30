@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
-import React from 'react'
-import initializeFirebase from '@/lib/firebase-setup/initializeFirebase'
 import '@abraham/reflection'
 import '@/styles/globals.scss'
+import React from 'react'
+import initializeFirebase from '@/lib/firebase-setup/initializeFirebase'
 
 if (typeof window === 'undefined') React.useLayoutEffect = React.useEffect
 

@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
+import SignUpPrompt from '@/components/page/home/SignUpPrompt'
 import TitleBar from '@/components/page/home/TitleBar'
 import BoardActionsDropdown from '@/components/page/home/BoardActionsDropdown'
 import ShelfButton from '@/components/page/home/ShelfButton'
@@ -17,6 +18,7 @@ const HomePage = () => {
     <Flex direction="column" css={{ maxWidth: '650px', m: 'auto' }}>
       <Head><title>Bookboard</title></Head>
 
+      <SignUpPrompt />
       <TitleBar />
 
       <Shelf>
