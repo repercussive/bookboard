@@ -16,6 +16,7 @@
     "@radix-ui/react-dialog": "^0.1.5",
     "@radix-ui/react-dropdown-menu": "^0.1.4",
     "@stitches/react": "^1.2.6",
+    "firebase": "^9.6.5",
     "lodash": "^4.17.21",
     "mobx": "^6.3.12",
     "mobx-react-lite": "^3.2.3",
