@@ -27,6 +27,9 @@ export default class AuthHandler {
 
   public signOut = async () => {
     await firebaseSignOut(this.auth)
+    if (isBrowser) {
+      window.location.replace('/')
+    }
   }
 
   public getCachedAuthState() {

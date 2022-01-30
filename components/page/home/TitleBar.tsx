@@ -1,17 +1,15 @@
 import { styled } from '@/styles/stitches.config'
 import ChangeThemeButton from '@/components/page/home/ChangeThemeButton'
+import UserDropdown from '@/components/page/home/UserDropdown'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
-import Icon from '@/components/modular/Icon'
-import UserCircleIcon from '@/components/icons/UserCircleIcon'
 
 const TitleBar = () => {
   return (
     <Wrapper align="center">
       <h1>bookboard</h1>
       <Spacer ml="auto" />
-      <Icon icon={UserCircleIcon} css={{ fontSize: '1.2em'}} />
-      <Spacer ml="$2" />
+      <UserDropdown />
       <ChangeThemeButton />
     </Wrapper>
   )
