@@ -41,6 +41,7 @@ const LightbulbSvg = () => {
 const LightbulbButton = styled('button', {
   position: 'relative',
   height: '2.5rem',
+  mb: '3px',
   mr: '-$1',
   bg: 'none',
   transition: 'transform 100ms',
