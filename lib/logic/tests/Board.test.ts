@@ -57,6 +57,21 @@ test(`adding a book to a board pushes the new book id to the start of the "unrea
   expect(board.unreadBooksOrder).toEqual([testBookB.id, testBookA.id])
 })
 
+test(`adding a book increments the "totalBooksAdded" stat`, () => {
+  const testBoard = new Board({ name: 'Test board' })
+  testBoard.addBook(new Book({ title: 'Test book A', author: 'Test author' }))
+  testBoard.addBook(new Book({ title: 'Test book B', author: 'Test author' }))
+  expect(testBoard.totalBooksAdded).toEqual(2)
+})
+
+test(`deleting a book does not decrease the "totalBooksAdded" stat`, () => {
+  const testBoard = new Board({ name: 'Test board' })
+  const book = new Book({ title: 'Test book', author: 'Test author' })
+  testBoard.addBook(book)
+  testBoard.deleteBook(book)
+  expect(testBoard.totalBooksAdded).toEqual(1)
+})
+
 test('deleting a book removes it from the "unreadBooks" object and the "unreadBooksOrder" array', () => {
   const { board, testBookA, testBookB } = createBoardWithTestBooks()
 

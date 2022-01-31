@@ -11,15 +11,18 @@ interface BoardConstructorOptions {
 export default class Board {
   public id
   public name
+  public dateCreated
   public unreadBooks: { [id: string]: Book } = {}
   public unreadBooksOrder: string[] = []
   public readBooks: { [id: string]: Book } = {}
+  public totalBooksAdded = 0
   private userDataHandler
 
   constructor(options: BoardConstructorOptions) {
     const { name } = options
     this.name = name
     this.id = nanoid(6)
+    this.dateCreated = new Date()
     this.userDataHandler = container.resolve(UserDataHandler)
     makeAutoObservable(this)
   }
@@ -31,6 +34,8 @@ export default class Board {
   public addBook = (newBook: Book) => {
     this.unreadBooks[newBook.id] = newBook
     this.unreadBooksOrder.unshift(newBook.id)
+    this.totalBooksAdded += 1
+    return this.unreadBooks[newBook.id]
   }
 
   public deleteBook = (book: Book) => {
