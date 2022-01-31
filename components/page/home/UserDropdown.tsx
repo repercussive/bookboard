@@ -15,6 +15,7 @@ const UserDropdown = observer(() => {
     <Dropdown
       align="end"
       alignOffset={12}
+      sideOffset={-4}
       triggerElement={<DropdownTrigger />}
     >
       {isAuthenticated && <>
