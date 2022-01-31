@@ -17,20 +17,21 @@ interface Props {
   children: ReactNode
   triggerElement?: JSX.Element
   isOpen?: boolean,
-  onOpenChange?: (open: boolean) => void
+  preventClosing?: boolean,
+  onOpenChange?: (open: boolean) => void,
 }
 
-const Dialog = ({ title, triggerElement, isOpen, onOpenChange, children }: Props) => {
+const Dialog = ({ title, triggerElement, isOpen, preventClosing, onOpenChange, children }: Props) => {
   return (
     <RadixDialog.Root
       open={isOpen ?? isOpen}
-      onOpenChange={(value) => onOpenChange?.(value)}
+      onOpenChange={preventClosing ? undefined : (value) => onOpenChange?.(value)}
     >
       {(() => triggerElement)()}
       <RadixDialog.Portal>
         <Overlay>
           <ContentWrapper>
-            <TitleSection text={title} />
+            <TitleSection text={title} hideCloseButton={preventClosing} />
             <Spacer mb="$3" />
             {children}
           </ContentWrapper>
@@ -40,14 +41,16 @@ const Dialog = ({ title, triggerElement, isOpen, onOpenChange, children }: Props
   )
 }
 
-const TitleSection = ({ text }: { text: string }) => {
+const TitleSection = ({ text, hideCloseButton }: { text: string, hideCloseButton?: boolean }) => {
   return (
     <Flex align="center">
       <RadixDialog.Title>{text}</RadixDialog.Title>
       <Spacer ml="auto" />
-      <CloseButton aria-label="Close dialog">
-        <Icon icon={CrossIcon} />
-      </CloseButton>
+      {!hideCloseButton && (
+        <CloseButton aria-label="Close dialog">
+          <Icon icon={CrossIcon} />
+        </CloseButton>
+      )}
     </Flex>
   )
 }
