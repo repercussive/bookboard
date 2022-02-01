@@ -9,7 +9,7 @@ export interface UserDocumentData {
   colorTheme?: ThemeId,
   plants?: { a: PlantId, b: PlantId},
   completedBooksCount?: number,
-  boards?: { [boardId: string]: { name: string, dateCreated: Timestamp }}
+  boardsMetadata?: { [boardId: string]: { name: string, dateCreated: Timestamp }}
 }
 
 @singleton()

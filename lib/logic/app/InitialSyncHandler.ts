@@ -52,7 +52,7 @@ export default class InitialSyncHandler {
       completedBooksCount,
       plants,
       colorTheme,
-      boards: this.boardsHandler.getBoardsMetadata()
+      boardsMetadata: this.boardsHandler.getBoardsMetadata()
     })
 
     const boardContents = this.getContentsOfAllBoards()

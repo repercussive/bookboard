@@ -61,7 +61,7 @@ test('user data (including boards metadata) are correctly uploaded on first sign
   expect(userData.plants).toEqual({ a: 'frank', b: 'george' })
   expect(userData.colorTheme).toEqual('juniper')
   expect(userData.completedBooksCount).toEqual(1)
-  expect(userData.boards[boardsHandler.selectedBoard.id].name).toEqual('Test board')
+  expect(userData.boardsMetadata[boardsHandler.selectedBoard.id].name).toEqual('Test board')
 })
 
 test('once a user document is created, post-signup sync will never be performed again', async () => {
