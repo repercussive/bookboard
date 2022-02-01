@@ -25,10 +25,11 @@ export default class UserDataHandler {
   }
 
   public setColorTheme = (theme: ThemeId) => {
+    if (!themeIds.includes(theme)) theme = 'vanilla'
     this.colorTheme = theme
 
     if (!isBrowser) return
-    
+
     localStorage.setItem('colorTheme', theme)
     for (const property of themeProperties) {
       document.documentElement.style.setProperty(`--color-${property}`, `var(--${theme}-color-${property})`)
@@ -36,6 +37,7 @@ export default class UserDataHandler {
   }
 
   public setPlant = (shelf: 'a' | 'b', plant: PlantId) => {
+    if (!plantIds.includes(plant)) plant = 'george'
     this.plants[shelf] = plant
   }
 
