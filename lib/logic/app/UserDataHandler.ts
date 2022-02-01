@@ -25,11 +25,11 @@ export default class UserDataHandler {
   }
 
   public setColorTheme = (theme: ThemeId) => {
-    if (!isBrowser) return
-
     this.colorTheme = theme
-    localStorage.setItem('colorTheme', theme)
 
+    if (!isBrowser) return
+    
+    localStorage.setItem('colorTheme', theme)
     for (const property of themeProperties) {
       document.documentElement.style.setProperty(`--color-${property}`, `var(--${theme}-color-${property})`)
     }

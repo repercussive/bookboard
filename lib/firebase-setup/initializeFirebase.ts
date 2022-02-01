@@ -13,9 +13,9 @@ export type FirebaseServices = {
   db: Firestore
 }
 
-export default function initializeFirebase(projectId = 'bookboard-app') {
+export default function initializeFirebase() {
   const firebaseConfig: FirebaseOptions = {
-    projectId,
+    projectId: 'bookboard-app',
     apiKey: 'AIzaSyCBAIJd9jIGE9sCyOqOthj7-CUCyku9_dE',
     authDomain: 'bookboard-app.firebaseapp.com',
     storageBucket: 'bookboard-app.appspot.com',

@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { Auth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
+import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -9,7 +10,7 @@ export default class AuthHandler {
   public auth
   public isAuthenticated = false
 
-  constructor(@inject('Auth') auth: Auth) {
+  constructor(@inject('Auth') auth: Auth, private initialSyncHandler: InitialSyncHandler) {
     this.auth = auth
     onAuthStateChanged(auth, (user) => this.setIsAuthenticated(!!user))
     makeAutoObservable(this)
@@ -20,6 +21,7 @@ export default class AuthHandler {
       const provider = new GoogleAuthProvider()
       provider.setCustomParameters({ prompt: 'select_account' })
       await signInWithPopup(this.auth, provider)
+      await this.initialSyncHandler.syncData()
     } catch (error) {
       console.error(error)
     }

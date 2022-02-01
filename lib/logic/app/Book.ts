@@ -6,6 +6,8 @@ export interface BookConstructorOptions {
   author: string
 }
 
+export type BookProperties = Pick<Book, 'title' | 'author' | 'rating' | 'review' | 'dateCompleted'>
+
 export default class Book {
   public id
   public title

@@ -26,6 +26,7 @@ export default class BoardsHandler {
   public addBoard = (newBoard: Board) => {
     this.allBoards.push(newBoard)
     this.selectedBoard = newBoard
+    return this.selectedBoard
   }
 
   public deleteBoard = (boardToDelete: Board) => {
@@ -39,5 +40,14 @@ export default class BoardsHandler {
 
   public setSelectedBoard = (board: Board) => {
     this.selectedBoard = board
+  }
+
+  public getBoardsMetadata = () => {
+    let metadata = {} as { [boardId: string]: { name: string, dateCreated: Date } }
+    for (const board of this.allBoards) {
+      const { name, dateCreated } = board
+      metadata[board.id] = { name, dateCreated }
+    }
+    return metadata
   }
 }

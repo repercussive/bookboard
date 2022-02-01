@@ -9,6 +9,7 @@ import BoardActionsDropdown from '@/components/page/home/BoardActionsDropdown'
 import ShelfButton from '@/components/page/home/ShelfButton'
 import ShelfPlant from '@/components/page/home/ShelfPlant'
 import BoardNameButton from '@/components/page/home/BoardNameButton'
+import PostSignupSyncDialog from '@/components/page/home/PostSignupSyncDialog'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
 import Head from 'next/head'
@@ -17,6 +18,7 @@ const HomePage = () => {
   return (
     <Flex direction="column" css={{ maxWidth: '650px', m: 'auto' }}>
       <Head><title>Bookboard</title></Head>
+      <PostSignupSyncDialog />
 
       <SignUpPrompt />
       <TitleBar />

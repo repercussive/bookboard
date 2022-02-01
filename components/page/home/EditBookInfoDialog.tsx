@@ -1,11 +1,14 @@
 import { container } from 'tsyringe'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
 import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
+import AuthHandler from '@/lib/logic/app/AuthHandler'
 import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
 import SimpleButton from '@/components/modular/SimpleButton'
 import Input from '@/components/modular/Input'
+import Text from '@/components/modular/Text'
 
 interface Props extends CoreDialogProps {
   triggerElement?: JSX.Element,
@@ -17,6 +20,12 @@ const emptyBookInfo = { title: '', author: '' }
 const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange }: Props) => {
   const [bookInfo, setBookInfo] = useState<BookConstructorOptions>(selectedBook ? { ...selectedBook } : emptyBookInfo)
   const { selectedBoard } = container.resolve(BoardsHandler)
+  const { isAuthenticated } = container.resolve(AuthHandler)
+
+  const isNewBook = !selectedBook
+  const preventCreation = !isAuthenticated && isNewBook && selectedBoard.totalBooksAdded >= maxBooksPerDocument
+
+  let dialogTitle = selectedBook ? 'Edit book' : (preventCreation ? 'Slow down!' : 'Add book')
 
   useEffect(() => {
     if (!isOpen) {
@@ -25,10 +34,10 @@ const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange
   }, [isOpen])
 
   function handleSaveChanges() {
-    if (selectedBook) {
-      selectedBook.updateInfo({ ...bookInfo })
-    } else {
+    if (isNewBook) {
       selectedBoard.addBook(new Book({ ...bookInfo }))
+    } else {
+      selectedBook.updateInfo({ ...bookInfo })
     }
 
     onOpenChange(false)
@@ -39,16 +48,20 @@ const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange
       isOpen={isOpen}
       onOpenChange={(value) => onOpenChange(value)}
       triggerElement={triggerElement}
-      title={selectedBook ? 'Edit book' : 'Add book'}
+      title={dialogTitle}
     >
-      <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
-      <Spacer mb="$4" />
-      <SimpleButton
-        onClick={handleSaveChanges}
-        disabled={!bookInfo.title || !bookInfo.author}
-      >
-        {selectedBook ? 'Save' : 'Add'}
-      </SimpleButton>
+      {preventCreation ? (
+        <Text>Please sign up before adding any more books.</Text>
+      ) : <>
+        <InputSection bookInfo={bookInfo} setBookInfo={setBookInfo} />
+        <Spacer mb="$4" />
+        <SimpleButton
+          onClick={handleSaveChanges}
+          disabled={!bookInfo.title || !bookInfo.author}
+        >
+          {isNewBook ? 'Add' : 'Save'}
+        </SimpleButton>
+      </>}
     </Dialog>
   )
 }
