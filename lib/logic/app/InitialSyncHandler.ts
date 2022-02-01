@@ -34,9 +34,9 @@ export default class InitialSyncHandler {
 
   private doPostSignupSync = async () => {
     this.isPerformingPostSignupSync = true
-    
+
     const batch = writeBatch(this.dbHandler.db)
-    
+
     const { completedBooksCount, plants, colorTheme } = this.userDataHandler
     batch.set(this.dbHandler.userDocRef, {
       completedBooksCount,
@@ -47,8 +47,12 @@ export default class InitialSyncHandler {
 
     const boardContents = this.getContentsOfAllBoards()
     for (const boardData of boardContents) {
-      const { boardId, totalBooksAdded, booksDocData } = boardData
-      batch.set(this.dbHandler.boardDocRef(boardId), { totalBooksAdded })
+      const { boardId, totalBooksAdded, unreadBooksOrder, unreadBooksCount, booksDocData } = boardData
+      batch.set(this.dbHandler.boardDocRef(boardId), {
+        totalBooksAdded,
+        unreadBooksOrder,
+        unreadBooksCount
+      })
       batch.set(this.dbHandler.boardChunkDocRef({ boardId, chunkIndex: 0 }), booksDocData)
     }
 
@@ -62,12 +66,20 @@ export default class InitialSyncHandler {
     const boardsDocData = [] as Array<{
       boardId: string,
       totalBooksAdded: number,
+      unreadBooksOrder: string[],
+      unreadBooksCount: number,
       booksDocData: { [bookId: string]: BookProperties }
     }>
 
     for (const board of allBoards) {
-      const { id, totalBooksAdded, unreadBooks, readBooks } = board
-      boardsDocData.push({ boardId: id, totalBooksAdded, booksDocData: {} })
+      const { id, totalBooksAdded, unreadBooksOrder, unreadBooks, readBooks } = board
+      boardsDocData.push({
+        boardId: id,
+        totalBooksAdded,
+        unreadBooksOrder,
+        unreadBooksCount: unreadBooksOrder.length,
+        booksDocData: {}
+      })
 
       const allBooks = Object.values({ ...unreadBooks, ...readBooks })
       const { booksDocData } = boardsDocData[boardsDocData.length - 1]
