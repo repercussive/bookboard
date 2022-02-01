@@ -44,7 +44,7 @@ test('deleting a board works', () => {
   const newBoard = new Board({ name: 'New board' })
   boardsHandler.addBoard(newBoard)
   boardsHandler.deleteBoard(boardsHandler.allBoards[1])
-  expect(boardsHandler.allBoards[1]).toBeUndefined()
+  expect(boardsHandler.allBoards.length).toEqual(1)
 })
 
 test('if the selected board is deleted, the first remaining board will be selected', () => {
