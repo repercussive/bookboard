@@ -1,8 +1,16 @@
 import { inject, singleton } from 'tsyringe'
-import { Firestore, doc, DocumentReference, DocumentData, getDoc } from 'firebase/firestore'
+import { Firestore, doc, DocumentReference, DocumentData, getDoc, Timestamp } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
+import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
 
 export const maxBooksPerDocument = 300
+
+export interface UserDocumentData {
+  colorTheme?: ThemeId,
+  plants?: { a: PlantId, b: PlantId},
+  completedBooksCount?: number,
+  boards?: { [boardId: string]: { name: string, dateCreated: Timestamp }}
+}
 
 @singleton()
 export default class DbHandler {

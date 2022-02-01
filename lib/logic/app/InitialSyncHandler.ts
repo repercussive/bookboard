@@ -3,14 +3,15 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { writeBatch } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
 import { BookProperties } from '@/lib/logic/app/Book'
+import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import DbHandler from '@/lib/logic/app/DbHandler'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import deleteUndefinedFields from '@/lib/logic/utils/deleteUndefinedFields'
 
 @singleton()
 export default class InitialSyncHandler {
   public isPerformingPostSignupSync = false
+  public isSynced = false
 
   constructor(
     @inject('Auth') private auth: Auth,
@@ -25,11 +26,20 @@ export default class InitialSyncHandler {
     if (!this.auth.currentUser) return
     const userData = await this.dbHandler.getDocData(this.dbHandler.userDocRef)
     if (userData) {
-      // todo
-      console.log('TODO: do something with user data')
+      this.handleUserData(userData)
     } else {
       await this.doPostSignupSync()
     }
+
+    runInAction(() => this.isSynced = true)
+  }
+
+  private handleUserData(userData: UserDocumentData) {
+    const { colorTheme, plants, completedBooksCount } = userData
+    this.userDataHandler.setColorTheme(colorTheme ?? 'vanilla')
+    this.userDataHandler.setPlant('a', plants?.a ?? 'george')
+    this.userDataHandler.setPlant('b', plants?.b ?? 'george')
+    this.userDataHandler.completedBooksCount = completedBooksCount ?? 0
   }
 
   private doPostSignupSync = async () => {

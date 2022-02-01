@@ -1,6 +1,9 @@
 import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
+import { styled } from '@/styles/stitches.config'
+import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
+import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
 import SignUpPrompt from '@/components/page/home/SignUpPrompt'
@@ -12,12 +15,15 @@ import BoardNameButton from '@/components/page/home/BoardNameButton'
 import PostSignupSyncDialog from '@/components/page/home/PostSignupSyncDialog'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
-import Head from 'next/head'
+import dynamic from 'next/dynamic'
 
 const HomePage = () => {
+  const { isWaiting } = useWaitForUserData()
+
+  if (isWaiting) return null
+
   return (
-    <Flex direction="column" css={{ maxWidth: '650px', m: 'auto' }}>
-      <Head><title>Bookboard</title></Head>
+    <Wrapper direction="column">
       <PostSignupSyncDialog />
 
       <SignUpPrompt />
@@ -45,7 +51,7 @@ const HomePage = () => {
       <Spacer mb="$4" bp1={{ mb: '$6' }} />
 
       <Board />
-    </Flex>
+    </Wrapper>
   )
 }
 
@@ -75,4 +81,17 @@ const BoardViewModeSection = observer(() => {
   )
 })
 
-export default HomePage
+const Wrapper = styled(Flex, {
+  maxWidth: '650px',
+  margin: 'auto',
+  '&::after': {
+    ...defaultPseudo,
+    position: 'fixed',
+    zIndex: 1,
+    bg: '$bg',
+    opacity: 0,
+    animation: 'fade-in reverse 180ms linear'
+  }
+})
+
+export default dynamic(Promise.resolve(HomePage), { ssr: false })

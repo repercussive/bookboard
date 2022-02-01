@@ -21,7 +21,6 @@ export default class AuthHandler {
       const provider = new GoogleAuthProvider()
       provider.setCustomParameters({ prompt: 'select_account' })
       await signInWithPopup(this.auth, provider)
-      await this.initialSyncHandler.syncData()
     } catch (error) {
       console.error(error)
     }
@@ -34,18 +33,22 @@ export default class AuthHandler {
     }
   }
 
-  public getCachedAuthState() {
+  public getCachedAuthState = () => {
     if (!isBrowser) return false
     return !!localStorage.getItem('authState')
   }
 
-  private setIsAuthenticated(state: boolean) {
-    this.isAuthenticated = state
-    if (!isBrowser) return
-    if (state) {
-      localStorage.setItem('authState', '1')
-    } else {
-      localStorage.removeItem('authState')
+  private setIsAuthenticated = (isAuthenticated: boolean) => {
+    this.isAuthenticated = isAuthenticated
+    if (isAuthenticated) {
+      this.initialSyncHandler.syncData()
+    }
+    if (isBrowser) {
+      if (isAuthenticated) {
+        localStorage.setItem('authState', '1')
+      } else {
+        localStorage.removeItem('authState')
+      }
     }
   }
 }
