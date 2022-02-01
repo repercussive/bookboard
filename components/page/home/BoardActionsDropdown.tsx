@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import BoardsHandler from '@/lib/logic/app/BoardsHandler'
+import BoardsHandler, { maxBoards } from '@/lib/logic/app/BoardsHandler'
 import Board from '@/lib/logic/app/Board'
 import ShelfButton from '@/components/page/home/ShelfButton'
 import EditBoardDialog from '@/components/page/home/EditBoardDialog'
@@ -84,11 +84,13 @@ const DropdownContent = () => {
           </Dropdown.Item>
         </Flex>
       ))}
-      <Dropdown.Divider />
-      <Dropdown.Item onClick={() => setActiveDialog('add')} aria-label="Create new board">
-        <Icon icon={PlusIcon} />
-        <span>New board</span>
-      </Dropdown.Item>
+      {allBoards.length < maxBoards && <>
+        <Dropdown.Divider />
+        <Dropdown.Item onClick={() => setActiveDialog('add')} aria-label="Create new board">
+          <Icon icon={PlusIcon} />
+          <span>New board</span>
+        </Dropdown.Item>
+      </>}
     </>
   )
 }

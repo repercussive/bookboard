@@ -4,6 +4,8 @@ import Board from '@/lib/logic/app/Board'
 
 type BoardViewMode = 'unread' | 'read'
 
+export const maxBoards = 50
+
 @singleton()
 export default class BoardsHandler {
   public selectedBoard: Board
@@ -24,6 +26,9 @@ export default class BoardsHandler {
   }
 
   public addBoard = (newBoard: Board) => {
+    if (this.allBoards.length >= maxBoards) {
+      throw new Error(`Can't add board; maximum boards limit reached.`)
+    }
     this.allBoards.push(newBoard)
     this.selectedBoard = newBoard
     return this.selectedBoard
