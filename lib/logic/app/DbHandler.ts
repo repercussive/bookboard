@@ -27,6 +27,8 @@ export interface BoardChunkDocumentData {
   }
 }
 
+type DocType = { [key: string]: any }
+
 @singleton()
 export default class DbHandler {
   public db
@@ -37,14 +39,14 @@ export default class DbHandler {
     this.db = db
   }
 
-  public getDocData = async (docRef: DocumentReference) => {
-    const doc = await getDoc(docRef)
+  public getDocData = async<T extends DocType>(docRef: DocumentReference<T>) => {
+    const doc = await getDoc<T>(docRef)
     return doc.data()
   }
 
-  public updateDoc = async (docRef: DocumentReference, data: { [key: string]: any }) => {
+  public updateDoc = async<T extends DocType>(docRef: DocumentReference<T>, data: T) => {
     if (!this.auth.currentUser) return
-    await setDoc(docRef, data, { merge: true })
+    await setDoc<T>(docRef, data, { merge: true })
   }
 
   public getBoardChunkDocs = async (boardId: string) => {
@@ -54,15 +56,24 @@ export default class DbHandler {
   }
 
   public boardDocRef = (boardId: string) => {
-    return doc(this.db, `users/${this.uid}/boards/${boardId}`)
+    return doc(
+      this.db,
+      `users/${this.uid}/boards/${boardId}`
+    ) as DocumentReference<BoardDocumentData>
   }
 
   public boardChunkDocRef = ({ boardId, chunkIndex }: { boardId: string, chunkIndex: number }) => {
-    return doc(this.db, `users/${this.uid}/boards/${boardId}/chunks/${chunkIndex}`)
+    return doc(
+      this.db,
+      `users/${this.uid}/boards/${boardId}/chunks/${chunkIndex}`
+    ) as DocumentReference<BoardChunkDocumentData>
   }
 
   public get userDocRef() {
-    return doc(this.db, `users/${this.uid}`)
+    return doc(
+      this.db,
+      `users/${this.uid}`
+    ) as DocumentReference<UserDocumentData>
   }
 
   private get uid() {
