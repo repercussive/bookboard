@@ -7,9 +7,12 @@ import AddBookButton from '@/components/page/home/AddBookButton'
 import BooksList from '@/components/page/home/BooksList'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
+import Text from '@/components/modular/Text'
 
 const Board = observer(() => {
-  const { viewMode } = container.resolve(BoardsHandler)
+  const { viewMode, selectedBoard, unloadedBoardIds } = container.resolve(BoardsHandler)
+
+  const isLoading = unloadedBoardIds.includes(selectedBoard.id)
 
   return (
     <Flex center direction="column">
@@ -18,14 +21,22 @@ const Board = observer(() => {
         <Flex align="center" css={{ height: '2rem' }}>
           <Title>{viewMode === 'unread' ? 'Up next' : `Books you've read`}</Title>
           <Spacer ml="auto" />
-          {viewMode === 'unread' && <AddBookButton />}
+          {(viewMode === 'unread' && !isLoading) && <AddBookButton />}
         </Flex>
         <Spacer mb="$4" />
-        <BooksList />
+        {isLoading ? <LoadingText /> : <BooksList />}
       </Wrapper>
     </Flex>
   )
 })
+
+const LoadingText = () => {
+  return (
+    <Text css={{ animation: 'pulse infinite 1.2s' }}>
+      Loading books...
+    </Text>
+  )
+}
 
 const Wrapper = styled('div', {
   width: 'min(calc(100vw - 1rem), 25rem)',

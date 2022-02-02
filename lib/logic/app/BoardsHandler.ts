@@ -1,6 +1,8 @@
 import { singleton } from 'tsyringe'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
+import DbHandler, { BoardDocumentData, UserDocumentData } from '@/lib/logic/app/DbHandler'
 import Board from '@/lib/logic/app/Board'
+import Book from '@/lib/logic/app/Book'
 
 type BoardViewMode = 'unread' | 'read'
 
@@ -11,8 +13,9 @@ export default class BoardsHandler {
   public selectedBoard: Board
   public allBoards: Board[] = []
   public viewMode: BoardViewMode = 'unread'
+  public unloadedBoardIds: string[] = []
 
-  constructor() {
+  constructor(private dbHandler: DbHandler) {
     const startingBoard = new Board({
       name: 'Books to read'
     })
@@ -43,8 +46,26 @@ export default class BoardsHandler {
     }
   }
 
-  public setSelectedBoard = (board: Board) => {
+  public setSelectedBoard = async (board: Board) => {
     this.selectedBoard = board
+    await this.loadBoardDataFromDb(board.id)
+  }
+
+  public registerBoardsMetadata = (metadata: UserDocumentData['boardsMetadata']) => {
+    if (!metadata) return
+
+    let tempBoards: Board[] = []
+
+    for (const [id, { name, dateCreated }] of Object.entries(metadata)) {
+      tempBoards.push(new Board({
+        name: name,
+        id: id,
+        dateCreated: dateCreated.toDate()
+      }))
+    }
+
+    this.allBoards = tempBoards.sort((a, b) => a.dateCreated.valueOf() - b.dateCreated.valueOf())
+    this.unloadedBoardIds = this.allBoards.map((board) => board.id)
   }
 
   public getBoardsMetadata = () => {
@@ -54,5 +75,49 @@ export default class BoardsHandler {
       metadata[board.id] = { name, dateCreated }
     }
     return metadata
+  }
+
+  private loadBoardDataFromDb = async (boardId: string) => {
+    if (!this.unloadedBoardIds.includes(boardId)) return
+
+    try {
+      const { getDocData, boardDocRef } = this.dbHandler
+      const boardDocData = await getDocData(boardDocRef(boardId)) as BoardDocumentData
+      const boardToPopulate = this.allBoards.find((board) => board.id === boardId)!
+
+      const allBooks = await this.getBooksInBoard(boardId)
+      const unreadBooks = {} as Board['unreadBooks']
+      const readBooks = {} as Board['readBooks']
+      for (const book of Object.values(allBooks)) {
+        (book.dateCompleted ? readBooks : unreadBooks)[book.id] = book
+      }
+
+      // todo: handle incomplete unreadBooksOrder (compare unreadBooks count vs order length)
+
+      runInAction(() => {
+        boardToPopulate.unreadBooks = unreadBooks
+        boardToPopulate.readBooks = readBooks
+        boardToPopulate.totalBooksAdded = boardDocData.totalBooksAdded
+        boardToPopulate.unreadBooksOrder = boardDocData.unreadBooksOrder
+        this.unloadedBoardIds = this.unloadedBoardIds.filter((id) => id !== boardId)
+      })
+    } catch (err) {
+      throw new Error(`Error populating board ${boardId}: ${err}`)
+    }
+  }
+
+  private getBooksInBoard = async (boardId: string) => {
+    const chunkDocs = await this.dbHandler.getBoardChunkDocs(boardId)
+    const books = {} as { [bookId: string]: Book }
+    for (const chunk of chunkDocs) {
+      for (const [id, properties] of Object.entries(chunk.data())) {
+        const { title, author, rating, review, dateCompleted } = properties
+        books[id] = new Book({
+          id, title, author, rating, review,
+          dateCompleted: dateCompleted?.toDate()
+        })
+      }
+    }
+    return books
   }
 }

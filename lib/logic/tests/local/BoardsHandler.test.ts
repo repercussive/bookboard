@@ -1,9 +1,12 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
+import { Timestamp } from 'firebase/firestore'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/lib/logic/app/Board'
 
 let boardsHandler: BoardsHandler
+container.register('Auth', class { })
+container.register('Firestore', class { })
 
 beforeEach(() => {
   boardsHandler = container.resolve(BoardsHandler)
@@ -59,4 +62,14 @@ test('if the selected board is deleted, the first remaining board will be select
 test('throws an error when attempting to delete the only remaining board', () => {
   const deleteOnlyRemaining = () => boardsHandler.deleteBoard(boardsHandler.allBoards[0])
   expect(deleteOnlyRemaining).toThrow()
+})
+
+test('correctly handles board metadata', () => {  
+  boardsHandler.registerBoardsMetadata({
+    boardIdA: { name: 'Test board A', dateCreated: Timestamp.fromDate(new Date('2021-01-01')) },
+    boardIdB: { name: 'Test board B', dateCreated: Timestamp.fromDate(new Date('2022-01-01')) }
+  })
+  expect(boardsHandler.unloadedBoardIds).toEqual(['boardIdA', 'boardIdB'])
+  expect(boardsHandler.allBoards[0]).toMatchObject({ name: 'Test board A' })
+  expect(boardsHandler.allBoards[1]).toMatchObject({ name: 'Test board B' })
 })

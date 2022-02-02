@@ -5,7 +5,9 @@ import Book from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 
 interface BoardConstructorOptions {
-  name: string
+  name: string,
+  id?: string,
+  dateCreated?: Date,
 }
 
 export default class Board {
@@ -19,10 +21,10 @@ export default class Board {
   private userDataHandler
 
   constructor(options: BoardConstructorOptions) {
-    const { name } = options
+    const { name, id, dateCreated } = options
     this.name = name
-    this.id = nanoid(6)
-    this.dateCreated = new Date()
+    this.id = id ?? nanoid(6)
+    this.dateCreated = dateCreated ?? new Date()
     this.userDataHandler = container.resolve(UserDataHandler)
     makeAutoObservable(this)
   }

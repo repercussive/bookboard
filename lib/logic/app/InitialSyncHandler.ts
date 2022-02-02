@@ -27,6 +27,7 @@ export default class InitialSyncHandler {
     const userData = await this.dbHandler.getDocData(this.dbHandler.userDocRef)
     if (userData) {
       this.handleUserData(userData)
+      this.boardsHandler.setSelectedBoard(this.boardsHandler.allBoards[0])
     } else {
       await this.doPostSignupSync()
     }
@@ -40,6 +41,7 @@ export default class InitialSyncHandler {
     this.userDataHandler.setPlant('a', plants?.a ?? 'george')
     this.userDataHandler.setPlant('b', plants?.b ?? 'george')
     this.userDataHandler.completedBooksCount = completedBooksCount ?? 0
+    this.boardsHandler.registerBoardsMetadata(userData.boardsMetadata)
   }
 
   private doPostSignupSync = async () => {
@@ -57,12 +59,8 @@ export default class InitialSyncHandler {
 
     const boardContents = this.getContentsOfAllBoards()
     for (const boardData of boardContents) {
-      const { boardId, totalBooksAdded, unreadBooksOrder, unreadBooksCount, booksDocData } = boardData
-      batch.set(this.dbHandler.boardDocRef(boardId), {
-        totalBooksAdded,
-        unreadBooksOrder,
-        unreadBooksCount
-      })
+      const { boardId, totalBooksAdded, unreadBooksOrder, booksDocData } = boardData
+      batch.set(this.dbHandler.boardDocRef(boardId), { totalBooksAdded, unreadBooksOrder })
       batch.set(this.dbHandler.boardChunkDocRef({ boardId, chunkIndex: 0 }), booksDocData)
     }
 
@@ -77,7 +75,6 @@ export default class InitialSyncHandler {
       boardId: string,
       totalBooksAdded: number,
       unreadBooksOrder: string[],
-      unreadBooksCount: number,
       booksDocData: { [bookId: string]: BookProperties }
     }>
 
@@ -87,7 +84,6 @@ export default class InitialSyncHandler {
         boardId: id,
         totalBooksAdded,
         unreadBooksOrder,
-        unreadBooksCount: unreadBooksOrder.length,
         booksDocData: {}
       })
 

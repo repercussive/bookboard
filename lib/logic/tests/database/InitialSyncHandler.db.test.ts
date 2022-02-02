@@ -106,7 +106,7 @@ test('board contents are correctly uploaded on first sign-in', async () => {
 
   const boardADoc = await boardDoc(testUserUid, boardA.id).get()
   const boardAChunk = (await boardADoc.ref.collection('chunks').doc('0').get()).data()
-  expect(boardADoc.data()).toEqual({ totalBooksAdded: 2, unreadBooksOrder: [boardABookB.id], unreadBooksCount: 1 })
+  expect(boardADoc.data()).toEqual({ totalBooksAdded: 2, unreadBooksOrder: [boardABookB.id] })
   expect(boardAChunk).toEqual({
     [boardABookA.id]: {
       title: boardABookA.title,
@@ -126,7 +126,7 @@ test('board contents are correctly uploaded on first sign-in', async () => {
 
   const boardBDoc = await boardDoc(testUserUid, boardB.id).get()
   const boardBChunk = (await boardBDoc.ref.collection('chunks').doc('0').get()).data()
-  expect(boardBDoc.data()).toEqual({ totalBooksAdded: 1, unreadBooksOrder: [boardBBook.id], unreadBooksCount: 1 })
+  expect(boardBDoc.data()).toEqual({ totalBooksAdded: 1, unreadBooksOrder: [boardBBook.id] })
   expect(boardBChunk).toEqual({
     [boardBBook.id]: {
       title: boardBBook.title,
