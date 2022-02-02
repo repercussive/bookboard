@@ -84,7 +84,7 @@ test('once a user document is created, post-signup sync will never be performed 
 })
 
 test('board contents are correctly uploaded on first sign-in', async () => {
-  // setting up boards locally 
+  // setting up boards locally
 
   const boardA = boardsHandler.selectedBoard
   const boardABookA = boardsHandler.selectedBoard.addBook(new Book({ title: 'Test board A book A', author: 'Test author' }))
@@ -93,7 +93,8 @@ test('board contents are correctly uploaded on first sign-in', async () => {
   boardABookA.updateReview('it was pretty good')
   boardsHandler.selectedBoard.markBookAsRead(boardABookA)
 
-  const boardB = boardsHandler.addBoard(new Board({ name: 'Test board B' }))
+  const boardB = new Board({ name: 'Test board B' })
+  boardsHandler.addBoard(boardB)
   const boardBBook = boardsHandler.selectedBoard.addBook(new Book({ title: 'Test board B book', author: 'Test author' }))
 
   // sign in & initial sync

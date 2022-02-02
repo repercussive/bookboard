@@ -3,9 +3,7 @@ import { container } from 'tsyringe'
 import Board from '@/logic/app/Board'
 import Book from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-
-container.register('Auth', class { })
-container.register('Firestore', class { })
+import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 
 function createBoardWithTestBooks() {
   const board = new Board({ name: 'Test board' })
@@ -16,6 +14,12 @@ function createBoardWithTestBooks() {
 
   return { board, testBookA, testBookB }
 }
+
+const fb = initializeFirebase()
+
+beforeEach(() => {
+  registerFirebaseInjectionTokens(fb)
+})
 
 afterEach(() => {
   container.clearInstances()

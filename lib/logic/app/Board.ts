@@ -3,6 +3,7 @@ import { container } from 'tsyringe'
 import { nanoid } from 'nanoid'
 import Book from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
+import DbHandler from '@/lib/logic/app/DbHandler'
 
 interface BoardConstructorOptions {
   name: string,
@@ -19,6 +20,7 @@ export default class Board {
   public readBooks: { [id: string]: Book } = {}
   public totalBooksAdded = 0
   private userDataHandler
+  private dbHandler
 
   constructor(options: BoardConstructorOptions) {
     const { name, id, timeCreated } = options
@@ -26,11 +28,18 @@ export default class Board {
     this.id = id ?? nanoid(6)
     this.timeCreated = timeCreated ?? Date.now()
     this.userDataHandler = container.resolve(UserDataHandler)
+    this.dbHandler = container.resolve(DbHandler)
     makeAutoObservable(this)
   }
 
-  public renameBoard = (newName: string) => {
+  public renameBoard = async (newName: string) => {
+    // 💻
     this.name = newName
+
+    // ☁️
+    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
+      boardsMetadata: { [this.id]: { name: newName } }
+    })
   }
 
   public addBook = (newBook: Book) => {

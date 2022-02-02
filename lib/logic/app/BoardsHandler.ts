@@ -1,5 +1,6 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
+import { writeBatch } from 'firebase/firestore'
 import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
 import Board from '@/lib/logic/app/Board'
 import Book from '@/lib/logic/app/Book'
@@ -19,7 +20,7 @@ export default class BoardsHandler {
     const startingBoard = new Board({
       name: 'Books to read'
     })
-    this.addBoard(startingBoard)
+    this.addBoard(startingBoard, { preventSync: true })
     this.selectedBoard = startingBoard
     makeAutoObservable(this)
   }
@@ -28,12 +29,33 @@ export default class BoardsHandler {
     this.viewMode = viewMode
   }
 
-  public addBoard = (newBoard: Board) => {
+  public addBoard = async (newBoard: Board, options?: { preventSync: boolean }) => {
     if (this.allBoards.length >= maxBoards) {
       throw new Error(`Can't add board; maximum boards limit reached.`)
     }
+
+    // 💻
     this.allBoards.push(newBoard)
     this.selectedBoard = newBoard
+
+    // ☁️
+    if (!options?.preventSync) {
+      const batch = writeBatch(this.dbHandler.db)
+      this.dbHandler.updateDocInBatch(batch, this.dbHandler.userDocRef, {
+        boardsMetadata: {
+          [newBoard.id]: {
+            name: newBoard.name,
+            timeCreated: newBoard.timeCreated
+          }
+        }
+      }),
+      this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(newBoard.id), {
+        totalBooksAdded: 0,
+        unreadBooksOrder: []
+      })
+      await batch.commit()
+    }
+
     return this.selectedBoard
   }
 

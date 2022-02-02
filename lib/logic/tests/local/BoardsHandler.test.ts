@@ -2,12 +2,13 @@ import '@abraham/reflection'
 import { container } from 'tsyringe'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/lib/logic/app/Board'
+import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 
 let boardsHandler: BoardsHandler
-container.register('Auth', class { })
-container.register('Firestore', class { })
+const fb = initializeFirebase()
 
 beforeEach(() => {
+  registerFirebaseInjectionTokens(fb)
   boardsHandler = container.resolve(BoardsHandler)
 })
 

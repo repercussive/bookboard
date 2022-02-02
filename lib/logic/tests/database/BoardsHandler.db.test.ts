@@ -6,6 +6,7 @@ import signInDummyUser from '@/test-setup/signInDummyUser'
 import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
 import getDbShortcuts from '@/test-setup/getDbShortcuts'
 import teardownFirebase from '@/test-setup/teardownFirebase'
+import Board from '@/lib/logic/app/Board'
 
 const { db } = getFirebaseAdmin()
 const { userDoc, boardDoc } = getDbShortcuts(db)
@@ -15,9 +16,12 @@ let boardsHandler: BoardsHandler
 let testUserUid: string
 
 beforeAll(async () => {
+  testUserUid = (await signInDummyUser(Date.now().toString())).uid
+})
+
+beforeEach(() => {
   registerFirebaseInjectionTokens(firebase)
   boardsHandler = container.resolve(BoardsHandler)
-  testUserUid = (await signInDummyUser()).uid
 })
 
 afterEach(async () => {
@@ -27,6 +31,32 @@ afterEach(async () => {
 
 afterAll(async () => {
   await teardownFirebase(firebase)
+})
+
+test('adding a board correctly adds it to the database', async () => {
+  const testBoard = await boardsHandler.addBoard(new Board({ name: 'Test board' }))
+
+  const boardDocData = (await boardDoc(testUserUid, testBoard.id).get()).data()
+  const userDocData = (await userDoc(testUserUid).get()).data()
+
+  expect(boardDocData).toEqual({
+    totalBooksAdded: 0,
+    unreadBooksOrder: []
+  })
+  expect(userDocData?.boardsMetadata).toEqual({
+    [testBoard.id]: {
+      name: testBoard.name,
+      timeCreated: testBoard.timeCreated
+    }
+  })
+})
+
+test(`changing a board's name correctly updates the database`, async () => {
+  const testBoard = await boardsHandler.addBoard(new Board({ name: 'Test board' }))
+  await testBoard.renameBoard('A cool new name')
+
+  const userDocData = (await userDoc(testUserUid).get()).data()
+  expect(userDocData?.boardsMetadata[testBoard.id].name).toEqual('A cool new name')
 })
 
 test('when a board is selected, it is correctly loaded from the database', async () => {
@@ -70,7 +100,7 @@ test('when a board is selected, it is correctly loaded from the database', async
   await boardsHandler.setSelectedBoard(boardsHandler.allBoards[0])
 
   // board data + books are correctly loaded
-  
+
   const loadedBoard = boardsHandler.allBoards[0]
 
   expect(loadedBoard).toMatchObject({
