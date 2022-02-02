@@ -27,7 +27,9 @@ export interface BoardChunkDocumentData {
   }
 }
 
-type DocType = { [key: string]: any }
+type DeepPartial<T> = T extends { [key: string]: any } ? {
+  [P in keyof T]?: DeepPartial<T[P]>
+} : T
 
 @singleton()
 export default class DbHandler {
@@ -39,14 +41,14 @@ export default class DbHandler {
     this.db = db
   }
 
-  public getDocData = async<T extends DocType>(docRef: DocumentReference<T>) => {
+  public getDocData = async<T>(docRef: DocumentReference<T>) => {
     const doc = await getDoc<T>(docRef)
     return doc.data()
   }
 
-  public updateDoc = async<T extends DocType>(docRef: DocumentReference<T>, data: T) => {
+  public updateDoc = async<T>(docRef: DocumentReference<T>, data: DeepPartial<T>) => {
     if (!this.auth.currentUser) return
-    await setDoc<T>(docRef, data, { merge: true })
+    await setDoc(docRef, data, { merge: true })
   }
 
   public getBoardChunkDocs = async (boardId: string) => {
