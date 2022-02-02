@@ -1,7 +1,6 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
 import { deleteUser } from 'firebase/auth'
-import { Timestamp } from 'firebase/firestore'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
@@ -113,10 +112,7 @@ test('board contents are correctly uploaded on first sign-in', async () => {
       author: boardABookA.author,
       rating: boardABookA.rating,
       review: boardABookA.review,
-      dateCompleted: {
-        _seconds: Timestamp.fromDate(boardABookA.dateCompleted!).seconds,
-        _nanoseconds: Timestamp.fromDate(boardABookA.dateCompleted!).nanoseconds,
-      }
+      timeCompleted: boardABookA.timeCompleted
     },
     [boardABookB.id]: {
       title: boardABookB.title,

@@ -1,6 +1,5 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import { Timestamp } from 'firebase/firestore'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import Board from '@/lib/logic/app/Board'
 
@@ -66,8 +65,8 @@ test('throws an error when attempting to delete the only remaining board', () =>
 
 test('correctly handles board metadata', () => {  
   boardsHandler.registerBoardsMetadata({
-    boardIdA: { name: 'Test board A', dateCreated: Timestamp.fromDate(new Date('2021-01-01')) },
-    boardIdB: { name: 'Test board B', dateCreated: Timestamp.fromDate(new Date('2022-01-01')) }
+    boardIdA: { name: 'Test board A', timeCreated: new Date('2021-01-01').valueOf() },
+    boardIdB: { name: 'Test board B', timeCreated: new Date('2022-01-01').valueOf() }
   })
   expect(boardsHandler.unloadedBoardIds).toEqual(['boardIdA', 'boardIdB'])
   expect(boardsHandler.allBoards[0]).toMatchObject({ name: 'Test board A' })

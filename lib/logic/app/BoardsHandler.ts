@@ -1,6 +1,6 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
-import DbHandler, { BoardDocumentData, UserDocumentData } from '@/lib/logic/app/DbHandler'
+import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
 import Board from '@/lib/logic/app/Board'
 import Book from '@/lib/logic/app/Book'
 
@@ -56,23 +56,19 @@ export default class BoardsHandler {
 
     let tempBoards: Board[] = []
 
-    for (const [id, { name, dateCreated }] of Object.entries(metadata)) {
-      tempBoards.push(new Board({
-        name: name,
-        id: id,
-        dateCreated: dateCreated.toDate()
-      }))
+    for (const [id, { name, timeCreated }] of Object.entries(metadata)) {
+      tempBoards.push(new Board({ name, id, timeCreated }))
     }
 
-    this.allBoards = tempBoards.sort((a, b) => a.dateCreated.valueOf() - b.dateCreated.valueOf())
+    this.allBoards = tempBoards.sort((a, b) => a.timeCreated - b.timeCreated)
     this.unloadedBoardIds = this.allBoards.map((board) => board.id)
   }
 
   public getBoardsMetadata = () => {
-    let metadata = {} as { [boardId: string]: { name: string, dateCreated: Date } }
+    let metadata = {} as Exclude<UserDocumentData['boardsMetadata'], undefined>
     for (const board of this.allBoards) {
-      const { name, dateCreated } = board
-      metadata[board.id] = { name, dateCreated }
+      const { name, timeCreated } = board
+      metadata[board.id] = { name, timeCreated }
     }
     return metadata
   }
@@ -82,14 +78,14 @@ export default class BoardsHandler {
 
     try {
       const { getDocData, boardDocRef } = this.dbHandler
-      const boardDocData = await getDocData(boardDocRef(boardId)) as BoardDocumentData
+      const boardDocData = await getDocData(boardDocRef(boardId))
       const boardToPopulate = this.allBoards.find((board) => board.id === boardId)!
 
       const allBooks = await this.getBooksInBoard(boardId)
       const unreadBooks = {} as Board['unreadBooks']
       const readBooks = {} as Board['readBooks']
       for (const book of Object.values(allBooks)) {
-        (book.dateCompleted ? readBooks : unreadBooks)[book.id] = book
+        (book.timeCompleted ? readBooks : unreadBooks)[book.id] = book
       }
 
       // todo: handle incomplete unreadBooksOrder (compare unreadBooks count vs order length)
@@ -97,8 +93,8 @@ export default class BoardsHandler {
       runInAction(() => {
         boardToPopulate.unreadBooks = unreadBooks
         boardToPopulate.readBooks = readBooks
-        boardToPopulate.totalBooksAdded = boardDocData.totalBooksAdded
-        boardToPopulate.unreadBooksOrder = boardDocData.unreadBooksOrder
+        boardToPopulate.totalBooksAdded = boardDocData?.totalBooksAdded ?? 0
+        boardToPopulate.unreadBooksOrder = boardDocData?.unreadBooksOrder ?? []
         this.unloadedBoardIds = this.unloadedBoardIds.filter((id) => id !== boardId)
       })
     } catch (err) {
@@ -111,11 +107,8 @@ export default class BoardsHandler {
     const books = {} as { [bookId: string]: Book }
     for (const chunk of chunkDocs) {
       for (const [id, properties] of Object.entries(chunk.data())) {
-        const { title, author, rating, review, dateCompleted } = properties
-        books[id] = new Book({
-          id, title, author, rating, review,
-          dateCompleted: dateCompleted?.toDate()
-        })
+        const { title, author, rating, review, timeCompleted } = properties
+        books[id] = new Book({ id, title, author, rating, review, timeCompleted })
       }
     }
     return books

@@ -9,7 +9,7 @@ export interface UserDocumentData {
   colorTheme?: ThemeId,
   plants?: { a: PlantId, b: PlantId },
   completedBooksCount?: number,
-  boardsMetadata?: { [boardId: string]: { name: string, dateCreated: Timestamp } }
+  boardsMetadata?: { [boardId: string]: { name: string, timeCreated: number } }
 }
 
 export interface BoardDocumentData {
@@ -23,7 +23,7 @@ export interface BoardChunkDocumentData {
     author: string,
     rating?: number,
     review?: string,
-    dateCompleted?: Timestamp
+    timeCompleted?: number
   }
 }
 

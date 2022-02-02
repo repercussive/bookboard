@@ -7,10 +7,10 @@ export interface BookConstructorOptions {
   id?: string,
   rating?: number,
   review?: string,
-  dateCompleted?: Date
+  timeCompleted?: number
 }
 
-export type BookProperties = Pick<Book, 'title' | 'author' | 'rating' | 'review' | 'dateCompleted'>
+export type BookProperties = Pick<Book, 'title' | 'author' | 'rating' | 'review' | 'timeCompleted'>
 
 export default class Book {
   public id
@@ -18,16 +18,16 @@ export default class Book {
   public author
   public rating?: number = undefined
   public review?: string = undefined
-  public dateCompleted?: Date = undefined
+  public timeCompleted?: number = undefined
 
   constructor(options: BookConstructorOptions) {
-    const { title, author, id, rating, review, dateCompleted } = options
+    const { title, author, id, rating, review, timeCompleted } = options
     this.title = title
     this.author = author
     this.id = id ?? nanoid(8)
     this.rating = rating
     this.review = review
-    this.dateCompleted = dateCompleted
+    this.timeCompleted = timeCompleted
     makeAutoObservable(this)
   }
 

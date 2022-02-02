@@ -7,13 +7,13 @@ import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 interface BoardConstructorOptions {
   name: string,
   id?: string,
-  dateCreated?: Date,
+  timeCreated?: number,
 }
 
 export default class Board {
   public id
   public name
-  public dateCreated
+  public timeCreated
   public unreadBooks: { [id: string]: Book } = {}
   public unreadBooksOrder: string[] = []
   public readBooks: { [id: string]: Book } = {}
@@ -21,10 +21,10 @@ export default class Board {
   private userDataHandler
 
   constructor(options: BoardConstructorOptions) {
-    const { name, id, dateCreated } = options
+    const { name, id, timeCreated } = options
     this.name = name
     this.id = id ?? nanoid(6)
-    this.dateCreated = dateCreated ?? new Date()
+    this.timeCreated = timeCreated ?? Date.now()
     this.userDataHandler = container.resolve(UserDataHandler)
     makeAutoObservable(this)
   }
@@ -46,7 +46,7 @@ export default class Board {
   }
 
   public markBookAsRead = (book: Book) => {
-    book.dateCompleted = new Date()
+    book.timeCompleted = Date.now()
     this.removeUnreadBook(book)
     this.readBooks[book.id] = book
     this.userDataHandler.incrementCompletedBooks()
@@ -54,7 +54,7 @@ export default class Board {
 
   public getSortedReadBookIds = () => {
     return Object.values(this.readBooks)
-      .sort((a, b) => (b.dateCompleted?.valueOf() ?? 0) - (a.dateCompleted?.valueOf() ?? 0))
+      .sort((a, b) => (b.timeCompleted ?? 0) - (a.timeCompleted ?? 0))
       .map((book) => book.id)
   }
 

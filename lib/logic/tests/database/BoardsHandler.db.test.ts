@@ -1,6 +1,5 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import { Timestamp } from 'firebase/firestore'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import signInDummyUser from '@/test-setup/signInDummyUser'
@@ -41,7 +40,7 @@ test('when a board is selected, it is correctly loaded from the database', async
     id: 'read-book',
     title: 'A read book',
     author: 'Test author',
-    dateCompleted: new Date(),
+    timeCompleted: Date.now(),
     rating: 3,
     review: 'pretty good'
   }
@@ -63,7 +62,7 @@ test('when a board is selected, it is correctly loaded from the database', async
   // register the unloaded board
 
   boardsHandler.registerBoardsMetadata({
-    [testBoardId]: { name: 'Test board', dateCreated: Timestamp.fromDate(new Date()) }
+    [testBoardId]: { name: 'Test board', timeCreated: Date.now() }
   })
 
   // select board to trigger download
