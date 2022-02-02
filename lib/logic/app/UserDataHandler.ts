@@ -1,5 +1,6 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable } from 'mobx'
+import DbHandler from '@/lib/logic/app/DbHandler'
 
 const isBrowser = typeof window !== 'undefined'
 const themeIds = ['vanilla', 'moonlight', 'almond', 'laurel', 'coffee', 'berry', 'chalkboard', 'blush', 'fjord', 'juniper', 'blackcurrant', 'milkyway'] as const
@@ -15,7 +16,7 @@ export default class UserDataHandler {
   public colorTheme: ThemeId = 'vanilla'
   public plants = { a: 'george' as PlantId, b: 'george' as PlantId }
 
-  constructor() {
+  constructor(private dbHandler: DbHandler) {
     this.loadColorTheme()
     makeAutoObservable(this)
   }
@@ -24,21 +25,32 @@ export default class UserDataHandler {
     this.completedBooksCount += 1
   }
 
-  public setColorTheme = (theme: ThemeId) => {
+  public setColorThemeLocally = async (theme: ThemeId) => {
     if (!themeIds.includes(theme)) theme = 'vanilla'
     this.colorTheme = theme
 
     if (!isBrowser) return
-
     localStorage.setItem('colorTheme', theme)
     for (const property of themeProperties) {
       document.documentElement.style.setProperty(`--color-${property}`, `var(--${theme}-color-${property})`)
     }
   }
 
-  public setPlant = (shelf: 'a' | 'b', plant: PlantId) => {
+  public syncColorTheme = async () => {
+    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
+      colorTheme: this.colorTheme
+    })
+  }
+
+  public setPlantLocally = (shelf: 'a' | 'b', plant: PlantId) => {
     if (!plantIds.includes(plant)) plant = 'george'
     this.plants[shelf] = plant
+  }
+
+  public syncPlants = async () => {
+    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
+      plants: this.plants
+    })
   }
 
   private loadColorTheme = () => {
@@ -46,9 +58,9 @@ export default class UserDataHandler {
 
     const storedTheme = localStorage.getItem('colorTheme') as ThemeId | undefined
     if (!storedTheme || !themeIds.includes(storedTheme)) {
-      this.setColorTheme('vanilla')
+      this.setColorThemeLocally('vanilla')
       return
     }
-    this.setColorTheme(storedTheme)
+    this.setColorThemeLocally(storedTheme)
   }
 }

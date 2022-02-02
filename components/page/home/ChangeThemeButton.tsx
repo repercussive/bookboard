@@ -1,20 +1,37 @@
+import { container } from 'tsyringe'
+import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import ThemesDialog from '@/components/page/home/ThemesDialog'
 
-const ChangeThemeButton = () => {
+const ChangeThemeButton = observer(() => {
+  const { syncColorTheme, colorTheme } = container.resolve(UserDataHandler)
   const [showDialog, setShowDialog] = useState(false)
+  const [themeOnDialogOpen, setThemeOnDialogOpen] = useState(colorTheme)
+
+  function handleClickThemeButton() {
+    setThemeOnDialogOpen(colorTheme)
+    setShowDialog(true)
+  }
+
+  function handleDialogOpenChange(open: boolean) {
+    if (!open && colorTheme !== themeOnDialogOpen) {
+      syncColorTheme()
+    }
+    setShowDialog(open)
+  }
 
   return (
     <>
-      <ThemesDialog isOpen={showDialog} onOpenChange={setShowDialog} />
-      <LightbulbButton aria-label="Change theme" onClick={() => setShowDialog(true)}>
+      <ThemesDialog isOpen={showDialog} onOpenChange={handleDialogOpenChange} />
+      <LightbulbButton aria-label="Change theme" onClick={handleClickThemeButton}>
         <LightbulbSvg />
       </LightbulbButton>
     </>
   )
-}
+})
 
 const LightbulbSvg = () => {
   return (

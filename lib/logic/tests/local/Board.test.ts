@@ -4,6 +4,9 @@ import Board from '@/logic/app/Board'
 import Book from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 
+container.register('Auth', class { })
+container.register('Firestore', class { })
+
 function createBoardWithTestBooks() {
   const board = new Board({ name: 'Test board' })
   const testBookA = new Book({ title: 'Test book A', author: 'An author' })

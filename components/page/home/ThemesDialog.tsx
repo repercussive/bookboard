@@ -47,7 +47,7 @@ const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
 }
 
 const ThemeItem = observer(({ themeId }: { themeId: ThemeId }) => {
-  const { colorTheme, setColorTheme } = container.resolve(UserDataHandler)
+  const { colorTheme, setColorThemeLocally } = container.resolve(UserDataHandler)
 
   return (
     <Flex center css={{ '&:not(:last-of-type)': { mb: '$2' } }}>
@@ -59,7 +59,7 @@ const ThemeItem = observer(({ themeId }: { themeId: ThemeId }) => {
           value={themeId}
           className="hidden"
           checked={themeId === colorTheme}
-          onChange={() => setColorTheme(themeId)}
+          onChange={() => setColorThemeLocally(themeId)}
         />
         <Flex center as="span">
           {themeId === colorTheme && <Icon icon={CheckIcon} />}

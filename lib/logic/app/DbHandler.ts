@@ -1,5 +1,5 @@
 import { inject, singleton } from 'tsyringe'
-import { Firestore, doc, collection, DocumentReference, getDoc, Timestamp, getDocs, query } from 'firebase/firestore'
+import { Firestore, doc, collection, DocumentReference, getDoc, Timestamp, getDocs, query, setDoc } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
 import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
 
@@ -37,9 +37,14 @@ export default class DbHandler {
     this.db = db
   }
 
-  public getDocData = async(docRef: DocumentReference) => {
+  public getDocData = async (docRef: DocumentReference) => {
     const doc = await getDoc(docRef)
     return doc.data()
+  }
+
+  public updateDoc = async (docRef: DocumentReference, data: { [key: string]: any }) => {
+    if (!this.auth.currentUser) return
+    await setDoc(docRef, data, { merge: true })
   }
 
   public getBoardChunkDocs = async (boardId: string) => {

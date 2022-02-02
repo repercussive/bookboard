@@ -42,8 +42,8 @@ afterAll(async () => {
 test('user data (including boards metadata) are correctly uploaded on first sign-in', async () => {
   // setting up user data locally
 
-  userDataHandler.setColorTheme('juniper')
-  userDataHandler.setPlant('a', 'frank')
+  userDataHandler.setColorThemeLocally('juniper')
+  userDataHandler.setPlantLocally('a', 'frank')
 
   boardsHandler.selectedBoard.renameBoard('Test board')
   boardsHandler.selectedBoard.markBookAsRead(

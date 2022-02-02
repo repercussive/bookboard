@@ -37,9 +37,9 @@ export default class InitialSyncHandler {
 
   private handleUserData(userData: UserDocumentData) {
     const { colorTheme, plants, completedBooksCount } = userData
-    this.userDataHandler.setColorTheme(colorTheme ?? 'vanilla')
-    this.userDataHandler.setPlant('a', plants?.a ?? 'george')
-    this.userDataHandler.setPlant('b', plants?.b ?? 'george')
+    this.userDataHandler.setColorThemeLocally(colorTheme ?? 'vanilla')
+    this.userDataHandler.setPlantLocally('a', plants?.a ?? 'george')
+    this.userDataHandler.setPlantLocally('b', plants?.b ?? 'george')
     this.userDataHandler.completedBooksCount = completedBooksCount ?? 0
     this.boardsHandler.registerBoardsMetadata(userData.boardsMetadata)
   }
