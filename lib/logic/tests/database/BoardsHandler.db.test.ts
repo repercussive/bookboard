@@ -1,12 +1,15 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
+import { BookProperties } from '@/lib/logic/app/Book'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import signInDummyUser from '@/test-setup/signInDummyUser'
 import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
 import getDbShortcuts from '@/test-setup/getDbShortcuts'
 import teardownFirebase from '@/test-setup/teardownFirebase'
 import Board from '@/lib/logic/app/Board'
+
+type BookIdAndProperties = BookProperties & { id: string }
 
 const { db } = getFirebaseAdmin()
 const { userDoc, boardDoc } = getDbShortcuts(db)
@@ -64,12 +67,23 @@ test('when a board is selected, it is correctly loaded from the database', async
 
   const testBoardId = 'test-board-id'
   const testBoardDoc = boardDoc(testUserUid, testBoardId)
-  const unreadBookAProperties = { id: 'unread-book-a', title: 'An unread book A', author: 'Test author' }
-  const unreadBookBProperties = { id: 'unread-book-b', title: 'An unread book B', author: 'Test author' }
-  const readBookProperties = {
+  const unreadBookAProperties: BookIdAndProperties = {
+    id: 'unread-book-a',
+    title: 'An unread book A',
+    author: 'Test author',
+    chunk: 0
+  }
+  const unreadBookBProperties: BookIdAndProperties = {
+    id: 'unread-book-b',
+    title: 'An unread book B',
+    author: 'Test author',
+    chunk: 1
+  }
+  const readBookProperties: BookIdAndProperties = {
     id: 'read-book',
     title: 'A read book',
     author: 'Test author',
+    chunk: 0,
     timeCompleted: Date.now(),
     rating: 3,
     review: 'pretty good'

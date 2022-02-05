@@ -1,9 +1,10 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
+import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
+import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 import Board from '@/logic/app/Board'
 import Book from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 
 function createBoardWithTestBooks() {
   const board = new Board({ name: 'Test board' })
@@ -69,6 +70,18 @@ test(`adding a book increments the "totalBooksAdded" stat`, () => {
   testBoard.addBook(new Book({ title: 'Test book A', author: 'Test author' }))
   testBoard.addBook(new Book({ title: 'Test book B', author: 'Test author' }))
   expect(testBoard.totalBooksAdded).toEqual(2)
+})
+
+test('newly added books are assigned to the correct chunk based on the maximum books allowed in a single document', () => {
+  const testBoard = new Board({ name: 'Test board' })
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < maxBooksPerDocument; j++) {
+      const book = new Book({ title: `${j}`, author: `${j}` })
+      testBoard.addBook(book)
+      expect(book.chunk).toEqual(i)
+    }
+  }
 })
 
 test(`deleting a book does not decrease the "totalBooksAdded" stat`, () => {

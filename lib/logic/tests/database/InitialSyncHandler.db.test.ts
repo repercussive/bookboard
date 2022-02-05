@@ -45,9 +45,9 @@ test('user data (including boards metadata) are correctly uploaded on first sign
   userDataHandler.setPlantLocally('a', 'frank')
 
   boardsHandler.selectedBoard.renameBoard('Test board')
-  boardsHandler.selectedBoard.markBookAsRead(
-    boardsHandler.selectedBoard.addBook(new Book({ title: 'Test book', author: 'Test author' }))
-  )
+  const readBook = new Book({ title: 'Test book', author: 'Test author' })
+  boardsHandler.selectedBoard.addBook(readBook)
+  boardsHandler.selectedBoard.markBookAsRead(readBook)
 
   // sign in & initial sync
 
@@ -87,15 +87,18 @@ test('board contents are correctly uploaded on first sign-in', async () => {
   // setting up boards locally
 
   const boardA = boardsHandler.selectedBoard
-  const boardABookA = boardsHandler.selectedBoard.addBook(new Book({ title: 'Test board A book A', author: 'Test author' }))
-  const boardABookB = boardsHandler.selectedBoard.addBook(new Book({ title: 'Test board A book B', author: 'Test author' }))
+  const boardABookA = new Book({ title: 'Test board A book A', author: 'Test author' })
+  const boardABookB = new Book({ title: 'Test board A book B', author: 'Test author' })
+  boardA.addBook(boardABookA)
+  boardA.addBook(boardABookB)
   boardABookA.updateRating(5)
   boardABookA.updateReview('it was pretty good')
   boardsHandler.selectedBoard.markBookAsRead(boardABookA)
 
   const boardB = new Board({ name: 'Test board B' })
   boardsHandler.addBoard(boardB)
-  const boardBBook = boardsHandler.selectedBoard.addBook(new Book({ title: 'Test board B book', author: 'Test author' }))
+  const boardBBook = new Book({ title: 'Test board B book', author: 'Test author' })
+  boardB.addBook(boardBBook)
 
   // sign in & initial sync
 
@@ -111,13 +114,15 @@ test('board contents are correctly uploaded on first sign-in', async () => {
     [boardABookA.id]: {
       title: boardABookA.title,
       author: boardABookA.author,
+      chunk: boardABookB.chunk,
       rating: boardABookA.rating,
       review: boardABookA.review,
       timeCompleted: boardABookA.timeCompleted
     },
     [boardABookB.id]: {
       title: boardABookB.title,
-      author: boardABookB.author
+      author: boardABookB.author,
+      chunk: boardABookB.chunk
     }
   })
 
@@ -127,7 +132,8 @@ test('board contents are correctly uploaded on first sign-in', async () => {
   expect(boardBChunk).toEqual({
     [boardBBook.id]: {
       title: boardBBook.title,
-      author: boardBBook.author
+      author: boardBBook.author,
+      chunk: boardBBook.chunk
     }
   })
 })

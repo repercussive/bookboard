@@ -91,8 +91,8 @@ export default class InitialSyncHandler {
       const { booksDocData } = boardsDocData[boardsDocData.length - 1]
 
       for (const book of allBooks) {
-        const { title, author, timeCompleted, rating, review } = book
-        booksDocData[book.id] = deleteUndefinedFields({ title, author, timeCompleted, rating, review })
+        const { title, author, chunk, timeCompleted, rating, review } = book
+        booksDocData[book.id] = deleteUndefinedFields({ title, author, chunk, timeCompleted, rating, review })
       }
     }
 

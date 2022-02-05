@@ -1,9 +1,12 @@
 import { makeAutoObservable } from 'mobx'
 import { container } from 'tsyringe'
 import { nanoid } from 'nanoid'
-import Book from '@/lib/logic/app/Book'
+import { arrayRemove, deleteField, writeBatch } from 'firebase/firestore'
+import pick from 'lodash/pick'
+import DbHandler, { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
+import Book, { BookProperties } from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import DbHandler from '@/lib/logic/app/DbHandler'
+import deleteUndefinedFields from '@/lib/logic/utils/deleteUndefinedFields'
 
 interface BoardConstructorOptions {
   name: string,
@@ -42,16 +45,46 @@ export default class Board {
     })
   }
 
-  public addBook = (newBook: Book) => {
+  public addBook = async (newBook: Book) => {
+    // 💻
+    newBook.chunk = Math.floor(this.totalBooksAdded / maxBooksPerDocument)
     this.unreadBooks[newBook.id] = newBook
     this.unreadBooksOrder.unshift(newBook.id)
     this.totalBooksAdded += 1
+
+    // ☁️
+    const bookProperties: BookProperties = pick(newBook, ['title', 'author', 'chunk', 'rating', 'review', 'timeCompleted'])
+    const batch = writeBatch(this.dbHandler.db)
+    this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(this.id), {
+      unreadBooksOrder: this.unreadBooksOrder,
+      totalBooksAdded: this.totalBooksAdded
+    })
+    this.dbHandler.updateDocInBatch(
+      batch,
+      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: newBook.chunk }),
+      { [newBook.id]: deleteUndefinedFields({ ...bookProperties }) }
+    )
+    await batch.commit()
+
     return this.unreadBooks[newBook.id]
   }
 
-  public deleteBook = (book: Book) => {
+  public deleteBook = async (book: Book) => {
+    // 💻
     this.removeUnreadBook(book)
     this.removeReadBook(book)
+
+    // ☁️
+    const batch = writeBatch(this.dbHandler.db)
+    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
+      unreadBooksOrder: arrayRemove(book.id)
+    })
+    this.dbHandler.updateDocInBatch(
+      batch,
+      this.dbHandler.boardChunkDocRef<any>({ boardId: this.id, chunkIndex: book.chunk }),
+      { [book.id]: deleteField() }
+    )
+    await batch.commit()
   }
 
   public markBookAsRead = (book: Book) => {

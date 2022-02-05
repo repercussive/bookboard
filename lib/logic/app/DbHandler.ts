@@ -2,6 +2,7 @@ import { inject, singleton } from 'tsyringe'
 import { Firestore, doc, collection, DocumentReference, getDoc, getDocs, query, setDoc, WriteBatch } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
 import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
+import { BookProperties } from '@/lib/logic/app/Book'
 
 export const maxBooksPerDocument = 300
 
@@ -18,13 +19,7 @@ export interface BoardDocumentData {
 }
 
 export interface BoardChunkDocumentData {
-  [bookId: string]: {
-    title: string
-    author: string,
-    rating?: number,
-    review?: string,
-    timeCompleted?: number
-  }
+  [bookId: string]: BookProperties
 }
 
 type DeepPartial<T> = T extends { [key: string]: any } ? {
@@ -69,11 +64,11 @@ export default class DbHandler {
     ) as DocumentReference<BoardDocumentData>
   }
 
-  public boardChunkDocRef = ({ boardId, chunkIndex }: { boardId: string, chunkIndex: number }) => {
+  public boardChunkDocRef = <T>({ boardId, chunkIndex }: { boardId: string, chunkIndex: number }) => {
     return doc(
       this.db,
       `users/${this.uid}/boards/${boardId}/chunks/${chunkIndex}`
-    ) as DocumentReference<BoardChunkDocumentData>
+    ) as T extends object ? T : DocumentReference<BoardChunkDocumentData>
   }
 
   public get userDocRef() {

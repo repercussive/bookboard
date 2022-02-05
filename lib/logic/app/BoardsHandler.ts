@@ -48,7 +48,7 @@ export default class BoardsHandler {
             timeCreated: newBoard.timeCreated
           }
         }
-      }),
+      })
       this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(newBoard.id), {
         totalBooksAdded: 0,
         unreadBooksOrder: []
@@ -70,7 +70,7 @@ export default class BoardsHandler {
 
   public setSelectedBoard = async (board: Board) => {
     this.selectedBoard = board
-    await this.loadBoardDataFromDb(board.id)
+    await this.loadBoardFromDb(board.id)
   }
 
   public registerBoardsMetadata = (metadata: UserDocumentData['boardsMetadata']) => {
@@ -95,7 +95,7 @@ export default class BoardsHandler {
     return metadata
   }
 
-  private loadBoardDataFromDb = async (boardId: string) => {
+  private loadBoardFromDb = async (boardId: string) => {
     if (!this.unloadedBoardIds.includes(boardId)) return
 
     try {
@@ -103,7 +103,7 @@ export default class BoardsHandler {
       const boardDocData = await getDocData(boardDocRef(boardId))
       const boardToPopulate = this.allBoards.find((board) => board.id === boardId)!
 
-      const allBooks = await this.getBooksInBoard(boardId)
+      const allBooks = await this.loadBooksInBoardFromDb(boardId)
       const unreadBooks = {} as Board['unreadBooks']
       const readBooks = {} as Board['readBooks']
       for (const book of Object.values(allBooks)) {
@@ -124,13 +124,13 @@ export default class BoardsHandler {
     }
   }
 
-  private getBooksInBoard = async (boardId: string) => {
+  private loadBooksInBoardFromDb = async (boardId: string) => {
     const chunkDocs = await this.dbHandler.getBoardChunkDocs(boardId)
     const books = {} as { [bookId: string]: Book }
     for (const chunk of chunkDocs) {
       for (const [id, properties] of Object.entries(chunk.data())) {
-        const { title, author, rating, review, timeCompleted } = properties
-        books[id] = new Book({ id, title, author, rating, review, timeCompleted })
+        const { title, author, chunk, rating, review, timeCompleted } = properties
+        books[id] = new Book({ id, title, author, chunk, rating, review, timeCompleted })
       }
     }
     return books
