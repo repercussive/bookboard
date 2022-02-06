@@ -12,10 +12,10 @@ const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDial
   const isUpdatingReview = useMemo(() => !!selectedBook.rating, [selectedBook])
   const [rating, setRating] = useState(selectedBook.rating ?? 0)
   const [review, setReview] = useState(selectedBook.review ?? '')
+  const { selectedBoard } = container.resolve(BoardsHandler)
 
-  function handleMarkAsRead() {
-    selectedBook.updateRating(rating)
-    selectedBook.updateReview(review)
+  function handleSave() {
+    selectedBoard.editBook(selectedBook, { rating, review })
     if (!isUpdatingReview) {
       container.resolve(BoardsHandler).selectedBoard.markBookAsRead(selectedBook)
     }
@@ -43,7 +43,7 @@ const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDial
       </label>
       <Spacer mb="$3" />
       <SimpleButton
-        onClick={handleMarkAsRead}
+        onClick={handleSave}
         disabled={rating === 0}
       >
         {rating === 0

@@ -1,15 +1,12 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
-import { BookProperties } from '@/lib/logic/app/Book'
+import Board, { BookProperties } from '@/lib/logic/app/Board'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import signInDummyUser from '@/test-setup/signInDummyUser'
 import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
 import getDbShortcuts from '@/test-setup/getDbShortcuts'
 import teardownFirebase from '@/test-setup/teardownFirebase'
-import Board from '@/lib/logic/app/Board'
-
-type BookIdAndProperties = BookProperties & { id: string }
 
 const { db } = getFirebaseAdmin()
 const { userDoc, boardDoc } = getDbShortcuts(db)
@@ -67,20 +64,20 @@ test('when a board is selected, it is correctly loaded from the database', async
 
   const testBoardId = 'test-board-id'
   const testBoardDoc = boardDoc(testUserUid, testBoardId)
-  const unreadBookAProperties: BookIdAndProperties = {
-    id: 'unread-book-a',
+  const unreadBookAId = 'unread-book-a'
+  const unreadBookAProperties: BookProperties = {
     title: 'An unread book A',
     author: 'Test author',
     chunk: 0
   }
-  const unreadBookBProperties: BookIdAndProperties = {
-    id: 'unread-book-b',
+  const unreadBookBId = 'unread-book-b'
+  const unreadBookBProperties: BookProperties = {
     title: 'An unread book B',
     author: 'Test author',
     chunk: 1
   }
-  const readBookProperties: BookIdAndProperties = {
-    id: 'read-book',
+  const readBookId = 'read-book'
+  const readBookProperties: BookProperties = {
     title: 'A read book',
     author: 'Test author',
     chunk: 0,
@@ -91,16 +88,16 @@ test('when a board is selected, it is correctly loaded from the database', async
 
   await testBoardDoc.set({
     totalBooksAdded: 3,
-    unreadBooksOrder: [unreadBookAProperties.id, unreadBookBProperties.id]
+    unreadBooksOrder: [unreadBookAId, unreadBookBId]
   })
 
   await testBoardDoc.collection('chunks').doc('0').set({
-    [unreadBookAProperties.id]: unreadBookAProperties,
-    [readBookProperties.id]: readBookProperties
+    [unreadBookAId]: unreadBookAProperties,
+    [readBookId]: readBookProperties
   })
 
   await testBoardDoc.collection('chunks').doc('1').set({
-    [unreadBookBProperties.id]: unreadBookBProperties
+    [unreadBookBId]: unreadBookBProperties
   })
 
   // register the unloaded board
@@ -119,11 +116,11 @@ test('when a board is selected, it is correctly loaded from the database', async
 
   expect(loadedBoard).toMatchObject({
     totalBooksAdded: 3,
-    unreadBooksOrder: [unreadBookAProperties.id, unreadBookBProperties.id],
+    unreadBooksOrder: [unreadBookAId, unreadBookBId],
   })
-  expect(loadedBoard.unreadBooks[unreadBookAProperties.id]).toMatchObject(unreadBookAProperties)
-  expect(loadedBoard.unreadBooks[unreadBookBProperties.id]).toMatchObject(unreadBookBProperties)
-  expect(loadedBoard.readBooks[readBookProperties.id]).toMatchObject(readBookProperties)
+  expect(loadedBoard.unreadBooks[unreadBookAId]).toEqual({ ...unreadBookAProperties, id: unreadBookAId })
+  expect(loadedBoard.unreadBooks[unreadBookBId]).toEqual({ ...unreadBookBProperties, id: unreadBookBId })
+  expect(loadedBoard.readBooks[readBookId]).toEqual({ ...readBookProperties, id: readBookId })
 
   // the board is no longer listed as unloaded
 

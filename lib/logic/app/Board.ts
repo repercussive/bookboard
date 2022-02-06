@@ -2,17 +2,29 @@ import { makeAutoObservable } from 'mobx'
 import { container } from 'tsyringe'
 import { nanoid } from 'nanoid'
 import { arrayRemove, deleteField, writeBatch } from 'firebase/firestore'
-import pick from 'lodash/pick'
 import DbHandler, { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import Book, { BookProperties } from '@/lib/logic/app/Book'
 import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import deleteUndefinedFields from '@/lib/logic/utils/deleteUndefinedFields'
+import exclude from '@/lib/logic/utils/exclude'
 
 interface BoardConstructorOptions {
   name: string,
   id?: string,
   timeCreated?: number,
 }
+
+export type BookProperties = {
+  title: string
+  author: string
+  chunk: number
+  rating?: number
+  review?: string
+  timeCompleted?: number
+}
+
+export type Book = BookProperties & { id: string }
+
+export type EditableBookProperties = Pick<Book, 'title' | 'author' | 'rating' | 'review'>
 
 export default class Board {
   public id
@@ -45,15 +57,20 @@ export default class Board {
     })
   }
 
-  public addBook = async (newBook: Book) => {
+  public addBook = async ({ title, author }: { title: string, author: string }) => {
     // 💻
-    newBook.chunk = Math.floor(this.totalBooksAdded / maxBooksPerDocument)
+    const newBook: Book = {
+      id: nanoid(8),
+      title,
+      author,
+      chunk: Math.floor(this.totalBooksAdded / maxBooksPerDocument),
+    }
     this.unreadBooks[newBook.id] = newBook
     this.unreadBooksOrder.unshift(newBook.id)
     this.totalBooksAdded += 1
 
     // ☁️
-    const bookProperties: BookProperties = pick(newBook, ['title', 'author', 'chunk', 'rating', 'review', 'timeCompleted'])
+    const bookProperties: BookProperties = exclude(newBook, 'id')
     const batch = writeBatch(this.dbHandler.db)
     this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(this.id), {
       unreadBooksOrder: this.unreadBooksOrder,
@@ -67,6 +84,17 @@ export default class Board {
     await batch.commit()
 
     return this.unreadBooks[newBook.id]
+  }
+
+  public editBook = async (book: Book, changes: Partial<EditableBookProperties>) => {
+    // 💻
+    Object.assign(book, changes)
+
+    // ☁️
+    await this.dbHandler.updateDoc(
+      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
+      { [book.id]: changes }
+    )
   }
 
   public deleteBook = async (book: Book) => {

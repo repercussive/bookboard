@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import Book, { BookConstructorOptions } from '@/lib/logic/app/Book'
+import { Book } from '@/lib/logic/app/Board'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import AuthHandler from '@/lib/logic/app/AuthHandler'
 import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
@@ -18,7 +18,9 @@ interface Props extends CoreDialogProps {
 const emptyBookInfo = { title: '', author: '' }
 
 const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange }: Props) => {
-  const [bookInfo, setBookInfo] = useState<BookConstructorOptions>(selectedBook ? { ...selectedBook } : emptyBookInfo)
+  const [bookInfo, setBookInfo] = useState<{ title: string, author: string }>(
+    selectedBook ? { title: selectedBook.title, author: selectedBook.author } : emptyBookInfo
+  )
   const { selectedBoard } = container.resolve(BoardsHandler)
   const { isAuthenticated } = container.resolve(AuthHandler)
 
@@ -35,9 +37,9 @@ const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange
 
   function handleSaveChanges() {
     if (isNewBook) {
-      selectedBoard.addBook(new Book({ ...bookInfo }))
+      selectedBoard.addBook(bookInfo)
     } else {
-      selectedBook.updateInfo({ ...bookInfo })
+      selectedBoard.editBook(selectedBook, bookInfo)
     }
 
     onOpenChange(false)
@@ -67,8 +69,8 @@ const EditBookInfoDialog = ({ triggerElement, selectedBook, isOpen, onOpenChange
 }
 
 const InputSection = ({ bookInfo, setBookInfo }: {
-  bookInfo: BookConstructorOptions,
-  setBookInfo: Dispatch<SetStateAction<BookConstructorOptions>>
+  bookInfo: { title: string, author: string },
+  setBookInfo: Dispatch<SetStateAction<{ title: string, author: string }>>
 }) => {
   function updateBookInfo(newValue: string, property: 'title' | 'author') {
     setBookInfo({

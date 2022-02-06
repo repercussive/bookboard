@@ -2,7 +2,7 @@ import { inject, singleton } from 'tsyringe'
 import { Firestore, doc, collection, DocumentReference, getDoc, getDocs, query, setDoc, WriteBatch } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
 import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
-import { BookProperties } from '@/lib/logic/app/Book'
+import { BookProperties } from '@/lib/logic/app/Board'
 
 export const maxBooksPerDocument = 300
 
@@ -68,7 +68,7 @@ export default class DbHandler {
     return doc(
       this.db,
       `users/${this.uid}/boards/${boardId}/chunks/${chunkIndex}`
-    ) as T extends object ? T : DocumentReference<BoardChunkDocumentData>
+    ) as (T extends object ? DocumentReference<BoardChunkDocumentData> : DocumentReference<T>)
   }
 
   public get userDocRef() {

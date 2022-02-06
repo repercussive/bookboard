@@ -1,9 +1,9 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { writeBatch } from 'firebase/firestore'
+import { Book } from '@/lib/logic/app/Board'
 import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
 import Board from '@/lib/logic/app/Board'
-import Book from '@/lib/logic/app/Book'
 
 type BoardViewMode = 'unread' | 'read'
 
@@ -129,8 +129,7 @@ export default class BoardsHandler {
     const books = {} as { [bookId: string]: Book }
     for (const chunk of chunkDocs) {
       for (const [id, properties] of Object.entries(chunk.data())) {
-        const { title, author, chunk, rating, review, timeCompleted } = properties
-        books[id] = new Book({ id, title, author, chunk, rating, review, timeCompleted })
+        books[id] = { id, ...properties }
       }
     }
     return books

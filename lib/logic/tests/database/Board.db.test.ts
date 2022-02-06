@@ -2,8 +2,9 @@ import '@abraham/reflection'
 import { container } from 'tsyringe'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
 import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import Book, { BookProperties } from '@/lib/logic/app/Book'
+import { BookProperties } from '@/lib/logic/app/Board'
 import Board from '@/lib/logic/app/Board'
+import exclude from '@/lib/logic/utils/exclude'
 import signInDummyUser from '@/test-setup/signInDummyUser'
 import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
 import getDbShortcuts from '@/test-setup/getDbShortcuts'
@@ -34,19 +35,29 @@ afterAll(async () => {
 
 test('adding a book to a board correctly updates the database', async () => {
   const board = new Board({ name: 'Test board' })
-  const book = await board.addBook(new Book({ title: 'Test book', author: 'Test author' }))
+  const book = await board.addBook(({ title: 'Test book', author: 'Test author' }))
 
   const chunkData = (await boardChunkDoc(testUserUid, board.id, 0).get()).data()
-  expect(chunkData?.[book.id]).toEqual({
+  expect(chunkData?.[book.id]).toEqual<BookProperties>({
     title: book.title,
     author: book.author,
     chunk: book.chunk
-  } as BookProperties)
+  })
+})
+
+test('editing a book correctly updates the database', async () => {
+  const board = new Board({ name: 'Test board' })
+  const book = await board.addBook(({ title: 'Test book', author: 'Test author' }))
+
+  await board.editBook(book, { title: 'New title', author: 'New author' })
+
+  const chunkData = (await boardChunkDoc(testUserUid, board.id, 0).get()).data()
+  expect(chunkData?.[book.id]).toEqual(exclude(book, 'id'))
 })
 
 test('removing a book from a board correctly updates the database', async () => {
   const board = new Board({ name: 'Test board' })
-  const book = await board.addBook(new Book({ title: 'Test book', author: 'Test author' }))
+  const book = await board.addBook({ title: 'Test book', author: 'Test author' })
 
   await board.deleteBook(book)
 
@@ -59,7 +70,7 @@ test('added books are uploaded to the correct chunk document', async () => {
   let lastBookAdded: any
 
   for (let i = 0; i < maxBooksPerDocument + 1; i++) {
-    lastBookAdded = await board.addBook(new Book({ title: 'Test book', author: 'Test author' }))
+    lastBookAdded = await board.addBook({ title: 'Test book', author: 'Test author' })
   }
 
   const chunkData = (await boardChunkDoc(testUserUid, board.id, 1).get()).data()
