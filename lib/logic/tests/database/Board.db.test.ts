@@ -65,6 +65,24 @@ test('removing a book from a board correctly updates the database', async () => 
   expect(chunkData).toEqual({})
 })
 
+test('marking a book as read correctly updates the database', async () => {
+  const board = new Board({ name: 'Test board' })
+  const book = await board.addBook({ title: 'Test book', author: 'Test author' })
+
+  await board.markBookAsRead(book, { rating: 5, review: 'masterpiece' })
+
+  const userData = (await userDoc(testUserUid).get()).data()
+  const chunkData = (await boardChunkDoc(testUserUid, board.id, 0).get()).data()
+
+  expect(userData?.completedBooksCount).toEqual(1)
+  expect(chunkData?.[book.id]).toMatchObject({ 
+    rating: book.rating,
+    review: book.review,
+    timeCompleted: book.timeCompleted
+  })
+  
+})
+
 test('added books are uploaded to the correct chunk document', async () => {
   const board = new Board({ name: 'Test board' })
   let lastBookAdded: any

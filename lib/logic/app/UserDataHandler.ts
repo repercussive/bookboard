@@ -21,8 +21,15 @@ export default class UserDataHandler {
     makeAutoObservable(this)
   }
 
-  public incrementCompletedBooks = () => {
+  public incrementCompletedBooks = async () => {
+    // 💻
     this.completedBooksCount += 1
+
+    // ☁️
+    await this.dbHandler.updateDoc(
+      this.dbHandler.userDocRef,
+      { completedBooksCount: this.completedBooksCount }
+    )
   }
 
   public setColorThemeLocally = async (theme: ThemeId) => {

@@ -115,11 +115,30 @@ export default class Board {
     await batch.commit()
   }
 
-  public markBookAsRead = (book: Book) => {
+  public markBookAsRead = async (book: Book, ratingAndReview?: Pick<BookProperties, 'rating' | 'review'>) => {
+    // 💻
     book.timeCompleted = Date.now()
+    Object.assign(book, ratingAndReview)
     this.removeUnreadBook(book)
     this.readBooks[book.id] = book
     this.userDataHandler.incrementCompletedBooks()
+
+    // ☁️
+    const batch = writeBatch(this.dbHandler.db)
+    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
+      unreadBooksOrder: arrayRemove(book.id)
+    })
+    this.dbHandler.updateDocInBatch(
+      batch,
+      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
+      {
+        [book.id]: {
+          timeCompleted: book.timeCompleted,
+          ...ratingAndReview
+        }
+      }
+    )
+    await batch.commit()
   }
 
   public getSortedReadBookIds = () => {

@@ -68,7 +68,7 @@ export default class DbHandler {
     return doc(
       this.db,
       `users/${this.uid}/boards/${boardId}/chunks/${chunkIndex}`
-    ) as (T extends object ? DocumentReference<BoardChunkDocumentData> : DocumentReference<T>)
+    ) as (T extends object ? DocumentReference<T> : DocumentReference<BoardChunkDocumentData>)
   }
 
   public get userDocRef() {

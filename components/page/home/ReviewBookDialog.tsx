@@ -9,15 +9,16 @@ import SimpleButton from '@/components/modular/SimpleButton'
 import Spacer from '@/components/modular/Spacer'
 
 const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDialogProps) => {
-  const isUpdatingReview = useMemo(() => !!selectedBook.rating, [selectedBook])
+  const isUpdatingReview = useMemo(() => !!selectedBook.timeCompleted, [selectedBook])
   const [rating, setRating] = useState(selectedBook.rating ?? 0)
   const [review, setReview] = useState(selectedBook.review ?? '')
   const { selectedBoard } = container.resolve(BoardsHandler)
 
   function handleSave() {
-    selectedBoard.editBook(selectedBook, { rating, review })
-    if (!isUpdatingReview) {
-      container.resolve(BoardsHandler).selectedBoard.markBookAsRead(selectedBook)
+    if (isUpdatingReview) {
+      selectedBoard.editBook(selectedBook, { rating, review })
+    } else {
+      container.resolve(BoardsHandler).selectedBoard.markBookAsRead(selectedBook, { rating, review })
     }
 
     onOpenChange(false)
