@@ -11,7 +11,7 @@ import getDbShortcuts from '@/test-setup/getDbShortcuts'
 import teardownFirebase from '@/test-setup/teardownFirebase'
 
 const { db } = getFirebaseAdmin()
-const { userDoc, boardChunkDoc } = getDbShortcuts(db)
+const { userDoc, boardChunkDoc, boardDoc } = getDbShortcuts(db)
 const firebase = initializeFirebase()
 
 let testUserUid: string
@@ -75,22 +75,32 @@ test('marking a book as read correctly updates the database', async () => {
   const chunkData = (await boardChunkDoc(testUserUid, board.id, 0).get()).data()
 
   expect(userData?.completedBooksCount).toEqual(1)
-  expect(chunkData?.[book.id]).toMatchObject({ 
+  expect(chunkData?.[book.id]).toMatchObject({
     rating: book.rating,
     review: book.review,
     timeCompleted: book.timeCompleted
   })
-  
+})
+
+test('reordering order of unread books correctly updates the database', async () => {
+  const board = new Board({ name: 'Test board' })
+  const bookA = await board.addBook({ title: 'Test book A', author: 'Test author' })
+  const bookB = await board.addBook({ title: 'Test book B', author: 'Test author' })
+  const bookC = await board.addBook({ title: 'Test book C', author: 'Test author' })
+
+  await board.updateUnreadBooksOrder([bookB.id, bookA.id, bookC.id])
+
+  const boardData = (await boardDoc(testUserUid, board.id).get()).data()
+  expect(boardData?.unreadBooksOrder).toEqual([bookB.id, bookA.id, bookC.id])
 })
 
 test('added books are uploaded to the correct chunk document', async () => {
   const board = new Board({ name: 'Test board' })
-  let lastBookAdded: any
 
-  for (let i = 0; i < maxBooksPerDocument + 1; i++) {
-    lastBookAdded = await board.addBook({ title: 'Test book', author: 'Test author' })
+  for (let chunk = 0; chunk < 3; chunk++) {
+    board.totalBooksAdded = chunk * maxBooksPerDocument
+    let book = await board.addBook({ title: 'Test book', author: 'Test author' })
+    const chunkData = (await boardChunkDoc(testUserUid, board.id, chunk).get()).data()
+    expect(chunkData?.[book.id]).not.toBeUndefined()
   }
-
-  const chunkData = (await boardChunkDoc(testUserUid, board.id, 1).get()).data()
-  expect(chunkData?.[lastBookAdded.id]).not.toBeUndefined()
 })

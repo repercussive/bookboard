@@ -147,8 +147,14 @@ export default class Board {
       .map((book) => book.id)
   }
 
-  public updateUnreadBooksOrder = (newOrder: string[]) => {
+  public updateUnreadBooksOrder = async (newOrder: string[]) => {
+    // 💻
     this.unreadBooksOrder = newOrder
+
+    // ☁️
+    await this.dbHandler.updateDoc(this.dbHandler.boardDocRef(this.id), {
+      unreadBooksOrder: this.unreadBooksOrder
+    })
   }
 
   private removeUnreadBook = (book: Book) => {
