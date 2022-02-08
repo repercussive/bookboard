@@ -1,6 +1,7 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
 import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
+import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
 import Board, { BookProperties } from '@/lib/logic/app/Board'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import signInDummyUser from '@/test-setup/signInDummyUser'
@@ -125,4 +126,24 @@ test('when a board is selected, it is correctly loaded from the database', async
   // the board is no longer listed as unloaded
 
   expect(boardsHandler.unloadedBoardIds).toEqual([])
+})
+
+test('deleting a board correctly updates the database', async () => {
+  const testBoard = await boardsHandler.addBoard(new Board({ name: 'Test board' }))
+  testBoard.totalBooksAdded = maxBooksPerDocument * 3
+
+  const testBoardDoc = boardDoc(testUserUid, testBoard.id)
+  const chunk1Doc = testBoardDoc.collection('chunks').doc('0')
+  const chunk2Doc = testBoardDoc.collection('chunks').doc('1')
+
+  await testBoardDoc.set({})
+  await chunk1Doc.set({})
+  await chunk2Doc.set({})
+
+  await boardsHandler.deleteBoard(testBoard)
+
+  expect((await userDoc(testUserUid).get()).data()?.boardsMetadata[testBoard.id]).toBeUndefined()
+  expect((await testBoardDoc.get()).data()).toBeUndefined()
+  expect((await chunk1Doc.get()).data()).toBeUndefined()
+  expect((await chunk2Doc.get()).data()).toBeUndefined()
 })

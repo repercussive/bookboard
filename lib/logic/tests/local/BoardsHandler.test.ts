@@ -59,9 +59,9 @@ test('if the selected board is deleted, the first remaining board will be select
   expect(boardsHandler.selectedBoard).toEqual(newBoard)
 })
 
-test('throws an error when attempting to delete the only remaining board', () => {
-  const deleteOnlyRemaining = () => boardsHandler.deleteBoard(boardsHandler.allBoards[0])
-  expect(deleteOnlyRemaining).toThrow()
+test('throws an error when attempting to delete the only remaining board', async () => {
+  const deleteOnlyRemaining = async () => await boardsHandler.deleteBoard(boardsHandler.allBoards[0])
+  await expect(deleteOnlyRemaining()).rejects.toThrow()
 })
 
 test('correctly handles board metadata', () => {  

@@ -51,6 +51,11 @@ export default class DbHandler {
     batch.set(docRef, data, { merge: true })
   }
 
+  public deleteDocInBatch = (batch: WriteBatch, docRef: DocumentReference) => {
+    if (!this.auth.currentUser) return
+    batch.delete(docRef)
+  }
+
   public getBoardChunkDocs = async (boardId: string) => {
     const chunksCollectionRef = collection(this.db, `users/${this.uid}/boards/${boardId}/chunks`)
     const chunksSnapshot = await getDocs(query<BoardChunkDocumentData>(chunksCollectionRef))

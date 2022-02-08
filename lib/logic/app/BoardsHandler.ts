@@ -1,8 +1,8 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { writeBatch } from 'firebase/firestore'
+import { deleteField, writeBatch } from 'firebase/firestore'
 import { Book } from '@/lib/logic/app/Board'
-import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
+import DbHandler, { maxBooksPerDocument, UserDocumentData } from '@/lib/logic/app/DbHandler'
 import Board from '@/lib/logic/app/Board'
 
 type BoardViewMode = 'unread' | 'read'
@@ -59,13 +59,29 @@ export default class BoardsHandler {
     return this.selectedBoard
   }
 
-  public deleteBoard = (boardToDelete: Board) => {
+  public deleteBoard = async (boardToDelete: Board) => {
     if (this.allBoards.length === 1) throw new Error('Cannot delete only remaining board.')
+
+    // 💻
     const isDeletingSelectedBoard = this.selectedBoard === boardToDelete
     this.allBoards = this.allBoards.filter((board) => board !== boardToDelete)
     if (isDeletingSelectedBoard) {
       this.selectedBoard = this.allBoards[0]
     }
+
+    // ☁️
+    const batch = writeBatch(this.dbHandler.db)
+    const chunks = 1 + Math.floor((boardToDelete.totalBooksAdded - 1) / maxBooksPerDocument)
+    for (let chunkIndex = 0; chunkIndex < chunks; chunkIndex++) {
+      this.dbHandler.deleteDocInBatch(batch, this.dbHandler.boardChunkDocRef({ boardId: boardToDelete.id, chunkIndex }))
+    }
+    this.dbHandler.deleteDocInBatch(batch, this.dbHandler.boardDocRef(boardToDelete.id))
+    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.userDocRef, {
+      boardsMetadata: {
+        [boardToDelete.id]: deleteField()
+      }
+    })
+    await batch.commit()
   }
 
   public setSelectedBoard = async (board: Board) => {
