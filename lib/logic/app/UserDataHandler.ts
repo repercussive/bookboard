@@ -15,6 +15,7 @@ export default class UserDataHandler {
   public completedBooksCount = 0
   public colorTheme: ThemeId = 'vanilla'
   public plants = { a: 'george' as PlantId, b: 'george' as PlantId }
+  public lastSelectedBoardId: string | undefined = undefined 
 
   constructor(private dbHandler: DbHandler) {
     this.loadColorTheme()
@@ -57,6 +58,12 @@ export default class UserDataHandler {
   public syncPlants = async () => {
     await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
       plants: this.plants
+    })
+  }
+
+  public setLastSelectedBoardId = async (id: string) => {
+    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
+      lastSelectedBoardId: id
     })
   }
 

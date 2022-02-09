@@ -11,6 +11,7 @@ export interface UserDocumentData {
   plants?: { a: PlantId, b: PlantId },
   completedBooksCount?: number,
   boardsMetadata?: { [boardId: string]: { name: string, timeCreated: number } }
+  lastSelectedBoardId?: string
 }
 
 export interface BoardDocumentData {

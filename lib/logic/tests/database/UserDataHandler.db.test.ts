@@ -48,3 +48,9 @@ test('syncing plants works', async () => {
     b: 'roman'
   })
 })
+
+test('setting the last selected board id works', async () => {
+  await userDataHandler.setLastSelectedBoardId('abc123')
+  const userData = (await userDoc(testUserUid).get()).data()
+  expect(userData?.lastSelectedBoardId).toEqual('abc123')
+})

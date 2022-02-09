@@ -27,7 +27,10 @@ export default class InitialSyncHandler {
     const userData = await this.dbHandler.getDocData(this.dbHandler.userDocRef)
     if (userData) {
       this.handleUserData(userData)
-      this.boardsHandler.setSelectedBoard(this.boardsHandler.allBoards[0])
+      const { allBoards } = this.boardsHandler
+      const { lastSelectedBoardId } = this.userDataHandler
+      const boardToSelect = allBoards.find((board) => board.id === lastSelectedBoardId) ?? allBoards[0]
+      this.boardsHandler.setSelectedBoard(boardToSelect)
     } else {
       await this.doPostSignupSync()
     }
@@ -36,11 +39,12 @@ export default class InitialSyncHandler {
   }
 
   private handleUserData(userData: UserDocumentData) {
-    const { colorTheme, plants, completedBooksCount } = userData
+    const { colorTheme, plants, completedBooksCount, lastSelectedBoardId } = userData
     this.userDataHandler.setColorThemeLocally(colorTheme ?? 'vanilla')
     this.userDataHandler.setPlantLocally('a', plants?.a ?? 'george')
     this.userDataHandler.setPlantLocally('b', plants?.b ?? 'george')
     this.userDataHandler.completedBooksCount = completedBooksCount ?? 0
+    this.userDataHandler.lastSelectedBoardId = lastSelectedBoardId
     this.boardsHandler.registerBoardsMetadata(userData.boardsMetadata)
   }
 

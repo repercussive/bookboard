@@ -2,6 +2,7 @@ import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import BoardsHandler, { maxBoards } from '@/lib/logic/app/BoardsHandler'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import Board from '@/lib/logic/app/Board'
 import ShelfButton from '@/components/page/home/ShelfButton'
 import EditBoardDialog from '@/components/page/home/EditBoardDialog'
@@ -57,11 +58,17 @@ const DropdownTrigger = () => {
 
 const DropdownContent = () => {
   const { allBoards, setSelectedBoard } = container.resolve(BoardsHandler)
+  const { setLastSelectedBoardId } = container.resolve(UserDataHandler)
   const { setActiveDialog, setBoardToDelete } = useContext(BoardActionsContext)
 
   function handlePressDeleteButton(board: Board) {
     setBoardToDelete(board)
     setActiveDialog('delete')
+  }
+
+  function handleSelectBoard(board: Board) {
+    setSelectedBoard(board)
+    setLastSelectedBoardId(board.id)
   }
 
   return (
@@ -70,7 +77,7 @@ const DropdownContent = () => {
         <Flex align="stretch" as="span" key={board.id}>
           <Dropdown.Item
             aria-label={`View board ${board.name}`}
-            onClick={() => setSelectedBoard(board)}
+            onClick={() => handleSelectBoard(board)}
             css={{ width: '100%' }}
           >
             {board.name}
