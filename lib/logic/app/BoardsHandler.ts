@@ -86,7 +86,7 @@ export default class BoardsHandler {
 
   public setSelectedBoard = async (board: Board) => {
     this.selectedBoard = board
-    await this.loadBoardFromDb(board.id)
+    await this.loadBoardFromDb(board)
   }
 
   public registerBoardsMetadata = (metadata: UserDocumentData['boardsMetadata']) => {
@@ -111,32 +111,33 @@ export default class BoardsHandler {
     return metadata
   }
 
-  private loadBoardFromDb = async (boardId: string) => {
-    if (!this.unloadedBoardIds.includes(boardId)) return
+  private loadBoardFromDb = async (boardToLoad: Board) => {
+    if (!this.unloadedBoardIds.includes(boardToLoad.id)) return
 
     try {
       const { getDocData, boardDocRef } = this.dbHandler
-      const boardDocData = await getDocData(boardDocRef(boardId))
-      const boardToPopulate = this.allBoards.find((board) => board.id === boardId)!
+      const boardDocData = await getDocData(boardDocRef(boardToLoad.id))
 
-      const allBooks = await this.loadBooksInBoardFromDb(boardId)
+      const allBooks = await this.loadBooksInBoardFromDb(boardToLoad.id)
       const unreadBooks = {} as Board['unreadBooks']
       const readBooks = {} as Board['readBooks']
       for (const book of Object.values(allBooks)) {
         (book.timeCompleted ? readBooks : unreadBooks)[book.id] = book
       }
 
-      // todo: handle incomplete unreadBooksOrder (compare unreadBooks count vs order length)
-
       runInAction(() => {
-        boardToPopulate.unreadBooks = unreadBooks
-        boardToPopulate.readBooks = readBooks
-        boardToPopulate.totalBooksAdded = boardDocData?.totalBooksAdded ?? 0
-        boardToPopulate.unreadBooksOrder = boardDocData?.unreadBooksOrder ?? []
-        this.unloadedBoardIds = this.unloadedBoardIds.filter((id) => id !== boardId)
+        boardToLoad.unreadBooks = unreadBooks
+        boardToLoad.readBooks = readBooks
+        boardToLoad.totalBooksAdded = boardDocData?.totalBooksAdded ?? 0
+        boardToLoad.unreadBooksOrder = boardDocData?.unreadBooksOrder ?? []
+        this.unloadedBoardIds = this.unloadedBoardIds.filter((id) => id !== boardToLoad.id)
       })
+
+      if (Object.keys(boardToLoad.unreadBooks).length !== boardToLoad.unreadBooksOrder.length) {
+        await this.handleIncompleteUnreadBooksOrder(boardToLoad)
+      }
     } catch (err) {
-      throw new Error(`Error populating board ${boardId}: ${err}`)
+      throw new Error(`Error populating board ${boardToLoad.id}: ${err}`)
     }
   }
 
@@ -149,5 +150,16 @@ export default class BoardsHandler {
       }
     }
     return books
+  }
+
+  private handleIncompleteUnreadBooksOrder = async (board: Board) => {
+    for (const bookId of Object.keys(board.unreadBooks)) {
+      if (!board.unreadBooksOrder.includes(bookId)) {
+        board.unreadBooksOrder.unshift(bookId)
+      }
+    }
+    await this.dbHandler.updateDoc(this.dbHandler.boardDocRef(board.id), {
+      unreadBooksOrder: board.unreadBooksOrder
+    })
   }
 }

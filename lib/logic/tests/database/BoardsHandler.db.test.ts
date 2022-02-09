@@ -60,8 +60,28 @@ test(`changing a board's name correctly updates the database`, async () => {
   expect(userDocData?.boardsMetadata[testBoard.id].name).toEqual('A cool new name')
 })
 
+test('deleting a board correctly updates the database', async () => {
+  const testBoard = await boardsHandler.addBoard(new Board({ name: 'Test board' }))
+  testBoard.totalBooksAdded = maxBooksPerDocument * 3
+
+  const testBoardDoc = boardDoc(testUserUid, testBoard.id)
+  const chunk1Doc = testBoardDoc.collection('chunks').doc('0')
+  const chunk2Doc = testBoardDoc.collection('chunks').doc('1')
+
+  await testBoardDoc.set({})
+  await chunk1Doc.set({})
+  await chunk2Doc.set({})
+
+  await boardsHandler.deleteBoard(testBoard)
+
+  expect((await userDoc(testUserUid).get()).data()?.boardsMetadata[testBoard.id]).toBeUndefined()
+  expect((await testBoardDoc.get()).data()).toBeUndefined()
+  expect((await chunk1Doc.get()).data()).toBeUndefined()
+  expect((await chunk2Doc.get()).data()).toBeUndefined()
+})
+
 test('when a board is selected, it is correctly loaded from the database', async () => {
-  // populate db, with books split between different documents (chunks)
+  //#region populate db, with books split between different documents (chunks)
 
   const testBoardId = 'test-board-id'
   const testBoardDoc = boardDoc(testUserUid, testBoardId)
@@ -100,12 +120,11 @@ test('when a board is selected, it is correctly loaded from the database', async
   await testBoardDoc.collection('chunks').doc('1').set({
     [unreadBookBId]: unreadBookBProperties
   })
+  //#endregion
 
   // register the unloaded board
 
-  boardsHandler.registerBoardsMetadata({
-    [testBoardId]: { name: 'Test board', timeCreated: Date.now() }
-  })
+  boardsHandler.registerBoardsMetadata({ [testBoardId]: { name: 'Test board', timeCreated: Date.now() } })
 
   // select board to trigger download
 
@@ -128,22 +147,26 @@ test('when a board is selected, it is correctly loaded from the database', async
   expect(boardsHandler.unloadedBoardIds).toEqual([])
 })
 
-test('deleting a board correctly updates the database', async () => {
-  const testBoard = await boardsHandler.addBoard(new Board({ name: 'Test board' }))
-  testBoard.totalBooksAdded = maxBooksPerDocument * 3
+test(`if book ids are missing from unreadBooksOrder in the board doc, those ids are restored upon loading the board`, async () => {
+  // populate db, with unreadBooksOrder missing two book ids
 
-  const testBoardDoc = boardDoc(testUserUid, testBoard.id)
-  const chunk1Doc = testBoardDoc.collection('chunks').doc('0')
-  const chunk2Doc = testBoardDoc.collection('chunks').doc('1')
+  const testBoardId = 'test-board-id'
+  const testBoardDoc = boardDoc(testUserUid, testBoardId)
 
-  await testBoardDoc.set({})
-  await chunk1Doc.set({})
-  await chunk2Doc.set({})
+  await testBoardDoc.set({
+    totalBooksAdded: 3,
+    unreadBooksOrder: ['book-c'] // "book-a" and "book-b" are missing
+  })
+  await testBoardDoc.collection('chunks').doc('0').set({
+    'book-a': { title: 'Book A', author: 'Test author', chunk: 0 },
+    'book-b': { title: 'Book B', author: 'Test author', chunk: 0 },
+    'book-c': { title: 'Book C', author: 'Test author', chunk: 0 },
+  })
 
-  await boardsHandler.deleteBoard(testBoard)
+  boardsHandler.registerBoardsMetadata({ [testBoardId]: { name: 'Test board', timeCreated: Date.now() } })
 
-  expect((await userDoc(testUserUid).get()).data()?.boardsMetadata[testBoard.id]).toBeUndefined()
-  expect((await testBoardDoc.get()).data()).toBeUndefined()
-  expect((await chunk1Doc.get()).data()).toBeUndefined()
-  expect((await chunk2Doc.get()).data()).toBeUndefined()
+  await boardsHandler.setSelectedBoard(boardsHandler.allBoards[0])
+  const loadedBoard = boardsHandler.allBoards[0]
+
+  expect(loadedBoard.unreadBooksOrder).toEqual(['book-a', 'book-b', 'book-c'])
 })
