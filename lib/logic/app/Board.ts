@@ -52,8 +52,10 @@ export default class Board {
     this.name = newName
 
     // ☁️
-    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
-      boardsMetadata: { [this.id]: { name: newName } }
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.userDocRef, {
+        boardsMetadata: { [this.id]: { name: newName } }
+      })
     })
   }
 
@@ -70,18 +72,20 @@ export default class Board {
     this.totalBooksAdded += 1
 
     // ☁️
-    const bookProperties: BookProperties = exclude(newBook, 'id')
-    const batch = writeBatch(this.dbHandler.db)
-    this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(this.id), {
-      unreadBooksOrder: this.unreadBooksOrder,
-      totalBooksAdded: this.totalBooksAdded
+    await this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
+      const bookProperties: BookProperties = exclude(newBook, 'id')
+      const batch = writeBatch(this.dbHandler.db)
+      updateDocInBatch(batch, this.dbHandler.boardDocRef(this.id), {
+        unreadBooksOrder: this.unreadBooksOrder,
+        totalBooksAdded: this.totalBooksAdded
+      })
+      updateDocInBatch(
+        batch,
+        this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: newBook.chunk }),
+        { [newBook.id]: deleteUndefinedFields({ ...bookProperties }) }
+      )
+      await batch.commit()
     })
-    this.dbHandler.updateDocInBatch(
-      batch,
-      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: newBook.chunk }),
-      { [newBook.id]: deleteUndefinedFields({ ...bookProperties }) }
-    )
-    await batch.commit()
 
     return this.unreadBooks[newBook.id]
   }
@@ -91,10 +95,12 @@ export default class Board {
     Object.assign(book, changes)
 
     // ☁️
-    await this.dbHandler.updateDoc(
-      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
-      { [book.id]: changes }
-    )
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(
+        this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
+        { [book.id]: changes }
+      )
+    })
   }
 
   public deleteBook = async (book: Book) => {
@@ -103,16 +109,18 @@ export default class Board {
     this.removeReadBook(book)
 
     // ☁️
-    const batch = writeBatch(this.dbHandler.db)
-    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
-      unreadBooksOrder: arrayRemove(book.id)
+    await this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
+      const batch = writeBatch(this.dbHandler.db)
+      updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
+        unreadBooksOrder: arrayRemove(book.id)
+      })
+      updateDocInBatch(
+        batch,
+        this.dbHandler.boardChunkDocRef<any>({ boardId: this.id, chunkIndex: book.chunk }),
+        { [book.id]: deleteField() }
+      )
+      await batch.commit()
     })
-    this.dbHandler.updateDocInBatch(
-      batch,
-      this.dbHandler.boardChunkDocRef<any>({ boardId: this.id, chunkIndex: book.chunk }),
-      { [book.id]: deleteField() }
-    )
-    await batch.commit()
   }
 
   public markBookAsRead = async (book: Book, ratingAndReview?: Pick<BookProperties, 'rating' | 'review'>) => {
@@ -124,21 +132,23 @@ export default class Board {
     this.userDataHandler.incrementCompletedBooks()
 
     // ☁️
-    const batch = writeBatch(this.dbHandler.db)
-    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
-      unreadBooksOrder: arrayRemove(book.id)
-    })
-    this.dbHandler.updateDocInBatch(
-      batch,
-      this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
-      {
-        [book.id]: {
-          timeCompleted: book.timeCompleted,
-          ...ratingAndReview
+    await this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
+      const batch = writeBatch(this.dbHandler.db)
+      updateDocInBatch<any>(batch, this.dbHandler.boardDocRef(this.id), {
+        unreadBooksOrder: arrayRemove(book.id)
+      })
+      updateDocInBatch(
+        batch,
+        this.dbHandler.boardChunkDocRef({ boardId: this.id, chunkIndex: book.chunk }),
+        {
+          [book.id]: {
+            timeCompleted: book.timeCompleted,
+            ...ratingAndReview
+          }
         }
-      }
-    )
-    await batch.commit()
+      )
+      await batch.commit()
+    })
   }
 
   public getSortedReadBookIds = () => {
@@ -152,8 +162,10 @@ export default class Board {
     this.unreadBooksOrder = newOrder
 
     // ☁️
-    await this.dbHandler.updateDoc(this.dbHandler.boardDocRef(this.id), {
-      unreadBooksOrder: this.unreadBooksOrder
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.boardDocRef(this.id), {
+        unreadBooksOrder: this.unreadBooksOrder
+      })
     })
   }
 

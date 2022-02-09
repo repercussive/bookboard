@@ -40,20 +40,22 @@ export default class BoardsHandler {
 
     // ☁️
     if (!options?.preventSync) {
-      const batch = writeBatch(this.dbHandler.db)
-      this.dbHandler.updateDocInBatch(batch, this.dbHandler.userDocRef, {
-        boardsMetadata: {
-          [newBoard.id]: {
-            name: newBoard.name,
-            timeCreated: newBoard.timeCreated
+      this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
+        const batch = writeBatch(this.dbHandler.db)
+        updateDocInBatch(batch, this.dbHandler.userDocRef, {
+          boardsMetadata: {
+            [newBoard.id]: {
+              name: newBoard.name,
+              timeCreated: newBoard.timeCreated
+            }
           }
-        }
+        })
+        updateDocInBatch(batch, this.dbHandler.boardDocRef(newBoard.id), {
+          totalBooksAdded: 0,
+          unreadBooksOrder: []
+        })
+        await batch.commit()
       })
-      this.dbHandler.updateDocInBatch(batch, this.dbHandler.boardDocRef(newBoard.id), {
-        totalBooksAdded: 0,
-        unreadBooksOrder: []
-      })
-      await batch.commit()
     }
 
     return this.selectedBoard
@@ -70,18 +72,20 @@ export default class BoardsHandler {
     }
 
     // ☁️
-    const batch = writeBatch(this.dbHandler.db)
-    const chunks = 1 + Math.floor((boardToDelete.totalBooksAdded - 1) / maxBooksPerDocument)
-    for (let chunkIndex = 0; chunkIndex < chunks; chunkIndex++) {
-      this.dbHandler.deleteDocInBatch(batch, this.dbHandler.boardChunkDocRef({ boardId: boardToDelete.id, chunkIndex }))
-    }
-    this.dbHandler.deleteDocInBatch(batch, this.dbHandler.boardDocRef(boardToDelete.id))
-    this.dbHandler.updateDocInBatch<any>(batch, this.dbHandler.userDocRef, {
-      boardsMetadata: {
-        [boardToDelete.id]: deleteField()
+    await this.dbHandler.runWriteOperations(async ({ deleteDocInBatch, updateDocInBatch }) => {
+      const batch = writeBatch(this.dbHandler.db)
+      const chunks = 1 + Math.floor((boardToDelete.totalBooksAdded - 1) / maxBooksPerDocument)
+      for (let chunkIndex = 0; chunkIndex < chunks; chunkIndex++) {
+        deleteDocInBatch(batch, this.dbHandler.boardChunkDocRef({ boardId: boardToDelete.id, chunkIndex }))
       }
+      deleteDocInBatch(batch, this.dbHandler.boardDocRef(boardToDelete.id))
+      updateDocInBatch<any>(batch, this.dbHandler.userDocRef, {
+        boardsMetadata: {
+          [boardToDelete.id]: deleteField()
+        }
+      })
+      await batch.commit()
     })
-    await batch.commit()
   }
 
   public setSelectedBoard = async (board: Board) => {
@@ -158,8 +162,10 @@ export default class BoardsHandler {
         board.unreadBooksOrder.unshift(bookId)
       }
     }
-    await this.dbHandler.updateDoc(this.dbHandler.boardDocRef(board.id), {
-      unreadBooksOrder: board.unreadBooksOrder
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.boardDocRef(board.id), {
+        unreadBooksOrder: board.unreadBooksOrder
+      })
     })
   }
 }

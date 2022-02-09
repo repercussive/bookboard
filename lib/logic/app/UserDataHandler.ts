@@ -15,7 +15,7 @@ export default class UserDataHandler {
   public completedBooksCount = 0
   public colorTheme: ThemeId = 'vanilla'
   public plants = { a: 'george' as PlantId, b: 'george' as PlantId }
-  public lastSelectedBoardId: string | undefined = undefined 
+  public lastSelectedBoardId: string | undefined = undefined
 
   constructor(private dbHandler: DbHandler) {
     this.loadColorTheme()
@@ -27,10 +27,12 @@ export default class UserDataHandler {
     this.completedBooksCount += 1
 
     // ☁️
-    await this.dbHandler.updateDoc(
-      this.dbHandler.userDocRef,
-      { completedBooksCount: this.completedBooksCount }
-    )
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(
+        this.dbHandler.userDocRef,
+        { completedBooksCount: this.completedBooksCount }
+      )
+    })
   }
 
   public setColorThemeLocally = async (theme: ThemeId) => {
@@ -45,8 +47,10 @@ export default class UserDataHandler {
   }
 
   public syncColorTheme = async () => {
-    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
-      colorTheme: this.colorTheme
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.userDocRef, {
+        colorTheme: this.colorTheme
+      })
     })
   }
 
@@ -56,14 +60,18 @@ export default class UserDataHandler {
   }
 
   public syncPlants = async () => {
-    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
-      plants: this.plants
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.userDocRef, {
+        plants: this.plants
+      })
     })
   }
 
   public setLastSelectedBoardId = async (id: string) => {
-    await this.dbHandler.updateDoc(this.dbHandler.userDocRef, {
-      lastSelectedBoardId: id
+    await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
+      await updateDoc(this.dbHandler.userDocRef, {
+        lastSelectedBoardId: id
+      })
     })
   }
 

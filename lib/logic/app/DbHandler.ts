@@ -1,4 +1,5 @@
 import { inject, singleton } from 'tsyringe'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { Firestore, doc, collection, DocumentReference, getDoc, getDocs, query, setDoc, WriteBatch } from 'firebase/firestore'
 import { Auth } from 'firebase/auth'
 import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
@@ -30,31 +31,45 @@ type DeepPartial<T> = T extends { [key: string]: any } ? {
 @singleton()
 export default class DbHandler {
   public db
+  public isWriteComplete = true
   private auth
+  private writeOperations
 
   constructor(@inject('Auth') auth: Auth, @inject('Firestore') db: Firestore) {
     this.auth = auth
     this.db = db
+    this.writeOperations = {
+      updateDoc: this.updateDoc,
+      updateDocInBatch: this.updateDocInBatch,
+      deleteDocInBatch: this.deleteDocInBatch
+    }
+    makeAutoObservable(this)
+  }
+
+  public runWriteOperations = async (callback: (writeOperations: typeof this.writeOperations) => Promise<void>) => {
+    this.isWriteComplete = false
+    await callback(this.writeOperations)
+    runInAction(() => this.isWriteComplete = true)
+  }
+
+  private updateDoc = async<T>(docRef: DocumentReference<T>, data: DeepPartial<T>) => {
+    if (!this.auth.currentUser) return
+    await setDoc(docRef, data, { merge: true })
+  }
+
+  private updateDocInBatch = <T>(batch: WriteBatch, docRef: DocumentReference<T>, data: DeepPartial<T>) => {
+    if (!this.auth.currentUser) return
+    batch.set(docRef, data, { merge: true })
+  }
+
+  private deleteDocInBatch = (batch: WriteBatch, docRef: DocumentReference) => {
+    if (!this.auth.currentUser) return
+    batch.delete(docRef)
   }
 
   public getDocData = async<T>(docRef: DocumentReference<T>) => {
     const doc = await getDoc<T>(docRef)
     return doc.data()
-  }
-
-  public updateDoc = async<T>(docRef: DocumentReference<T>, data: DeepPartial<T>) => {
-    if (!this.auth.currentUser) return
-    await setDoc(docRef, data, { merge: true })
-  }
-
-  public updateDocInBatch = <T>(batch: WriteBatch, docRef: DocumentReference<T>, data: DeepPartial<T>) => {
-    if (!this.auth.currentUser) return
-    batch.set(docRef, data, { merge: true })
-  }
-
-  public deleteDocInBatch = (batch: WriteBatch, docRef: DocumentReference) => {
-    if (!this.auth.currentUser) return
-    batch.delete(docRef)
   }
 
   public getBoardChunkDocs = async (boardId: string) => {

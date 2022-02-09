@@ -4,6 +4,8 @@ import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
+import useWarnUnsavedChanges from '@/lib/hooks/useWarnUnsavedChanges'
+import DbHandler from '@/lib/logic/app/DbHandler'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
 import SignUpPrompt from '@/components/page/home/SignUpPrompt'
@@ -17,8 +19,10 @@ import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
 import dynamic from 'next/dynamic'
 
-const HomePage = () => {
+const HomePage = observer(() => {
+  const { isWriteComplete } = container.resolve(DbHandler)
   const { isWaiting } = useWaitForUserData()
+  useWarnUnsavedChanges(!isWriteComplete)
 
   if (isWaiting) return null
 
@@ -53,7 +57,7 @@ const HomePage = () => {
       <Board />
     </Wrapper>
   )
-}
+})
 
 const BoardViewModeSection = observer(() => {
   const { viewMode, setViewMode } = container.resolve(BoardsHandler)
