@@ -14,7 +14,9 @@ export default function useWaitForUserData() {
       setIsWaiting(false)
     }
 
-    waitForSync()
+    if (isWaiting) {
+      waitForSync()
+    }
   }, [])
 
   return {
