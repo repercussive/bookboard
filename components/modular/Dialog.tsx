@@ -43,7 +43,7 @@ const Dialog = ({ title, triggerElement, isOpen, preventClosing, onOpenChange, c
 
 const TitleSection = ({ text, hideCloseButton }: { text: string, hideCloseButton?: boolean }) => {
   return (
-    <Flex align="center" css={{ height: '2rem' }}>
+    <Flex align="center" css={{ minHeight: '2rem' }}>
       <RadixDialog.Title>{text}</RadixDialog.Title>
       <Spacer ml="auto" />
       {!hideCloseButton && (

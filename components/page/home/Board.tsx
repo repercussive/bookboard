@@ -18,7 +18,7 @@ const Board = observer(() => {
     <Flex center direction="column">
       <Hanger role="presentation" />
       <Wrapper>
-        <Flex align="center" css={{ height: '2rem' }}>
+        <Flex align="center" css={{ minHeight: '2rem' }}>
           <Title>{viewMode === 'unread' ? 'Up next' : `Books you've read`}</Title>
           <Spacer ml="auto" />
           {(viewMode === 'unread' && !isLoading) && <AddBookButton />}
