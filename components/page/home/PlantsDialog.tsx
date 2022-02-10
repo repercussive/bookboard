@@ -1,9 +1,13 @@
+import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
-import { PlantId } from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler, { PlantId, unlocks } from '@/lib/logic/app/UserDataHandler'
 import PlantSvg from '@/components/page/home/PlantSvg'
 import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'
+import Icon from '@/components/modular/Icon'
+import Flex from '@/components/modular/Flex'
+import LockIcon from '@/components/icons/LockIcon'
 
 interface Props extends CoreDialogProps {
   selectedPlantOnOpen: PlantId,
@@ -57,15 +61,26 @@ const PlantsDialog = ({ isOpen, onOpenChange, selectedPlantOnOpen, onSaveSelecti
 
 const SelectPlantButton = ({ plantId }: { plantId: PlantId }) => {
   const { selectedPlant, setSelectedPlant } = useContext(PlantsDialogContext)
+  const { completedBooksCount } = container.resolve(UserDataHandler)
+
+  const unlockInfo = unlocks.find((item) => item.id === plantId)
+
+  if (completedBooksCount >= (unlockInfo?.booksRequired ?? 0)) {
+    return (
+      <button
+        onClick={() => setSelectedPlant(plantId)}
+        aria-label="Plant"
+        data-selected={selectedPlant === plantId}
+      >
+        <PlantSvg plantId={plantId} />
+      </button>
+    )
+  }
 
   return (
-    <button
-      onClick={() => setSelectedPlant(plantId)}
-      aria-label="Plant"
-      data-selected={selectedPlant === plantId}
-    >
-      <PlantSvg plantId={plantId} />
-    </button>
+    <LockWrapper center>
+      <Icon icon={LockIcon} />
+    </LockWrapper>
   )
 }
 
@@ -88,6 +103,14 @@ const PlantsGrid = styled('div', {
       }
     }
   }
+})
+
+const LockWrapper = styled(Flex, {
+  position: 'relative', 
+  top: '0.4rem',
+  height: '2.35rem',
+  opacity: 0.25,
+  fontSize: '1rem'
 })
 
 export default PlantsDialog

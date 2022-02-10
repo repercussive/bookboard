@@ -2,26 +2,13 @@ import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
 import { defaultPseudo } from '@/styles/utilStyles'
 import { styled } from '@/styles/stitches.config'
-import UserDataHandler, { ThemeId } from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler, { ThemeId, themesData, unlocks } from '@/lib/logic/app/UserDataHandler'
 import Dialog, { CoreDialogProps as CoreDialogProps } from '@/components/modular/Dialog'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'
 import CheckIcon from '@/components/icons/CheckIcon'
-
-const themesData: Record<ThemeId, { name: string }> = {
-  vanilla: { name: 'Vanilla' },
-  moonlight: { name: 'Moonlight' },
-  almond: { name: 'Almond' },
-  laurel: { name: 'Laurel' },
-  coffee: { name: 'Coffee' },
-  berry: { name: 'Berry' },
-  chalkboard: { name: 'Chalkboard' },
-  blush: { name: 'Blush' },
-  fjord: { name: 'Fjord' },
-  juniper: { name: 'Juniper' },
-  blackcurrant: { name: 'Blackcurrant' },
-  milkyway: { name: 'Milky Way' },
-}
+import Text from '@/components/modular/Text'
+import LockIcon from '@/components/icons/LockIcon'
 
 const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
   return (
@@ -48,26 +35,45 @@ const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
 
 const ThemeItem = observer(({ themeId }: { themeId: ThemeId }) => {
   const { colorTheme, setColorThemeLocally } = container.resolve(UserDataHandler)
+  const { completedBooksCount } = container.resolve(UserDataHandler)
+
+  const unlockInfo = unlocks.find((item) => item.id === themeId)
+  const isUnlocked = completedBooksCount >= (unlockInfo?.booksRequired ?? 0)
 
   return (
     <Flex center css={{ '&:not(:last-of-type)': { mb: '$2' } }}>
-      <ThemeLabel>
-        {themesData[themeId].name}
-        <input
-          type="radio"
-          name="theme"
-          value={themeId}
-          className="hidden"
-          checked={themeId === colorTheme}
-          onChange={() => setColorThemeLocally(themeId)}
-        />
-        <Flex center as="span">
-          {themeId === colorTheme && <Icon icon={CheckIcon} />}
-        </Flex>
-      </ThemeLabel>
+      {isUnlocked ? (
+        <ThemeLabel>
+          {themesData[themeId].name}
+          <input
+            type="radio"
+            name="theme"
+            value={themeId}
+            className="hidden"
+            checked={themeId === colorTheme}
+            onChange={() => setColorThemeLocally(themeId)}
+          />
+          <Flex center as="span">
+            {themeId === colorTheme && <Icon icon={CheckIcon} />}
+          </Flex>
+        </ThemeLabel>
+      ) : <LockedTheme themeId={themeId} />}
     </Flex>
   )
 })
+
+const LockedTheme = ({ themeId }: { themeId: ThemeId }) => {
+  return (
+    <Flex center css={{ width: '100%', opacity: 0.3 }}>
+      <Text css={{ mr: 'auto', fontSize: '1rem !important' }}>
+        {themesData[themeId].name}
+      </Text>
+      <Flex center as="span" css={{ width: '1.7rem', height: '1.7rem' }}>
+        <Icon icon={LockIcon} css={{ fontSize: '0.9em' }} />
+      </Flex>
+    </Flex>
+  )
+}
 
 const ThemeLabel = styled('label', {
   display: 'flex',
