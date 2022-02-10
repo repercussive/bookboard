@@ -1,0 +1,16 @@
+@use 'sass:color';
+
+$fern-color-primary: #f7ffe1;
+$fern-color-bg: #6a8d6f;
+
+:root {
+  --fern-color-bg: #{$fern-color-bg};
+  --fern-color-primary: #{$fern-color-primary};
+  --fern-color-primary-alt: #{color.scale($fern-color-primary, $saturation: -50%, $lightness: -6%)};
+  --fern-color-shadow: #{color.scale($fern-color-bg, $lightness: -50%, $saturation: -25%, $alpha: -85%)};
+  --fern-color-board: #{color.scale($fern-color-bg, $lightness: 5%)};
+  --fern-color-button-alt: #{color.scale($fern-color-bg, $saturation: -0%, $lightness: 20%)};
+  --fern-color-button-alt-text: #{$fern-color-primary};
+  --fern-color-focus-highlight: #{color.scale($fern-color-bg, $lightness: 10%)};
+  --fern-color-selection: #{color.scale($fern-color-primary, $alpha: -75%)};
+}

@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx'
 import DbHandler from '@/lib/logic/app/DbHandler'
 
 const isBrowser = typeof window !== 'undefined'
-const themeIds = ['vanilla', 'moonlight', 'almond', 'laurel', 'coffee', 'berry', 'chalkboard', 'blush', 'fjord', 'juniper', 'blackcurrant', 'milkyway'] as const
+const themeIds = ['vanilla', 'moonlight', 'almond', 'fern', 'coffee', 'berry', 'chalkboard', 'blush', 'fjord', 'juniper', 'blackcurrant', 'milkyway'] as const
 const themeProperties = ['bg', 'primary', 'primary-alt', 'shadow', 'board', 'button-alt', 'button-alt-text', 'focus-highlight', 'selection']
 const plantIds = ['george', 'frank', 'zoe', 'anita', 'wes', 'leah', 'oliver', 'roman'] as const
 
@@ -13,7 +13,7 @@ export type PlantId = typeof plantIds[number]
 export const unlocks: Array<{ id: ThemeId | PlantId, booksRequired: number }> = [
   { id: 'almond', booksRequired: 1 },
   { id: 'anita', booksRequired: 2 },
-  { id: 'laurel', booksRequired: 3 },
+  { id: 'fern', booksRequired: 3 },
   { id: 'coffee', booksRequired: 4 },
   { id: 'wes', booksRequired: 5 },
   { id: 'berry', booksRequired: 6 },
@@ -33,7 +33,7 @@ export const themesData: Record<ThemeId, { name: string }> = {
   vanilla: { name: 'Vanilla' },
   moonlight: { name: 'Moonlight' },
   almond: { name: 'Almond' },
-  laurel: { name: 'Laurel' },
+  fern: { name: 'Fern' },
   coffee: { name: 'Coffee' },
   berry: { name: 'Berry' },
   chalkboard: { name: 'Chalkboard' },

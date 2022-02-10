@@ -20,7 +20,7 @@ const ThemesDialog = ({ isOpen, onOpenChange }: CoreDialogProps) => {
       <ThemeItem themeId="vanilla" />
       <ThemeItem themeId="moonlight" />
       <ThemeItem themeId="almond" />
-      <ThemeItem themeId="laurel" />
+      <ThemeItem themeId="fern" />
       <ThemeItem themeId="coffee" />
       <ThemeItem themeId="berry" />
       <ThemeItem themeId="chalkboard" />
