@@ -6,7 +6,7 @@ $blush-color-bg: #F9EAE1;
 :root {
   --blush-color-bg: #{$blush-color-bg};
   --blush-color-primary: #{$blush-color-primary};
-  --blush-color-primary-alt: #{color.scale($blush-color-primary, $saturation: -50%, $lightness: -12%)};
+  --blush-color-primary-alt: #{color.scale($blush-color-primary, $saturation: -15%, $lightness: -11%)};
   --blush-color-shadow: #{color.scale($blush-color-bg, $lightness: -50%, $saturation: -75%, $alpha: -88%)};
   --blush-color-board: #{color.scale($blush-color-bg, $lightness: 5%)};
   --blush-color-button-alt: #{color.scale($blush-color-primary, $saturation: -15%, $lightness: 20%)};
