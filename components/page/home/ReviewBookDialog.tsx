@@ -40,6 +40,7 @@ const ReviewBookDialog = ({ selectedBook, isOpen, onOpenChange }: BookActionDial
         <ReviewTextarea
           value={review}
           onChange={(e) => setReview(e.target.value)}
+          maxLength={3000}
         />
       </label>
       <Spacer mb="$3" />

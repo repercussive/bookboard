@@ -87,6 +87,7 @@ const InputSection = ({ bookInfo, setBookInfo }: {
         <Input
           value={bookInfo.title}
           onChange={(e) => updateBookInfo(e.target.value, 'title')}
+          maxLength={50}
         />
       </label>
       <Spacer mb="$3" />
@@ -96,6 +97,7 @@ const InputSection = ({ bookInfo, setBookInfo }: {
         <Input
           value={bookInfo.author}
           onChange={(e) => updateBookInfo(e.target.value, 'author')}
+          maxLength={25}
         />
       </label>
     </>

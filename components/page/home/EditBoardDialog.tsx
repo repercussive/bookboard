@@ -40,7 +40,11 @@ const EditBoardDialog = observer(({ isOpen, onOpenChange, createNewBoard }: Prop
       <label>
         Name
         <Spacer mb="$1" />
-        <Input value={boardName} onChange={(e) => setBoardName(e.target.value)} />
+        <Input
+          value={boardName}
+          onChange={(e) => setBoardName(e.target.value)}
+          maxLength={50}
+        />
       </label>
       <Spacer mb="$4" />
       <SimpleButton
