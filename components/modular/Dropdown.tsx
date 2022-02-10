@@ -15,7 +15,7 @@ interface Props {
 
 const Dropdown = memo(({ triggerElement, align, sideOffset, alignOffset, onOpenChange, children }: Props) => {
   return (
-    <RadixDropdownMenu.Root onOpenChange={onOpenChange}>
+    <RadixDropdownMenu.Root modal={false} onOpenChange={onOpenChange}>
       {(() => triggerElement)()}
       <DropdownContentWrapper align={align} sideOffset={sideOffset} alignOffset={alignOffset}>
         {children}
