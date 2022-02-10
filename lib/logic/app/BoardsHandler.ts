@@ -40,7 +40,7 @@ export default class BoardsHandler {
 
     // ☁️
     if (!options?.preventSync) {
-      this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
+      await this.dbHandler.runWriteOperations(async ({ updateDocInBatch }) => {
         const batch = writeBatch(this.dbHandler.db)
         updateDocInBatch(batch, this.dbHandler.userDocRef, {
           boardsMetadata: {
