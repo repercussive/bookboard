@@ -4,6 +4,7 @@ import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import AddBookButton from '@/components/page/home/AddBookButton'
+import SortBooksDropdown from '@/components/page/home/SortBooksDropdown'
 import BooksList from '@/components/page/home/BooksList'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
@@ -22,6 +23,7 @@ const Board = observer(() => {
           <Title>{viewMode === 'unread' ? 'Up next' : `Books you've read`}</Title>
           <Spacer ml="auto" />
           {(viewMode === 'unread' && !isLoading) && <AddBookButton />}
+          {(viewMode === 'read' && !isLoading) && <SortBooksDropdown board={selectedBoard} />}
         </Flex>
         <Spacer mb="$4" />
         {isLoading ? <LoadingText /> : <BooksList />}

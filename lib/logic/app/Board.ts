@@ -23,8 +23,8 @@ export type BookProperties = {
 }
 
 export type Book = BookProperties & { id: string }
-
 export type EditableBookProperties = Pick<Book, 'title' | 'author' | 'rating' | 'review'>
+export type BookSortMode = 'newest-first' | 'oldest-first' | 'highest-rated-first' | 'lowest-rated-first'
 
 export default class Board {
   public id
@@ -34,6 +34,7 @@ export default class Board {
   public unreadBooksOrder: string[] = []
   public readBooks: { [id: string]: Book } = {}
   public totalBooksAdded = 0
+  public readBooksSortMode: BookSortMode = 'newest-first'
   private userDataHandler
   private dbHandler
 
@@ -151,10 +152,32 @@ export default class Board {
     })
   }
 
+  public setReadBooksSortMode = (sortMode: BookSortMode) => {
+    this.readBooksSortMode = sortMode
+  }
+
   public getSortedReadBookIds = () => {
-    return Object.values(this.readBooks)
+    const mapToIds = (books: Book[]) => books.map((book) => book.id)
+
+    const newestFirst = Object.values(this.readBooks)
       .sort((a, b) => (b.timeCompleted ?? 0) - (a.timeCompleted ?? 0))
-      .map((book) => book.id)
+
+    switch (this.readBooksSortMode) {
+      case 'newest-first': {
+        return mapToIds(newestFirst)
+      }
+      case 'oldest-first': {
+        return mapToIds(newestFirst).reverse()
+      }
+      case 'highest-rated-first': {
+        const highestRatedFirst = newestFirst.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+        return mapToIds(highestRatedFirst)
+      }
+      case 'lowest-rated-first': {
+        const lowestRatedFirst = newestFirst.sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
+        return mapToIds(lowestRatedFirst)
+      }
+    }
   }
 
   public updateUnreadBooksOrder = async (newOrder: string[]) => {
