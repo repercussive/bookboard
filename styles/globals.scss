@@ -22,6 +22,7 @@
 
 :root {
   --padding-page: 1rem;
+  --color-focus-outer-ring: var(--color-primary);
 }
 
 html,
@@ -35,7 +36,7 @@ body {
 
   :focus {
     outline: none;
-    box-shadow: var(--color-focus-highlight) 0 0 0 3px, var(--color-primary) 0 0 0 5px;
+    box-shadow: var(--color-focus-highlight) 0 0 0 3px, var(--color-focus-outer-ring) 0 0 0 5px;
     transition: box-shadow 150ms;
     &:not(:focus-visible) {
       outline: none;

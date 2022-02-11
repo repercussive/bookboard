@@ -1,17 +1,244 @@
+import { container } from 'tsyringe'
+import { observer } from 'mobx-react-lite'
+import { useRouter } from 'next/router'
+import { styled } from '@/styles/stitches.config'
+import AuthHandler from '@/lib/logic/app/AuthHandler'
+import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
+import LandingIllustration from '@/components/page/index/LandingIllustration'
+import Flex from '@/components/modular/Flex'
+import Icon from '@/components/modular/Icon'
+import SimpleButton from '@/components/modular/SimpleButton'
+import UserDropdown from '@/components/modular/UserDropdown'
+import Spacer from '@/components/modular/Spacer'
+import Text from '@/components/modular/Text'
+import BookIcon from '@/components/icons/BookIcon'
+import CloudIcon from '@/components/icons/CloudIcon'
+import HeartIcon from '@/components/icons/HeartIcon'
+import StarOutlineIcon from '@/components/icons/StarOutlineIcon'
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Home() {
+const LandingPage = observer(() => {
+  const { isAuthenticated } = container.resolve(AuthHandler)
+  const { isWaiting } = useWaitForUserData()
+  const router = useRouter()
+
+  if (isAuthenticated) {
+    router.push('/home')
+  }
+
+  if (isWaiting) return null
+
   return (
-    <div>
-      <Head>
-        <title>Bookboard</title>
-      </Head>
-      <Link href="/home" passHref>
-        <button>
-          go to app (temporary)
-        </button>
-      </Link>
-    </div>
+    <LandingWrapper>
+      <Head><title>Bookboard</title></Head>
+
+      <MainSectionWrapper>
+        <TitleSection />
+        <MobileIllustrationWrapper><LandingIllustration /></MobileIllustrationWrapper>
+        <MainContentSpacer />
+
+        <MainContentWrapper direction="column">
+          <h2>The helpful little book tracker.</h2>
+          <Divider />
+          <Spacer mb="$2" />
+          <FeatureList>
+            <li><Icon icon={BookIcon} /> Organize your to-read list</li>
+            <li><Icon icon={StarOutlineIcon} /> Log books you've completed</li>
+            <li><Icon icon={HeartIcon} /> Read to earn plants & themes</li>
+            <li><Icon icon={CloudIcon} /> Sync across devices for free</li>
+          </FeatureList>
+          <Link href="/home" passHref>
+            <GetStartedButton>Get started</GetStartedButton>
+          </Link>
+          <Spacer mb="$4" />
+          <Text css={{ textAlign: 'center' }}>No sign-up required to try it out.</Text>
+        </MainContentWrapper>
+
+        <MainContentSpacer />
+      </MainSectionWrapper>
+
+      <FullIllustrationWrapper><LandingIllustration /></FullIllustrationWrapper>
+    </LandingWrapper>
+  )
+})
+
+const TitleSection = () => {
+  const { signIn } = container.resolve(AuthHandler)
+
+  return (
+    <Flex align="center" css={{ width: '100%', zIndex: 1 }}>
+      <h1>bookboard</h1>
+      <Spacer ml="auto" />
+      <SignInButton onClick={signIn}>Sign in</SignInButton>
+      <UserDropdownWrapper>
+        <UserDropdown />
+      </UserDropdownWrapper>
+    </Flex>
   )
 }
+
+const LandingWrapper = styled(Flex, {
+  minHeight: '100vh',
+  margin: 'calc(var(--padding-page) * -1)',
+  '--color-focus-highlight': 'var(--color-primary)',
+  '--color-focus-outer-ring': 'var(--color-bg)'
+})
+
+const MainSectionWrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  flexGrow: '1',
+  padding: '$4',
+  bg: '$bg',
+  color: '$primary',
+  'h1, h2': {
+    fontWeight: 'normal'
+  },
+  'h2': {
+    maxWidth: '800px',
+    fontSize: 'min(3rem, 8vw)',
+    textAlign: 'center'
+  },
+  '::selection': {
+    bg: 'var(--color-button-alt)',
+    opacity: 0.2
+  },
+  '@media screen and (min-width: 870px)': {
+    padding: '$8',
+    maxWidth: '64vw',
+    bg: '$primary',
+    color: '$bg',
+    'h2': {
+      paddingRight: '1rem',
+      marginTop: 'auto',
+      fontSize: '4rem',
+      textAlign: 'left'
+    }
+  }
+})
+
+const MainContentWrapper = styled(Flex, {
+  bg: '$primary',
+  margin: 'calc(var(--padding-page) * -1)',
+  padding: '$8 var(--padding-page)',
+  color: '$bg',
+  flexGrow: 1,
+  '@media screen and (min-width: 870px)': {
+    flexGrow: 0,
+  }
+})
+
+const MainContentSpacer = styled('div', {
+  '@media screen and (min-width: 870px)': {
+    mb: 'auto'
+  }
+})
+
+const FeatureList = styled('ul', {
+  'li': {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '2rem',
+    listStyle: 'none',
+    fontSize: '1rem',
+    '&:not(:last-of-type)': {
+      marginBottom: '$6'
+    },
+    'span': {
+      fontSize: '0.8em',
+      marginLeft: '$1',
+      marginRight: '$6'
+    },
+    '@media screen and (min-width: 870px)': {
+      fontSize: '1.25rem',
+      marginBottom: '3rem'
+    }
+  }
+})
+
+const GetStartedButton = styled(SimpleButton, {
+  padding: '$3 $7',
+  bg: '$bg !important',
+  color: '$primary !important',
+  fontSize: '1.5rem',
+  borderRadius: '8px',
+  '&:hover': {
+    opacity: 0.9
+  }
+})
+
+const SignInButton = styled(SimpleButton, {
+  '--color-focus-outer-ring': 'var(--vanilla-color-primary)',
+  '--color-focus-highlight': 'var(--vanilla-color-bg)',
+  padding: '$2 $3',
+  fontSize: '1rem',
+  '@media screen and (max-width: 330px)': {
+    display: 'none'
+  },
+  '@media screen and (min-width: 870px)': {
+    '--color-focus-outer-ring': 'inherit',
+    '--color-focus-highlight': 'inherit',
+    bg: '$bg !important',
+    color: '$primary !important',
+    '&:hover': {
+      opacity: 0.9
+    },
+  }
+})
+
+const UserDropdownWrapper = styled('div', {
+  '@media screen and (min-width: 330px)': {
+    display: 'none'
+  }
+})
+
+const MobileIllustrationWrapper = styled('div', {
+  position: 'relative',
+  top: 'calc(-60px)',
+  width: 'min(85vw, 270px)',
+  marginBottom: '-$2',
+  alignSelf: 'center',
+  '.lightbulb': {
+    display: 'none'
+  },
+  '@media screen and (min-width: 870px)': {
+    display: 'none'
+  }
+})
+
+const FullIllustrationWrapper = styled('div', {
+  display: 'none',
+  'svg': {
+    position: 'relative',
+    top: '-5px',
+    left: 'calc(min(4vw, 80px) * -1)',
+    height: '85vh',
+    width: '100%',
+    pointerEvents: 'none'
+  },
+  '@media screen and (min-width: 870px)': {
+    display: 'block'
+  },
+  '.lightbulb': {
+    transform: 'translateY(30px)',
+    '@media screen and (min-width: 1550px)': {
+      transform: 'none'
+    }
+  }
+})
+
+const Divider = styled('div', {
+  width: '100%',
+  margin: '$5 0',
+  height: '4px',
+  bg: '$bg',
+  borderRadius: '99px',
+  '@media screen and (min-width: 500px)': {
+    margin: '$8 0',
+    height: '5px'
+  }
+})
+
+export default LandingPage

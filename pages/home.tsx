@@ -1,9 +1,11 @@
 import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
 import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
 import useWarnUnsavedChanges from '@/lib/hooks/useWarnUnsavedChanges'
 import DbHandler from '@/lib/logic/app/DbHandler'
 import Board from '@/components/page/home/Board'
@@ -24,6 +26,11 @@ const HomePage = observer(() => {
   const { isWriteComplete } = container.resolve(DbHandler)
   const { isWaiting } = useWaitForUserData()
   useWarnUnsavedChanges(!isWriteComplete)
+
+  useEffect(() => {
+    const { setColorThemeLocally, colorTheme } = container.resolve(UserDataHandler)
+    setColorThemeLocally(colorTheme)
+  }, [])
 
   if (isWaiting) return null
 

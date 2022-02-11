@@ -1,6 +1,6 @@
 import { styled } from '@/styles/stitches.config'
 import ChangeThemeButton from '@/components/page/home/ChangeThemeButton'
-import UserDropdown from '@/components/page/home/UserDropdown'
+import UserDropdown from '@/components/modular/UserDropdown'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
 
