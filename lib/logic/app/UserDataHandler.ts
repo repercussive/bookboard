@@ -52,6 +52,7 @@ export default class UserDataHandler {
   public colorTheme: ThemeId = 'vanilla'
   public plants = { a: 'george' as PlantId, b: 'george' as PlantId }
   public lastSelectedBoardId: string | undefined = undefined
+  public isNewItemUnlocked = false
 
   constructor(private dbHandler: DbHandler) {
     this.loadColorTheme()
@@ -61,6 +62,7 @@ export default class UserDataHandler {
   public incrementCompletedBooks = async () => {
     // 💻
     this.completedBooksCount += 1
+    this.setIsNewItemUnlocked(this.completedBooksCount <= unlocks.length)
 
     // ☁️
     await this.dbHandler.runWriteOperations(async ({ updateDoc }) => {
@@ -109,6 +111,10 @@ export default class UserDataHandler {
         lastSelectedBoardId: id
       })
     })
+  }
+
+  public setIsNewItemUnlocked = (state: boolean) => {
+    this.isNewItemUnlocked = state
   }
 
   private loadColorTheme = () => {

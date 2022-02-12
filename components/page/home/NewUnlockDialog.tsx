@@ -10,26 +10,25 @@ import SimpleButton from '@/components/modular/SimpleButton'
 import Text from '@/components/modular/Text'
 
 const NewUnlockDialog = () => {
-  const { completedBooksCount } = container.resolve(UserDataHandler)
+  const { completedBooksCount, isNewItemUnlocked, setIsNewItemUnlocked } = container.resolve(UserDataHandler)
   const [showDialog, setShowDialog] = useState(false)
   const [preventClosing, setPreventClosing] = useState(false)
-  const [previousCompletedBooksCount, setPreviousCompletedBooksCount] = useState(completedBooksCount)
 
   async function runDialogSequence() {
     await new Promise(resolve => setTimeout(resolve, 500))
     setShowDialog(true)
     setPreventClosing(true)
-    setPreviousCompletedBooksCount(completedBooksCount)
     await new Promise(resolve => setTimeout(resolve, 1000))
     setPreventClosing(false)
   }
 
-  if (completedBooksCount > previousCompletedBooksCount) {
+  if (isNewItemUnlocked && !showDialog) {
     runDialogSequence()
+    setIsNewItemUnlocked(false)
   }
 
   const unlockInfo = unlocks.find((item) => item.booksRequired === completedBooksCount)
-
+  
   if (!unlockInfo) return null
 
   const unlockType: 'theme' | 'plant' = unlockableThemes.some((item) => item.id === unlockInfo.id) ? 'theme' : 'plant'
