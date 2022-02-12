@@ -19,13 +19,13 @@ const Board = observer(() => {
     <Flex center direction="column">
       <Hanger role="presentation" />
       <Wrapper>
-        <Flex align="center" css={{ minHeight: '2rem' }}>
+        <Flex align="center" css={{ minHeight: '2.4rem' }}>
           <Title>{viewMode === 'unread' ? 'Up next' : `Books you've read`}</Title>
           <Spacer ml="auto" />
           {(viewMode === 'unread' && !isLoading) && <AddBookButton />}
           {(viewMode === 'read' && !isLoading) && <SortBooksDropdown board={selectedBoard} />}
         </Flex>
-        <Spacer mb="$4" />
+        <Spacer mb="$3" />
         {isLoading ? <LoadingText /> : <BooksList />}
       </Wrapper>
     </Flex>
@@ -44,6 +44,7 @@ const Wrapper = styled('div', {
   width: 'min(calc(100vw - 1rem), 25rem)',
   maxWidth: '25rem',
   padding: '$4',
+  paddingTop: '$3',
   border: 'solid 3px $primary',
   borderRadius: '8px',
   bg: '$board',
