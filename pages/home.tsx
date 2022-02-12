@@ -19,6 +19,7 @@ import ShelfPlant from '@/components/page/home/ShelfPlant'
 import BoardNameButton from '@/components/page/home/BoardNameButton'
 import NewUnlockDialog from '@/components/page/home/NewUnlockDialog'
 import PostSignupSyncDialog from '@/components/page/home/PostSignupSyncDialog'
+import LoadingScreen from '@/components/modular/LoadingScreen'
 import Flex from '@/components/modular/Flex'
 import Spacer from '@/components/modular/Spacer'
 import dynamic from 'next/dynamic'
@@ -34,7 +35,7 @@ const HomePage = observer(() => {
     setColorThemeLocally(colorTheme)
   }, [])
 
-  if (isWaiting || hasSignedOut) return null
+  if (isWaiting || hasSignedOut) return <LoadingScreen />
 
   return (
     <Wrapper direction="column">

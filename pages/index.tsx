@@ -11,6 +11,7 @@ import SimpleButton from '@/components/modular/SimpleButton'
 import UserDropdown from '@/components/modular/UserDropdown'
 import Spacer from '@/components/modular/Spacer'
 import Text from '@/components/modular/Text'
+import LoadingScreen from '@/components/modular/LoadingScreen'
 import BookIcon from '@/components/icons/BookIcon'
 import CloudIcon from '@/components/icons/CloudIcon'
 import HeartIcon from '@/components/icons/HeartIcon'
@@ -27,7 +28,7 @@ const LandingPage = observer(() => {
     router.push('/home')
   }
 
-  if (isWaiting) return null
+  if (isWaiting) return <LoadingScreen />
 
   return (
     <LandingWrapper>
