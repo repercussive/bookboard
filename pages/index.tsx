@@ -42,12 +42,7 @@ const LandingPage = observer(() => {
           <h2>The helpful little book tracker.</h2>
           <Divider />
           <Spacer mb="$2" />
-          <FeatureList>
-            <li><Icon icon={BookIcon} /> Organize your to-read list</li>
-            <li><Icon icon={StarOutlineIcon} /> Log books you've completed</li>
-            <li><Icon icon={HeartIcon} /> Read to earn plants & themes</li>
-            <li><Icon icon={CloudIcon} /> Sync across devices for free</li>
-          </FeatureList>
+          <FeatureList />
           <Link href="/home" passHref>
             <GetStartedButton>Get started</GetStartedButton>
           </Link>
@@ -78,6 +73,25 @@ const TitleSection = () => {
   )
 }
 
+const FeatureList = () => {
+  return (
+    <ul>
+      <FeatureListItem css={{ animationDelay: '400ms' }}>
+        <Icon icon={BookIcon} /> Organize your to-read list
+      </FeatureListItem>
+      <FeatureListItem css={{ animationDelay: '500ms' }}>
+        <Icon icon={StarOutlineIcon} /> Log books you've completed
+      </FeatureListItem>
+      <FeatureListItem css={{ animationDelay: '600ms' }}>
+        <Icon icon={HeartIcon} /> Read to earn plants & themes
+      </FeatureListItem>
+      <FeatureListItem css={{ animationDelay: '700ms' }}>
+        <Icon icon={CloudIcon} /> Sync across devices for free
+      </FeatureListItem>
+    </ul>
+  )
+}
+
 const LandingWrapper = styled(Flex, {
   minHeight: '100vh',
   margin: 'calc(var(--padding-page) * -1)',
@@ -99,7 +113,9 @@ const MainSectionWrapper = styled('div', {
   'h2': {
     maxWidth: '800px',
     fontSize: 'min(3rem, 8vw)',
-    textAlign: 'center'
+    textAlign: 'center',
+    opacity: 0,
+    animation: 'fade-in forwards 400ms 50ms'
   },
   '::selection': {
     bg: 'var(--color-button-alt)',
@@ -136,25 +152,25 @@ const MainContentSpacer = styled('div', {
   }
 })
 
-const FeatureList = styled('ul', {
-  'li': {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '2rem',
-    listStyle: 'none',
-    fontSize: '1rem',
-    '&:not(:last-of-type)': {
-      marginBottom: '$6'
-    },
-    'span': {
-      fontSize: '0.8em',
-      marginLeft: '$1',
-      marginRight: '$6'
-    },
-    '@media screen and (min-width: 870px)': {
-      fontSize: '1.25rem',
-      marginBottom: '3rem'
-    }
+const FeatureListItem = styled('li', {
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '2rem',
+  listStyle: 'none',
+  fontSize: '1rem',
+  opacity: 0,
+  animation: 'fade-in forwards 400ms',
+  '&:not(:last-of-type)': {
+    marginBottom: '$6'
+  },
+  'span': {
+    fontSize: '0.8em',
+    marginLeft: '$1',
+    marginRight: '$6'
+  },
+  '@media screen and (min-width: 870px)': {
+    fontSize: '1.25rem',
+    marginBottom: '3rem'
   }
 })
 
