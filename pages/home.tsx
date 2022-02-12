@@ -4,10 +4,11 @@ import { useEffect } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
 import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import useWarnUnsavedChanges from '@/lib/hooks/useWarnUnsavedChanges'
 import DbHandler from '@/lib/logic/app/DbHandler'
+import UserDataHandler from '@/lib/logic/app/UserDataHandler'
+import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
+import useWarnUnsavedChanges from '@/lib/hooks/useWarnUnsavedChanges'
+import useHasSignedOut from '@/lib/hooks/useHasSignedOut'
 import Board from '@/components/page/home/Board'
 import Shelf from '@/components/page/home/Shelf'
 import SignUpPrompt from '@/components/page/home/SignUpPrompt'
@@ -25,6 +26,7 @@ import dynamic from 'next/dynamic'
 const HomePage = observer(() => {
   const { isWriteComplete } = container.resolve(DbHandler)
   const { isWaiting } = useWaitForUserData()
+  const { hasSignedOut } = useHasSignedOut()
   useWarnUnsavedChanges(!isWriteComplete)
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const HomePage = observer(() => {
     setColorThemeLocally(colorTheme)
   }, [])
 
-  if (isWaiting) return null
+  if (isWaiting || hasSignedOut) return null
 
   return (
     <Wrapper direction="column">
