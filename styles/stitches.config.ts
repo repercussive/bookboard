@@ -3,7 +3,7 @@ import { createStitches } from '@stitches/react'
 
 export type SpaceValue = ScaleValue<'space'> | string
 
-export const { styled, css, theme } = createStitches({
+export const { styled, css, theme, getCssText } = createStitches({
   theme: {
     colors: {
       bg: 'var(--color-bg)',

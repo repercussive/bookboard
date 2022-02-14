@@ -96,8 +96,8 @@ const FeatureList = () => {
 const LandingWrapper = styled(Flex, {
   minHeight: '100vh',
   margin: 'calc(var(--padding-page) * -1)',
-  '--color-focus-highlight': 'var(--color-primary)',
-  '--color-focus-outer-ring': 'var(--color-bg)'
+  '--color-focus-highlight': 'var(--vanilla-color-primary)',
+  '--color-focus-outer-ring': 'var(--vanilla-color-bg)'
 })
 
 const MainSectionWrapper = styled('div', {
@@ -106,8 +106,8 @@ const MainSectionWrapper = styled('div', {
   justifyContent: 'flex-start',
   flexGrow: '1',
   padding: '$4',
-  bg: '$bg',
-  color: '$primary',
+  bg: 'var(--vanilla-color-bg)',
+  color: 'var(--vanilla-color-primary)',
   'h1, h2': {
     fontWeight: 'normal'
   },
@@ -119,14 +119,14 @@ const MainSectionWrapper = styled('div', {
     animation: 'fade-in forwards 400ms 50ms'
   },
   '::selection': {
-    bg: 'var(--color-button-alt)',
+    bg: 'var(--vanilla-color-button-alt)',
     opacity: 0.2
   },
   '@media screen and (min-width: 870px)': {
     padding: '$8',
     maxWidth: '64vw',
-    bg: '$primary',
-    color: '$bg',
+    bg: 'var(--vanilla-color-primary)',
+    color: 'var(--vanilla-color-bg)',
     'h2': {
       paddingRight: '1rem',
       marginTop: 'auto',
@@ -137,10 +137,10 @@ const MainSectionWrapper = styled('div', {
 })
 
 const MainContentWrapper = styled(Flex, {
-  bg: '$primary',
+  bg: 'var(--vanilla-color-primary)',
   margin: 'calc(var(--padding-page) * -1)',
   padding: '$8 var(--padding-page)',
-  color: '$bg',
+  color: 'var(--vanilla-color-bg)',
   flexGrow: 1,
   '@media screen and (min-width: 870px)': {
     flexGrow: 0,
@@ -177,8 +177,8 @@ const FeatureListItem = styled('li', {
 
 const GetStartedButton = styled(SimpleButton, {
   padding: '$3 $7',
-  bg: '$bg !important',
-  color: '$primary !important',
+  bg: 'var(--vanilla-color-bg) !important',
+  color: 'var(--vanilla-color-primary) !important',
   fontSize: '1.5rem',
   borderRadius: '8px',
   '&:hover': {
@@ -197,8 +197,8 @@ const SignInButton = styled(SimpleButton, {
   '@media screen and (min-width: 870px)': {
     '--color-focus-outer-ring': 'inherit',
     '--color-focus-highlight': 'inherit',
-    bg: '$bg !important',
-    color: '$primary !important',
+    bg: 'var(--vanilla-color-bg) !important',
+    color: 'var(--vanilla-color-primary) !important',
     '&:hover': {
       opacity: 0.9
     },
@@ -227,6 +227,7 @@ const MobileIllustrationWrapper = styled('div', {
 
 const FullIllustrationWrapper = styled('div', {
   display: 'none',
+  bg: 'var(--vanilla-color-bg)',
   'svg': {
     position: 'relative',
     top: '-5px',
@@ -250,7 +251,7 @@ const Divider = styled('div', {
   width: '100%',
   margin: '$5 0',
   height: '4px',
-  bg: '$bg',
+  bg: 'var(--vanilla-color-bg)',
   borderRadius: '99px',
   '@media screen and (min-width: 500px)': {
     margin: '$8 0',
