@@ -1,5 +1,6 @@
+import type { Auth } from 'firebase/auth'
 import { makeAutoObservable } from 'mobx'
-import { Auth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
 import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
 

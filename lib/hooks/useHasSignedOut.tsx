@@ -17,7 +17,7 @@ const useHasSignedOut = () => {
       }
     })
     return () => unsubscribe()
-  }, [hasSignedIn])
+  }, [hasSignedIn]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { hasSignedOut }
 }

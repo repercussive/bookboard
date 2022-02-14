@@ -17,7 +17,7 @@ export default function useWaitForUserData() {
     if (isWaiting) {
       waitForSync()
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     isWaiting

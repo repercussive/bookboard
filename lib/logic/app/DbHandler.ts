@@ -1,7 +1,7 @@
+import type { Auth } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { Firestore, doc, collection, DocumentReference, getDoc, getDocs, query, setDoc, WriteBatch } from 'firebase/firestore'
-import { Auth } from 'firebase/auth'
 import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
 import { BookProperties } from '@/lib/logic/app/Board'
 
