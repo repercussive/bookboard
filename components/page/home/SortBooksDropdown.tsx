@@ -52,7 +52,7 @@ const SortOption: FC<{ sortMode: BookSortMode }> = ({ children, sortMode }) => {
 
 const DropdownTrigger = () => {
   return (
-    <DropdownButton>
+    <DropdownButton aria-label="Sort mode">
       <Flex as="span" center>
         <Icon icon={SortIcon} />
       </Flex>
