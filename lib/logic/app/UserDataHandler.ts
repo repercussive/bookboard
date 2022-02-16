@@ -1,10 +1,10 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable } from 'mobx'
 import DbHandler from '@/lib/logic/app/DbHandler'
+import applyColorTheme from '@/lib/logic/utils/applyColorTheme'
 
 const isBrowser = typeof window !== 'undefined'
 const themeIds = ['vanilla', 'moonlight', 'almond', 'fern', 'coffee', 'berry', 'chalkboard', 'blush', 'fjord', 'juniper', 'blackcurrant', 'milkyway'] as const
-const themeProperties = ['bg', 'primary', 'primary-alt', 'shadow', 'board', 'button-alt', 'button-alt-text', 'focus-highlight', 'selection']
 const plantIds = ['george', 'frank', 'zoe', 'anita', 'wes', 'leah', 'oliver', 'roman'] as const
 
 export type ThemeId = typeof themeIds[number]
@@ -79,9 +79,7 @@ export default class UserDataHandler {
 
     if (!isBrowser) return
     localStorage.setItem('colorTheme', theme)
-    for (const property of themeProperties) {
-      document.documentElement.style.setProperty(`--color-${property}`, `var(--${theme}-color-${property})`)
-    }
+    applyColorTheme(theme)
   }
 
   public syncColorTheme = async () => {

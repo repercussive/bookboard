@@ -1,8 +1,10 @@
 import { container } from 'tsyringe'
+import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import { styled } from '@/styles/stitches.config'
 import AuthHandler from '@/lib/logic/app/AuthHandler'
+import applyColorTheme from '@/lib/logic/utils/applyColorTheme'
 import useWaitForUserData from '@/lib/hooks/useWaitForUserData'
 import LandingIllustration from '@/components/page/index/LandingIllustration'
 import Flex from '@/components/modular/Flex'
@@ -23,6 +25,10 @@ const LandingPage = observer(() => {
   const { isAuthenticated } = container.resolve(AuthHandler)
   const { isWaiting } = useWaitForUserData()
   const router = useRouter()
+
+  useEffect(() => {
+    applyColorTheme('vanilla')
+  }, [])
 
   if (isAuthenticated) {
     router.push('/home')
