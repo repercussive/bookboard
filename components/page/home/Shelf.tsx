@@ -5,7 +5,7 @@ import Flex from '@/components/modular/Flex'
 const Shelf = styled(Flex, {
   position: 'relative',
   mx: '-$paddingPage',
-  px: '0.6rem',
+  px: '$4',
   pb: '2.6px',
   alignItems: 'flex-end !important',
   '&::after': {

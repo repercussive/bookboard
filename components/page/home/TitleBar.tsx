@@ -16,7 +16,7 @@ const TitleBar = () => {
 }
 
 const Wrapper = styled(Flex, {
-  mb: '$2',
+  mb: '$1',
   mx: '-$1',
   '@bp1': {
     mt: '$1',

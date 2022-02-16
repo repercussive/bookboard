@@ -46,7 +46,7 @@ const HomePage = observer(() => {
       <TitleBar />
 
       <Shelf>
-        <Spacer ml="-$1" />
+        <Spacer ml="-$2" />
         <ShelfPlant shelfId="a" />
         <Spacer ml="$2" />
         <BoardNameButton />
@@ -54,14 +54,14 @@ const HomePage = observer(() => {
         <BoardActionsDropdown />
       </Shelf>
 
-      <Spacer mb="$4" />
+      <Spacer mb="$2" bp1={{ mb: '$4' }} />
 
       <Shelf>
         <BoardViewModeSection />
         <Spacer ml="auto" />
         <Spacer ml="$3" />
         <ShelfPlant shelfId="b" flip />
-        <Spacer ml="-$1" />
+        <Spacer ml="-$2" />
       </Shelf>
 
       <Spacer mb="$4" bp1={{ mb: '$6' }} />
