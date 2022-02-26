@@ -234,6 +234,7 @@ const MobileIllustrationWrapper = styled('div', {
 const FullIllustrationWrapper = styled('div', {
   display: 'none',
   bg: 'var(--vanilla-color-bg)',
+  flex: 1,
   'svg': {
     position: 'relative',
     top: '-5px',
