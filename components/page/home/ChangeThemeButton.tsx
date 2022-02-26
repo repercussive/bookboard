@@ -64,7 +64,8 @@ const LightbulbButton = styled('button', {
   transition: 'transform 100ms',
   '&::before': {
     ...defaultPseudo,
-    top: '-100px',
+    height: '50px',
+    transform: 'translateY(-45px)',
     left: 'calc(50% - 1.5px)',
     bottom: '2.2rem',
     width: '3px',
