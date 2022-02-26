@@ -58,7 +58,7 @@ const TitleSection = ({ text, hideCloseButton }: { text: string, hideCloseButton
 const ContentWrapper = styled(RadixDialog.Content, {
   display: 'flex',
   flexDirection: 'column',
-  width: 'min(350px, calc(100vw - 1rem))',
+  width: 'min(360px, calc(100vw - 1rem))',
   p: '$4',
   m: '$2',
   bg: '$bg',
