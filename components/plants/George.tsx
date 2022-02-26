@@ -1,4 +1,8 @@
+import { useState } from 'react'
+
 const George = () => {
+  const [maskId] = useState(Math.random().toString())
+
   return (
     <>
       <path
@@ -7,7 +11,7 @@ const George = () => {
         strokeWidth={1.75}
         strokeLinejoin="round"
       />
-      <mask id="b" fill="#fff">
+      <mask id={maskId} fill="#fff">
         <rect x={6.3} y={16.77} width={16.96} height={5.49} rx={1} />
       </mask>
       <rect
@@ -19,7 +23,7 @@ const George = () => {
         stroke="currentColor"
         strokeWidth={3.5}
         strokeLinejoin="round"
-        mask="url(#b)"
+        mask={`url(#${maskId})`}
       />
       <path
         d="M3.4 7.57c2.4 2.83 3.07 9.11 9.99 5.56.45-2.29-.1-4.49-2.78-5.92-2.68-1.44-7.21.36-7.21.36Zm23.2 2.21c-3.29 2.77-5.1 7.23-9.6 3.86-.14-1.87.4-3.69 2.57-4.8 2.16-1.13 7.03.94 7.03.94Z"
