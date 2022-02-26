@@ -267,7 +267,7 @@ const BookInfoWrapper = styled('div', {
   variants: {
     showDragCursor: {
       true: {
-        cursor: 'n-resize'
+        cursor: 'ns-resize'
       }
     }
   }
