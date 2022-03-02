@@ -46,6 +46,12 @@ const SignUpButton = styled(SimpleButton, {
   color: '$primary !important',
   '&:hover': {
     opacity: 0.9
+  },
+  '&:focus': {
+    boxShadow: 'var(--colors-primary) 0 0 0 2px, var(--colors-bg) 0 0 0 4px',
+    '&:not(:focus-visible)': {
+      boxShadow: 'none'
+    }
   }
 })
 
