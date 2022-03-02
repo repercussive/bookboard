@@ -83,16 +83,16 @@ const TitleSection = () => {
 const FeatureList = () => {
   return (
     <ul>
-      <FeatureListItem css={{ animationDelay: '400ms' }}>
+      <FeatureListItem>
         <Icon icon={BookIcon} /> Organize your to-read list
       </FeatureListItem>
-      <FeatureListItem css={{ animationDelay: '500ms' }}>
+      <FeatureListItem>
         <Icon icon={StarOutlineIcon} /> Log books you've completed
       </FeatureListItem>
-      <FeatureListItem css={{ animationDelay: '600ms' }}>
+      <FeatureListItem>
         <Icon icon={HeartIcon} /> Read to earn plants & themes
       </FeatureListItem>
-      <FeatureListItem css={{ animationDelay: '700ms' }}>
+      <FeatureListItem>
         <Icon icon={CloudIcon} /> Sync across devices for free
       </FeatureListItem>
     </ul>
@@ -120,9 +120,7 @@ const MainSectionWrapper = styled('div', {
   'h2': {
     maxWidth: '800px',
     fontSize: 'min(3rem, 8vw)',
-    textAlign: 'center',
-    opacity: 0,
-    animation: 'fade-in forwards 400ms 50ms'
+    textAlign: 'center'
   },
   '::selection': {
     bg: 'var(--vanilla-color-button-alt)',
@@ -165,8 +163,6 @@ const FeatureListItem = styled('li', {
   marginBottom: '2rem',
   listStyle: 'none',
   fontSize: '1rem',
-  opacity: 0,
-  animation: 'fade-in forwards 400ms',
   '&:not(:last-of-type)': {
     marginBottom: '$6'
   },
