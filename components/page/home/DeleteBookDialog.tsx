@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { useEffect, useState } from 'react'
 import { BookActionDialogProps } from '@/components/page/home/BookActionsDropdown'
-import BoardsHandler from '@/lib/logic/app/BoardsHandler'
+import BoardsHandler from '@/logic/app/BoardsHandler'
 import Dialog from '@/components/modular/Dialog'
 import Text from '@/components/modular/Text'
 import SimpleButton from '@/components/modular/SimpleButton'

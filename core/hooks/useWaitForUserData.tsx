@@ -1,8 +1,8 @@
 import { container } from 'tsyringe'
 import { when } from 'mobx'
 import { useEffect, useState } from 'react'
-import AuthHandler from '@/lib/logic/app/AuthHandler'
-import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
+import AuthHandler from '@/logic/app/AuthHandler'
+import InitialSyncHandler from '@/logic/app/InitialSyncHandler'
 
 export default function useWaitForUserData() {
   const { getCachedAuthState } = container.resolve(AuthHandler)

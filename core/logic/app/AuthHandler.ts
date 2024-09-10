@@ -2,7 +2,7 @@ import type { Auth } from 'firebase/auth'
 import { makeAutoObservable } from 'mobx'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
-import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
+import InitialSyncHandler from '@/logic/app/InitialSyncHandler'
 
 const isBrowser = typeof window !== 'undefined'
 

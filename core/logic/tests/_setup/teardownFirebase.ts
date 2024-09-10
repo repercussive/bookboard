@@ -1,4 +1,4 @@
-import { FirebaseServices } from '@/lib/firebase-setup/initializeFirebase'
+import { FirebaseServices } from 'core/firebase-setup/initializeFirebase'
 import { deleteApp } from '@firebase/app'
 import { deleteUser } from '@firebase/auth'
 import { terminate, clearIndexedDbPersistence } from '@firebase/firestore'

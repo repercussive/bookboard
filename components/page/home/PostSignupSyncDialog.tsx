@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import InitialSyncHandler from '@/lib/logic/app/InitialSyncHandler'
+import InitialSyncHandler from '@/logic/app/InitialSyncHandler'
 import Dialog from '@/components/modular/Dialog'
 import Text from '@/components/modular/Text'
 import Spacer from '@/components/modular/Spacer'

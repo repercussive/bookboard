@@ -1,7 +1,7 @@
 import { createContext, FC, useContext } from 'react'
 import { styled } from '@/styles/stitches.config'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-import Board, { BookSortMode } from '@/lib/logic/app/Board'
+import Board, { BookSortMode } from '@/logic/app/Board'
 import Dropdown from '@/components/modular/Dropdown'
 import Flex from '@/components/modular/Flex'
 import Icon from '@/components/modular/Icon'

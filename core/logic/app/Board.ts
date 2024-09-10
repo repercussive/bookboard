@@ -2,10 +2,10 @@ import { makeAutoObservable } from 'mobx'
 import { container } from 'tsyringe'
 import { nanoid } from 'nanoid'
 import { arrayRemove, deleteField, writeBatch } from 'firebase/firestore'
-import DbHandler, { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import deleteUndefinedFields from '@/lib/logic/utils/deleteUndefinedFields'
-import exclude from '@/lib/logic/utils/exclude'
+import DbHandler, { maxBooksPerDocument } from '@/logic/app/DbHandler'
+import UserDataHandler from '@/logic/app/UserDataHandler'
+import deleteUndefinedFields from '@/logic/utils/deleteUndefinedFields'
+import exclude from '@/logic/utils/exclude'
 
 interface BoardConstructorOptions {
   name: string,

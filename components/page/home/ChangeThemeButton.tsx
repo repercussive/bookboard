@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { styled } from '@/styles/stitches.config'
 import { defaultPseudo } from '@/styles/utilStyles'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler from '@/logic/app/UserDataHandler'
 import ThemesDialog from '@/components/page/home/ThemesDialog'
 
 const ChangeThemeButton = observer(() => {

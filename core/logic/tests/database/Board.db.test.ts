@@ -1,14 +1,14 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
-import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import { BookProperties } from '@/lib/logic/app/Board'
-import Board from '@/lib/logic/app/Board'
-import exclude from '@/lib/logic/utils/exclude'
-import signInDummyUser from '@/test-setup/signInDummyUser'
-import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
-import getDbShortcuts from '@/test-setup/getDbShortcuts'
-import teardownFirebase from '@/test-setup/teardownFirebase'
+import initializeFirebase, { registerFirebaseInjectionTokens } from 'core/firebase-setup/initializeFirebase'
+import { maxBooksPerDocument } from '@/logic/app/DbHandler'
+import { BookProperties } from '@/logic/app/Board'
+import Board from '@/logic/app/Board'
+import exclude from '@/logic/utils/exclude'
+import signInDummyUser from '@/logic/tests/_setup/signInDummyUser'
+import getFirebaseAdmin from '@/logic/tests/_setup/getFirebaseAdmin'
+import getDbShortcuts from '@/logic/tests/_setup/getDbShortcuts'
+import teardownFirebase from '@/logic/tests/_setup/teardownFirebase'
 
 const { db } = getFirebaseAdmin()
 const { userDoc, boardChunkDoc, boardDoc } = getDbShortcuts(db)

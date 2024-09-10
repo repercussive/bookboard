@@ -1,7 +1,7 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable } from 'mobx'
-import DbHandler from '@/lib/logic/app/DbHandler'
-import applyColorTheme from '@/lib/logic/utils/applyColorTheme'
+import DbHandler from '@/logic/app/DbHandler'
+import applyColorTheme from '@/logic/utils/applyColorTheme'
 
 const isBrowser = typeof window !== 'undefined'
 const themeIds = ['vanilla', 'moonlight', 'almond', 'fern', 'coffee', 'berry', 'chalkboard', 'blush', 'fjord', 'juniper', 'blackcurrant', 'milkyway'] as const

@@ -1,9 +1,9 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import { maxBooksPerDocument } from '@/lib/logic/app/DbHandler'
-import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
+import { maxBooksPerDocument } from '@/logic/app/DbHandler'
+import initializeFirebase, { registerFirebaseInjectionTokens } from 'core/firebase-setup/initializeFirebase'
 import Board from '@/logic/app/Board'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler from '@/logic/app/UserDataHandler'
 
 async function createBoardWithTestBooks() {
   const board = new Board({ name: 'Test board' })

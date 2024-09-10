@@ -2,8 +2,8 @@ import type { Auth } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { Firestore, doc, collection, DocumentReference, getDoc, getDocs, query, setDoc, WriteBatch } from 'firebase/firestore'
-import { PlantId, ThemeId } from '@/lib/logic/app/UserDataHandler'
-import { BookProperties } from '@/lib/logic/app/Board'
+import { PlantId, ThemeId } from '@/logic/app/UserDataHandler'
+import { BookProperties } from '@/logic/app/Board'
 
 export const maxBooksPerDocument = 300
 

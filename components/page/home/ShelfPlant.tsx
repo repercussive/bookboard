@@ -2,7 +2,7 @@ import { container } from 'tsyringe'
 import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { styled } from '@/styles/stitches.config'
-import UserDataHandler, { PlantId } from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler, { PlantId } from '@/logic/app/UserDataHandler'
 import PlantSvg from '@/components/page/home/PlantSvg'
 import PlantsDialog from '@/components/page/home/PlantsDialog'
 

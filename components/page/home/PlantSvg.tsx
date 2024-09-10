@@ -1,4 +1,4 @@
-import { PlantId } from '@/lib/logic/app/UserDataHandler'
+import { PlantId } from '@/logic/app/UserDataHandler'
 import Anita from '@/components/plants/Anita'
 import Frank from '@/components/plants/Frank'
 import George from '@/components/plants/George'

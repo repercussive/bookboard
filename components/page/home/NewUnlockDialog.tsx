@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { useState } from 'react'
 import { styled } from '@/styles/stitches.config'
-import UserDataHandler, { PlantId, ThemeId, themesData, unlockableThemes, unlocks } from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler, { PlantId, ThemeId, themesData, unlockableThemes, unlocks } from '@/logic/app/UserDataHandler'
 import Dialog from '@/components/modular/Dialog'
 import PlantSvg from '@/components/page/home/PlantSvg'
 import Flex from '@/components/modular/Flex'

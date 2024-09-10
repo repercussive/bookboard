@@ -1,4 +1,4 @@
-import AuthHandler from '@/lib/logic/app/AuthHandler'
+import AuthHandler from '@/logic/app/AuthHandler'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import { container } from 'tsyringe'

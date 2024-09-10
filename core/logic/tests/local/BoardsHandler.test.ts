@@ -1,8 +1,8 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import Board from '@/lib/logic/app/Board'
-import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
+import BoardsHandler from '@/logic/app/BoardsHandler'
+import Board from '@/logic/app/Board'
+import initializeFirebase, { registerFirebaseInjectionTokens } from 'core/firebase-setup/initializeFirebase'
 
 let boardsHandler: BoardsHandler
 const fb = initializeFirebase()

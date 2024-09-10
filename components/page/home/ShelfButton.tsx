@@ -1,7 +1,7 @@
 import type { CSS } from '@stitches/react/types/css-util'
 import { FC, useRef } from 'react'
 import { styled } from '@/styles/stitches.config'
-import useElementDimensions from '@/lib/hooks/useElementDimensions'
+import useElementDimensions from '@/hooks/useElementDimensions'
 
 interface Props {
   onClick?: () => void,

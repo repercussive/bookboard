@@ -1,11 +1,11 @@
 import '@abraham/reflection'
 import { container } from 'tsyringe'
-import initializeFirebase, { registerFirebaseInjectionTokens } from '@/lib/firebase-setup/initializeFirebase'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import signInDummyUser from '@/test-setup/signInDummyUser'
-import getFirebaseAdmin from '@/test-setup/getFirebaseAdmin'
-import getDbShortcuts from '@/test-setup/getDbShortcuts'
-import teardownFirebase from '@/test-setup/teardownFirebase'
+import initializeFirebase, { registerFirebaseInjectionTokens } from 'core/firebase-setup/initializeFirebase'
+import UserDataHandler from '@/logic/app/UserDataHandler'
+import signInDummyUser from '@/logic/tests/_setup/signInDummyUser'
+import getFirebaseAdmin from '@/logic/tests/_setup/getFirebaseAdmin'
+import getDbShortcuts from '@/logic/tests/_setup/getDbShortcuts'
+import teardownFirebase from '@/logic/tests/_setup/teardownFirebase'
 
 const { db } = getFirebaseAdmin()
 const { userDoc } = getDbShortcuts(db)

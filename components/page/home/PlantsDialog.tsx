@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { styled } from '@/styles/stitches.config'
-import UserDataHandler, { PlantId, unlocks } from '@/lib/logic/app/UserDataHandler'
+import UserDataHandler, { PlantId, unlocks } from '@/logic/app/UserDataHandler'
 import PlantSvg from '@/components/page/home/PlantSvg'
 import Dialog, { CoreDialogProps } from '@/components/modular/Dialog'
 import Spacer from '@/components/modular/Spacer'

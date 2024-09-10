@@ -1,9 +1,9 @@
 import { singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { deleteField, writeBatch } from 'firebase/firestore'
-import { Book } from '@/lib/logic/app/Board'
-import DbHandler, { maxBooksPerDocument, UserDocumentData } from '@/lib/logic/app/DbHandler'
-import Board from '@/lib/logic/app/Board'
+import { Book } from '@/logic/app/Board'
+import DbHandler, { maxBooksPerDocument, UserDocumentData } from '@/logic/app/DbHandler'
+import Board from '@/logic/app/Board'
 
 type BoardViewMode = 'unread' | 'read'
 

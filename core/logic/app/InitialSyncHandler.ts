@@ -2,11 +2,11 @@ import type { Auth } from 'firebase/auth'
 import { inject, singleton } from 'tsyringe'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { writeBatch } from 'firebase/firestore'
-import { BookProperties } from '@/lib/logic/app/Board'
-import DbHandler, { UserDocumentData } from '@/lib/logic/app/DbHandler'
-import BoardsHandler from '@/lib/logic/app/BoardsHandler'
-import UserDataHandler from '@/lib/logic/app/UserDataHandler'
-import deleteUndefinedFields from '@/lib/logic/utils/deleteUndefinedFields'
+import { BookProperties } from '@/logic/app/Board'
+import DbHandler, { UserDocumentData } from '@/logic/app/DbHandler'
+import BoardsHandler from '@/logic/app/BoardsHandler'
+import UserDataHandler from '@/logic/app/UserDataHandler'
+import deleteUndefinedFields from '@/logic/utils/deleteUndefinedFields'
 
 @singleton()
 export default class InitialSyncHandler {

@@ -24,9 +24,10 @@
     "paths": {
       "@/styles/*": ["styles/*"],
       "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
-      "@/logic/*": ["lib/logic/*"],
-      "@/test-setup/*": ["lib/logic/tests/_setup/*"]
+      "@/core/*": ["core/*"],
+      "@/logic/*": ["core/logic/*"],
+      "@/hooks/*": ["core/hooks/*"],
+      "@/test-setup/*": ["core/logic/tests/_setup/*"]
     }
   },
   "include": [
