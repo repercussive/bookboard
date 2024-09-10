@@ -34,10 +34,6 @@ export default function initializeFirebase() {
     connectAuthEmulator(auth, 'http://localhost:9099')
     console.info = consoleInfo
   }
-  // PRODUCTION
-  else {
-    // todo: configure App Check here
-  }
 
   const firebase: FirebaseServices = {
     app,
