@@ -12,6 +12,7 @@ const Shelf = styled(Flex, {
     ...defaultPseudo,
     borderBottom: 'solid 3px',
     borderBottomColor: '$primary',  
+    zIndex: 1
   },
   '@bp1': {
     px: '$4'
