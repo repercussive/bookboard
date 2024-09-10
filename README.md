@@ -1,5 +1,7 @@
 # Bookboard
 
+### [Click here to try out this app (no sign-up required)](https://bookboard.pages.dev/)
+
 Bookboard is a minimalistic web app that allows bookworms to easily track their to-read lists and log a history of everything they've read. Books can be organized into any number of "boards". Once you complete a book, you can leave a rating and review, allowing you to retroactively see which ones you loved (or hated) the most. Users can sync their data by logging in with a Google account.
 
 The app is written in **TypeScript**, with **Firebase** handling the database and user authentication. All the business logic is tested with **Jest**. The interface was created using **React**, with **MobX**'s state management magic tying it all together. The styling solution is **Stitches**, a neat CSS-in-JS library which turned out to be just right for the job.
