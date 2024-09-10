@@ -16,7 +16,7 @@ const Board = observer(() => {
   const isLoading = unloadedBoardIds.includes(selectedBoard.id)
 
   return (
-    <Flex center direction="column">
+    <Flex center direction="column" css={{ zIndex: 1 }}>
       <Hanger role="presentation" />
       <Wrapper>
         <Flex align="center" css={{ minHeight: '2.4rem' }}>
@@ -60,26 +60,27 @@ const Hanger = styled('div', {
   minHeight: '11px',
   marginBottom: '15px',
   borderRadius: '50%',
+  backgroundColor: '$bg',
   border: 'solid 3px $primary',
   '&::before': {
     ...defaultPseudo,
-    top: '3px',
-    left: '-13.7px',
-    width: '3.5px',
-    height: '21px',
+    top: '0',
+    left: '-13px',
+    width: '2.5px',
+    height: '30px',
     backgroundColor: '$primary',
-    borderRadius: '3px',
-    transform: 'skewX(-45deg)'
+    transform: 'rotate(45deg)',
+    zIndex: -1,
   },
   '&::after': {
     ...defaultPseudo,
-    top: '3px',
-    left: '15.2px',
-    width: '3.5px',
-    height: '21px',
+    top: '0',
+    left: '15.6px',
+    width: '2.5px',
+    height: '30px',
     backgroundColor: '$primary',
-    borderRadius: '3px',
-    transform: 'skewX(45deg)'
+    transform: 'rotate(-45deg)',
+    zIndex: -1
   }
 })
 
